@@ -1,0 +1,55 @@
+import {poppins} from "@/app/fonts/fonts";
+import {IoCheckmark} from "react-icons/io5";
+
+
+interface props {
+    header: string,
+    description: string,
+    image: string,
+    label: string,
+    sectorPoints: string[],
+    sectorQuestion: string,
+    sectionAns: string
+}
+
+export const SolutionsHeaderSection = (props: props) => {
+    return (
+        <div
+            className={"flex px-[6%] gap-16 md:py-0 pb-20 pt-40 items-center md:flex-row flex-col md:justify-between min-h-screen"}>
+            <div className={"flex w-full flex-col gap-1 h-full"}>
+                <div className={"px-4 py-1 rounded-full w-min bg-primary"}>
+                    <p className={`text-white text-xs whitespace-nowrap font-bold ${poppins.className}`}>
+                        {props.header}
+                    </p>
+                </div>
+                <h1 className={"text-3xl md:text-5xl font-bold"}>
+                    {props.header}
+                </h1>
+                <p className={"text-muted-foreground text-sm"}>
+                    {props.description}
+                </p>
+                <div className={"flex flex-col mt-8"}>
+                    <h1 className={`font-medium`}>
+                        Helping businesses like yours to reach their full potential
+                    </h1>
+                    <div className={"grid gap-2 mt-3 grid-cols-3"}>
+                        {
+                            props.sectorPoints.map((point, _) => (
+                                <div className={"flex gap-2"}>
+                                    <IoCheckmark className={"text-primary"}/>
+                                    <p className={"text-xs"}>{point}</p>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+            <div className={"flex w-full justify-center items-end"}>
+                <img src={props.image}
+                     className={"rounded-[18px]"}
+                     alt={"team image"}
+                />
+            </div>
+        </div>
+    )
+}

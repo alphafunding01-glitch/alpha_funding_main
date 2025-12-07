@@ -1,0 +1,31 @@
+import {poppins} from "@/app/fonts/fonts";
+
+
+export default function MeetTheTeamHero() {
+    return (
+        <div className={"flex px-[6%] gap-16 md:py-0  py-40 items-center md:flex-row flex-col md:justify-between min-h-screen"}>
+            <div className={"flex w-full flex-col h-full"}>
+                <div className={"px-4 py-1 rounded-full w-min bg-primary"}>
+                    <p className={`text-white text-xs whitespace-nowrap font-bold ${poppins.className}`}>
+                        Meet The Team
+                    </p>
+                </div>
+                <h1 className={"text-3xl md:text-5xl font-bold"}>
+                    Meet Our <span className={"text-[#62c1a5] mx-1"}>Business Finance</span>
+                    Broker Team
+                </h1>
+                <p className={"text-muted-foreground"}>
+                    Our dynamic team of finance experts are committed to your success. Combining experience, know-how
+                    and a passion for helping businesses reach their potential, we cater our solutions to your unique
+                    needs - read more about the benefits of using a business finance broker.
+                </p>
+            </div>
+            <div className={"flex w-full justify-center items-end"}>
+                <img src={"https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg"}
+                     className={"rounded-[18px]"}
+                     alt={"team image"}
+                />
+            </div>
+        </div>
+    )
+}

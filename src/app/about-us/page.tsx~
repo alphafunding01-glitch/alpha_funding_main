@@ -1,0 +1,23 @@
+import NavBar from "@/components/navbar";
+import AboutUsHero from "@/sections/about-us/about-us-hero";
+import AboutUsStory from "@/sections/about-us/about-us-story";
+import AboutUsMissionVision from "@/sections/about-us/about-us-mission-vission";
+import AboutUsValues from "@/sections/about-us/about-us-values";
+import CheckEligibleSection from "@/sections/common/find-eligible-section";
+
+export default function AboutUs() {
+    return (
+        <div className={"flex flex-col"}>
+            <NavBar/>
+            <div className={"flex bg-[#f0f0f0] flex-col"}>
+                <AboutUsHero/>
+                <AboutUsStory/>
+                <AboutUsMissionVision/>
+                <AboutUsValues/>
+                <div className={"bg-white"}>
+                    <CheckEligibleSection/>
+                </div>
+            </div>
+        </div>
+    )
+}
