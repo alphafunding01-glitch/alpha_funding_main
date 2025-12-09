@@ -13,28 +13,26 @@ export default function HomeHeroPage() {
   return (
     <div
       className={
-        "flex md:flex-row md:py-9 py-40 flex-col justify-between px-[4%] md:px-[6%] items-center bg-primary text-primary-foreground"
+        "flex md:flex-row md:py-9 py-40 flex-col justify-between px-[4%] md:px-[6%] items-center bg-[#f0f0f0] text-primary"
       }
     >
       <div className="flex relative mt-36 flex-col justify-between h-full w-full gap-4">
         <div className="flex flex-col gap-4">
           {/* Small pill – use secondary color to pop */}
-          <div className="px-4 py-1 mb-2 rounded-full w-min bg-secondary">
+          <div className="px-4 py-1 mb-2 rounded-full w-min bg-[#06b6d4]">
             <p
-              className={`text-secondary-foreground text-xs whitespace-nowrap font-bold ${poppins.className}`}
+              className={`text-white text-xs whitespace-nowrap font-bold ${poppins.className}`}
             >
-              Fuel Your Growth, Without The Finance Fuss
+              Business finance solutions from £10k to £10M.
             </p>
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-bold text-gradient-cyber">
-            Start Strong With Finance That Works For You.
+          <h1 className="text-3xl md:text-5xl font-bold text-gradient-primary">
+            Fast Business Loans UK | Commercial Finance Broker
           </h1>
         </div>
-        <p className={`${poppins.className} text-sm mt-4`}>
-          At Alpha Funding, we believe finance should feel like a boost, not a burden. Whether you're just
-          getting started or scaling something big, we tailor funding to fit your journey — with flexible
-          terms, fast turnaround, and support that's actually supportive.
+        <p className={`${poppins.className} text-sm mt-4 text-black`}>
+          Alpha Funding is a UK business finance broker helping SMEs access secured and unsecured business loans, asset finance, invoice finance, and more — with flexible terms and competitive rates from our panel of trusted lenders.
         </p>
         <div className={"flex mt-8 gap-4"}>
           <Link href={"/apply-now"} className={buttonVariants({
@@ -43,10 +41,10 @@ export default function HomeHeroPage() {
           })}>
             Apply Now <ArrowUpRight />
           </Link>
-          <Link href={"/calculator"} className={buttonVariants({
-            size: "lg", variant: "secondary", className: "md:w-[200px]"
+          <Link href={"/check-eligibility"} className={buttonVariants({
+            size: "lg", variant: "secondary", className: "md:w-[200px] !bg-[#06b6d4] text-white hover:!bg-[#06b6d4]/90"
           })} >
-            Calculator <ArrowUpRight />
+            Check Eligibility <ArrowUpRight />
           </Link>
         </div>
         <div className={"md:flex items-center  gap-8 mt-8"}>

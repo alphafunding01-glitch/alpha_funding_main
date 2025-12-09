@@ -389,11 +389,11 @@ export default function NavBar() {
     );
 
     // Common styles for navigation menu triggers
-    const navTriggerStyles = "uppercase bg-transparent text-white hover:bg-[#0F172A] hover:text-white focus:bg-[#0F172A] focus:text-white data-[state=open]:bg-[#0F172A] data-[state=open]:text-white";
+    const navTriggerStyles = "uppercase bg-transparent text-[#201130] hover:bg-[#0F172A] hover:text-white focus:bg-[#0F172A] focus:text-white data-[state=open]:bg-[#0F172A] data-[state=open]:text-white";
 
     return (
         <div
-            className={"flex bg-primary nav-shadow rounded-2xl justify-between fixed gap-4 left-[4%] right-[4%] md:left-[6%] md:right-[6%] top-4 py-5 px-[2%] z-50"}>
+            className={"flex bg-white nav-shadow rounded-2xl justify-between fixed gap-4 left-[4%] right-[4%] md:left-[6%] md:right-[6%] top-4 py-5 px-[2%] z-50"}>
             <div className={"flex items-center gap-6"}>
                 <Link href={"/"} className={"w-36"}>
                     <img
@@ -562,7 +562,7 @@ export default function NavBar() {
                             <NavigationMenuItem>
                                 <NavigationMenuLink
                                     href={"/partner"}
-                                    className={"uppercase text-white hover:text-[#D946EF] transition-colors duration-200 px-4 py-2"}
+                                    className={"uppercase text-[#201130] hover:text-[#D946EF] transition-colors duration-200 px-4 py-2"}
                                 >
                                     Partner With Us
                                 </NavigationMenuLink>
@@ -630,7 +630,7 @@ export default function NavBar() {
                 {/* Mobile Menu Sheet - Only visible on mobile */}
                 < Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen} >
                     <SheetTrigger asChild className="lg:hidden">
-                        <Button variant="ghost" size="sm" className="text-white hover:bg-[#0F172A]">
+                        <Button variant="ghost" size="sm" className="text-[#201130] hover:bg-[#0F172A] hover:text-white">
                             <Menu className="h-5 w-5" />
                         </Button>
                     </SheetTrigger>

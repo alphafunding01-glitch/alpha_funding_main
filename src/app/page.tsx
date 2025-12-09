@@ -12,14 +12,15 @@ import WhyAlphaFunding from "@/sections/home/home-why-alpha-funding";
 import CookieConsent from "@/components/cookies-dialog";
 import { OrganizationJsonLd, BreadcrumbJsonLd } from 'next-seo';
 import type { Metadata } from 'next';
+import HomeFaqSection from "@/sections/home/home-faq-section";
 
 export const metadata: Metadata = {
-    title: 'Home',
-    description: 'Alpha Funding provides flexible business finance solutions with fast turnaround and supportive service. Get funding tailored to your journey - from business loans to refinance options.',
+    title: 'Business Loans UK | Commercial Finance Broker | Alpha Funding',
+    description: 'Fast business loans from £10k–£10M. UK commercial finance broker with decisions in 24–48 hours. Secured, unsecured, asset, invoice & property finance for SMEs.',
     openGraph: {
         url: 'https://www.alpha-funding.co.uk/',
-        title: 'Alpha Funding - Business Finance Solutions',
-        description: 'Flexible business finance solutions with fast turnaround. Business loans, refinance, merchant cash advance, and more.',
+        title: 'Business Loans UK | Commercial Finance Broker | Alpha Funding',
+        description: 'Fast business loans from £10k–£10M. UK commercial finance broker with decisions in 24–48 hours. Secured, unsecured, asset, invoice & property finance for SMEs.',
         images: [
             {
                 url: 'https://www.alpha-funding.co.uk/og-home.jpg',
@@ -83,6 +84,7 @@ export default function Home() {
                 <CheckEligibleSection />
                 <WhyAlphaFunding />
                 <HomeReviewSection />
+                <HomeFaqSection />
                 <BusinessBannerSection />
                 <CookieConsent />
             </div>

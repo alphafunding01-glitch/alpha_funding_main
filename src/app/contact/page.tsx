@@ -50,16 +50,11 @@ export default function Contact() {
                         addressCountry: 'GB',
                     },
                 ]}
-                geo={[
-                    {
-                        latitude: 51.5273,
-                        longitude: -0.1335,
-                    },
-                    {
-                        latitude: 53.3736,
-                        longitude: -3.0228,
-                    },
-                ]}
+                geo={{
+                    latitude: 51.5273,
+                    longitude: -0.1335,
+                }}
+
                 image="https://www.alpha-funding.co.uk/logo.png"
                 priceRange="$$"
                 openingHoursSpecification={[

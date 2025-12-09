@@ -15,25 +15,25 @@ export default function HomeWhyChooseUs() {
         {
             title: "Enquiry",
             description:
-                "See what you’re eligible for — no impact on your credit score.",
+                "Check eligibility in minutes — no impact on your credit score.",
             icon: <Search className="w-6 h-6" />,
         },
         {
             title: "Application",
             description:
-                "We research the market, handle the paperwork, and find your perfect fit.",
+                "We search the market and handle the paperwork.",
             icon: <FileText className="w-6 h-6" />,
         },
         {
             title: "Approval",
             description:
-                "Once approved, you’ll get your offer and agreement — clear and simple.",
+                "Receive your offer — clear terms, no hidden fees.",
             icon: <CheckCircle2 className="w-6 h-6" />,
         },
         {
             title: "Payout",
             description:
-                "Sign, seal, and get your funding. Then? Time to go make things happen.",
+                "Sign and receive funds. Time to grow.",
             icon: <Wallet className="w-6 h-6" />,
         },
     ];
@@ -42,9 +42,9 @@ export default function HomeWhyChooseUs() {
         <div className="bg-white px-[4%] md:px-[6%] py-16 flex flex-col items-center text-center gap-8 relative overflow-hidden">
             {/* Heading */}
             <h1
-                className={`text-2xl md:text-4xl font-bold z-10 ${poppins.className}`}
+                className={`text-2xl md:text-4xl font-bold z-10 ${poppins.className} text-gradient-primary`}
             >
-                Here’s How We Support Your Journey
+                How to Get a Business Loan in the UK
             </h1>
             <p className="max-w-2xl text-sm md:text-base text-muted-foreground z-10">
                 When Alpha Funding launched, we set out to make finance more transparent, more
@@ -100,8 +100,8 @@ export default function HomeWhyChooseUs() {
                         <div
                             key={index}
                             className={`flex flex-col items-center text-center max-w-[260px] md:max-w-[220px] transition-all duration-300 ${index % 2 === 0
-                                    ? "md:mt-[-120px]" // alternate on desktop
-                                    : "md:mt-[140px]"
+                                ? "md:mt-[-120px]" // alternate on desktop
+                                : "md:mt-[140px]"
                                 }`}
                         >
                             {/* Circle with Icon */}

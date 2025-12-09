@@ -86,12 +86,12 @@
      =================== */
 
   /* Primary - Midnight */
-  --primary: #030f42;
+  --primary: #201130;
   --primary-foreground: #FFFFFF;
 
   /* Secondary - Cyan (CTAs) */
-  --secondary: #06B6D4;
-  --secondary-foreground: #030f42;
+  --secondary: #a5c4e4;
+  --secondary-foreground: #201130;
 
   /* Accent - Fuchsia */
   --accent: #D946EF;
@@ -105,11 +105,11 @@
   /* Card */
   --card: #F8FAFC;
   /* Slate Tint */
-  --card-foreground: #030f42;
+  --card-foreground: #201130;
 
   /* Popover */
   --popover: #FFFFFF;
-  --popover-foreground: #030f42;
+  --popover-foreground: #201130;
 
   /* Muted */
   --muted: #F1F5F9;
@@ -123,7 +123,7 @@
   --input: #CBD5E1;
 
   /* Ring/Focus */
-  --ring: #06B6D4;
+  --ring: #a5c4e4;
   /* Cyan */
 
   /* Destructive */
@@ -131,15 +131,15 @@
   --destructive-foreground: #FFFFFF;
 
   /* Success */
-  --success: #06B6D4;
+  --success: #a5c4e4;
   --success-foreground: #FFFFFF;
 
   /* Warning */
   --warning: #F59E0B;
-  --warning-foreground: #030f42;
+  --warning-foreground: #201130;
 
   /* Info */
-  --info: #06B6D4;
+  --info: #a5c4e4;
   --info-foreground: #FFFFFF;
 
   /* ===================
@@ -147,12 +147,12 @@
      =================== */
 
   /* Midnight Variants */
-  --brand-midnight: #030f42;
+  --brand-midnight: #201130;
   --brand-midnight-dark: #0F172A;
   --brand-midnight-slate: #1E293B;
 
   /* Cyan Variants */
-  --brand-cyan: #06B6D4;
+  --brand-cyan: #a5c4e4;
   --brand-cyan-light: #22D3EE;
   --brand-cyan-lighter: #67E8F9;
 
@@ -290,6 +290,13 @@
    =================== */
 
 /* Text Gradients */
+.text-gradient-primary {
+  background: linear-gradient(to right, #43cea2, #185a9d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .text-gradient-cyber {
   background: var(--gradient-cyber);
   -webkit-background-clip: text;

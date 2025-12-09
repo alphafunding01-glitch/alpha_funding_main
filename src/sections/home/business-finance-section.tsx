@@ -1,7 +1,7 @@
-import {useState} from 'react';
-import {TrendingUp, Shield, Users, Zap, Clock, Network, PoundSterling, Star, ArrowRight, Phone} from 'lucide-react';
+import { useState } from 'react';
+import { TrendingUp, Shield, Users, Zap, Clock, Network, PoundSterling, Star, ArrowRight, Phone } from 'lucide-react';
 import Link from "next/link";
-import {buttonVariants} from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 export default function BusinessFinanceSection() {
     const [loanAmount, setLoanAmount] = useState('75000');
@@ -31,13 +31,13 @@ export default function BusinessFinanceSection() {
                     <div className="space-y-8">
                         <div className="space-y-4">
                             <div
-                                className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-xs font-medium">
-                                <Star className="w-4 h-4"/>
+                                className="inline-flex items-center gap-2 bg-[#06b6d4] text-white px-4 py-2 rounded-full text-xs font-medium">
+                                <Star className="w-4 h-4" />
                                 Proven and trusted by businesses at scale
                             </div>
-                            <h1 className="text-4xl font-bold text-foreground leading-tight">
+                            <h1 className="text-4xl font-bold leading-tight text-gradient-primary">
                                 Start Your
-                                <span className="block text-brand-purple">Finance Journey</span>
+                                <span className="block">Finance Journey</span>
                             </h1>
                             <p className="text-sm text-muted-foreground max-w-md">
                                 Unlock your business potential with tailored finance solutions. From £1K to £10M, we've
@@ -48,13 +48,13 @@ export default function BusinessFinanceSection() {
                         {/* Key Features Pills */}
                         <div className="flex flex-wrap gap-3">
                             {[
-                                {icon: Zap, text: "Fast Funding"},
-                                {icon: Shield, text: "Secured & Unsecured Loans"},
-                                {icon: Users, text: "Trusted Lenders"}
+                                { icon: Zap, text: "Fast Funding" },
+                                { icon: Shield, text: "Secured & Unsecured Loans" },
+                                { icon: Users, text: "Trusted Lenders" }
                             ].map((feature, index) => (
                                 <div key={index}
-                                     className="flex items-center gap-2 bg-card border px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-shadow">
-                                    <feature.icon className="w-4 h-4 text-primary"/>
+                                    className="flex items-center gap-2 bg-card border px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-shadow">
+                                    <feature.icon className="w-4 h-4 text-primary" />
                                     <span className="text-sm font-medium text-card-foreground">{feature.text}</span>
                                 </div>
                             ))}
@@ -68,19 +68,19 @@ export default function BusinessFinanceSection() {
                                     title: "Tailored Finance Solutions",
                                     desc: "Customized to your needs"
                                 },
-                                {icon: Clock, title: "Loan Terms Up to 72 Months", desc: "Flexible repayment options"},
+                                { icon: Clock, title: "Loan Terms Up to 72 Months", desc: "Flexible repayment options" },
                                 {
                                     icon: PoundSterling,
                                     title: "Funding from £1,000 to £10 Million",
                                     desc: "Scale as you grow"
                                 },
-                                {icon: Network, title: "Wide Lender Network", desc: "Best possible rates"}
+                                { icon: Network, title: "Wide Lender Network", desc: "Best possible rates" }
                             ].map((benefit, index) => (
                                 <div key={index}
-                                     className="flex items-start gap-3 p-3 rounded-lg hover:bg-accent/20 transition-colors">
+                                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-accent/20 transition-colors">
                                     <div
                                         className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center mt-1 flex-shrink-0">
-                                        <benefit.icon className="w-4 h-4 text-primary"/>
+                                        <benefit.icon className="w-4 h-4 text-primary" />
                                     </div>
                                     <div>
                                         <h3 className="font-semibold text-card-foreground text-sm leading-tight">{benefit.title}</h3>
@@ -106,7 +106,7 @@ export default function BusinessFinanceSection() {
                                         Amount</label>
                                     <div className="relative">
                                         <PoundSterling
-                                            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground"/>
+                                            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                         <input
                                             type="text"
                                             value={loanAmount}
@@ -131,11 +131,11 @@ export default function BusinessFinanceSection() {
 
                                 {/* Quick Calculation Display */}
                                 <Link href={"/apply-now"}
-                                      className={
-                                          buttonVariants({
-                                              className: "w-full mt-16"
-                                          })
-                                      }
+                                    className={
+                                        buttonVariants({
+                                            className: "w-full mt-16"
+                                        })
+                                    }
                                 >
                                     Apply For This Loan
                                 </Link>
