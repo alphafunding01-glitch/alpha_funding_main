@@ -74,12 +74,12 @@ export default function NavBar() {
         // {
         //     label: "Meet The Team",
         //     url: "/meet-the-team",
-        //     description: "Get to know the experts behind Maestro Business Finance"
+        //     description: "Get to know the experts behind Alpha FUnding commercial Finance"
         // },
         {
             label: "About us",
             url: "/about-us",
-            description: "Learn more about Maestro and what makes us a leading finance partner"
+            description: "Learn more about Alpha Funding that makes us a leading finance partner"
         },
         {
             label: "Contact Us",
@@ -89,7 +89,7 @@ export default function NavBar() {
         {
             label: "Join Our Team",
             url: "/contact",
-            description: "Unlock your career potential with Maestro"
+            description: "Unlock your career potential with Alpha Funding"
         },
         // {
         //     label: "FAQ",
@@ -348,7 +348,7 @@ export default function NavBar() {
 
     // Combine all links for search
     const allLinks = [
-        ...homeList.map(item => ({ ...item, category: "Welcome to Maestro" })),
+        ...homeList.map(item => ({ ...item, category: "Welcome to Alpha Funding" })),
         ...aboutItems.map(item => ({ ...item, category: "Finance Solutions" })),
         ...otherSolutionsItems.map(item => ({ ...item, category: "Other Solutions" })),
         ...sectorsArray.map(item => ({ ...item, category: "Sectors" })),
@@ -409,14 +409,14 @@ export default function NavBar() {
                         <NavigationMenuList>
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger className={navTriggerStyles}>
-                                    Maestro
+                                    Alpha Funding
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent
                                     className={"flex p-0 gap-6 items-stretch !rounded-2xl border-none shadow-2xl !h-auto !fixed !left-1/2 !transform !-translate-x-1/2 !top-26 !w-[87.2vw]"}>
                                     <div className={"flex px-10 flex-col py-10 justify-start"}>
                                         <div className={"flex w-full px-4 gap-4"}>
                                             <p className={"text-2xl font-semibold text-primary"}>
-                                                Maestro
+                                                Alpha Funding
                                             </p>
                                         </div>
                                         <div className={"grid grid-cols-3 gap-4 my-5"}>
@@ -645,7 +645,7 @@ export default function NavBar() {
                             <div className="flex-1 overflow-y-auto p-6 bg-white">
                                 <Accordion type="single" collapsible className="space-y-2">
                                     <MobileNavItem
-                                        title="Maestro"
+                                        title="Alpha Funding"
                                         items={homeList}
                                     />
                                     <MobileNavItem
