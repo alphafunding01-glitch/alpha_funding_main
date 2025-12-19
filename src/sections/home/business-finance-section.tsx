@@ -31,7 +31,7 @@ export default function BusinessFinanceSection() {
                     <div className="space-y-8">
                         <div className="space-y-4">
                             <div
-                                className="inline-flex items-center gap-2 bg-[#06b6d4] text-white px-4 py-2 rounded-full text-xs font-medium">
+                                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white px-4 py-2 rounded-full text-xs font-medium">
                                 <Star className="w-4 h-4" />
                                 Proven and trusted by businesses at scale
                             </div>
@@ -65,26 +65,30 @@ export default function BusinessFinanceSection() {
                             {[
                                 {
                                     icon: TrendingUp,
-                                    title: "Tailored Finance Solutions",
-                                    desc: "Customized to your needs"
+                                    title: "Finance That Fits",
+                                    desc: "Built around your goals"
                                 },
-                                { icon: Clock, title: "Loan Terms Up to 72 Months", desc: "Flexible repayment options" },
+                                { icon: Clock, title: "Repay Over 6 Years", desc: "Pay at your own pace" },
                                 {
                                     icon: PoundSterling,
-                                    title: "Funding from £1,000 to £10 Million",
-                                    desc: "Scale as you grow"
+                                    title: "£1K to £10M Available",
+                                    desc: "Funding that scales"
                                 },
-                                { icon: Network, title: "Wide Lender Network", desc: "Best possible rates" }
+                                { icon: Network, title: "Whole-of-Market Access", desc: "We find your best rate" }
                             ].map((benefit, index) => (
                                 <div key={index}
-                                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-accent/20 transition-colors">
-                                    <div
-                                        className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center mt-1 flex-shrink-0">
-                                        <benefit.icon className="w-4 h-4 text-primary" />
+                                    className="flex items-start gap-4 p-3 rounded-xl hover:bg-accent/5 transition-all duration-300 group">
+                                    <div className="relative flex-shrink-0">
+                                        {/* Halo / Glow Effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-[#000428] to-[#1CB5E0] opacity-20 blur-lg rounded-full group-hover:opacity-40 transition-opacity" />
+                                        <div
+                                            className="relative w-10 h-10 bg-white shadow-sm border border-border/50 rounded-xl flex items-center justify-center mt-1 z-10 transition-transform group-hover:scale-110">
+                                            <benefit.icon className="w-5 h-5 text-primary" />
+                                        </div>
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-card-foreground text-sm leading-tight">{benefit.title}</h3>
-                                        <p className="text-xs text-muted-foreground mt-1">{benefit.desc}</p>
+                                        <h3 className="font-bold text-card-foreground text-sm leading-tight group-hover:text-primary transition-colors">{benefit.title}</h3>
+                                        <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{benefit.desc}</p>
                                     </div>
                                 </div>
                             ))}

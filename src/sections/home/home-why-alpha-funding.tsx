@@ -14,33 +14,33 @@ import Link from "next/link";
 export default function WhyAlphaFunding() {
     const loans = [
         {
-            title: "Wide Lender Network",
-            description: "Whole-of-market access for the best rates.",
+            title: "50+ UK Lenders",
+            description: "One search. Best rate found.",
             icon: <FaPercentage className="text-primary text-lg" />
         },
         {
-            title: "Fast Decisions",
-            description: "Approved today, funded tomorrow.",
+            title: "24-Hour Decisions",
+            description: "Green light today, cash tomorrow.",
             icon: <FaClock className="text-primary text-lg" />
         },
         {
-            title: "Effortless Application",
-            description: "Apply online in minutes — no long forms.",
+            title: "Apply in Minutes",
+            description: "Online, simple, no paperwork pile.",
             icon: <FaClipboardCheck className="text-primary text-lg" />
         },
         {
-            title: "Flexible Repayments",
-            description: "Aligned to your business cash flow.",
+            title: "Repay Your Way",
+            description: "Schedules that fit your cash flow.",
             icon: <FaExchangeAlt className="text-primary text-lg" />
         },
         {
-            title: "Tailored Solutions",
-            description: "Personalised finance matched to your needs.",
+            title: "Finance That Fits",
+            description: "Matched to how your business runs.",
             icon: <FaCogs className="text-primary text-lg" />
         },
         {
-            title: "Dedicated Support",
-            description: "Your own account manager, start to finish.",
+            title: "One Point of Contact",
+            description: "Your advisor from start to funded.",
             icon: <FaUserTie className="text-primary text-lg" />
         }
     ];

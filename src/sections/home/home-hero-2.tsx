@@ -15,10 +15,10 @@ import BusinessFinanceSection from "@/sections/home/business-finance-section";
 
 export default function Homehero2() {
     const points = [
-        "Fast business loans UK",
-        "Secured & unsecured options",
-        "Whole-of-market broker access",
-        "Tailored to your cash flow"
+        "Decisions in 24–48 hours",
+        "No collateral? No problem.",
+        "50+ UK lender panel",
+        "Built around your cash flow"
     ];
 
 
@@ -75,19 +75,21 @@ export default function Homehero2() {
 
 
     return (
-        <div className={"flex flex-col min-h-screen pt-10"}>
-            {/* Intro Stats */}
-            <div className={"grid grid-cols-1 md:grid-cols-4 px-[4%] md:px-[6%] w-full gap-5"}>
-                {
-                    points.map((point, index) => (
-                        <div key={index} className={"flex text-lg items-center gap-2"}>
-                            <MdVerified size={25} className={"text-primary"} />
-                            <p className={"font-semibold text-sm md:text-base"}>
-                                {point}
-                            </p>
-                        </div>
-                    ))
-                }
+        <div className={"flex flex-col"}>
+            {/* Intro Stats - Centered Row */}
+            <div className="w-full bg-white py-10 flex items-center justify-center">
+                <div className={"grid grid-cols-1 md:grid-cols-4 px-[4%] md:px-[6%] w-full gap-5"}>
+                    {
+                        points.map((point, index) => (
+                            <div key={index} className={"flex text-lg items-center justify-center md:justify-start gap-2"}>
+                                <MdVerified size={25} className={"text-primary flex-shrink-0"} />
+                                <p className={"font-semibold text-sm md:text-base whitespace-nowrap"}>
+                                    {point}
+                                </p>
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
 
             <BusinessFinanceSection />

@@ -52,7 +52,7 @@
   --color-brand-midnight: var(--brand-midnight);
   --color-brand-midnight-dark: var(--brand-midnight-dark);
   --color-brand-midnight-slate: var(--brand-midnight-slate);
-  --color-brand-cyan: var(--brand-cyan);
+  --color-brand-cyan: #1CB5E0;
   --color-brand-cyan-light: var(--brand-cyan-light);
   --color-brand-cyan-lighter: var(--brand-cyan-lighter);
   --color-brand-fuchsia: var(--brand-fuchsia);
@@ -90,7 +90,7 @@
   --primary-foreground: #FFFFFF;
 
   /* Secondary - Cyan (CTAs) */
-  --secondary: #a5c4e4;
+  --secondary: #1CB5E0;
   --secondary-foreground: #201130;
 
   /* Accent - Fuchsia */
@@ -123,7 +123,7 @@
   --input: #CBD5E1;
 
   /* Ring/Focus */
-  --ring: #a5c4e4;
+  --ring: #1CB5E0;
   /* Cyan */
 
   /* Destructive */
@@ -131,7 +131,7 @@
   --destructive-foreground: #FFFFFF;
 
   /* Success */
-  --success: #a5c4e4;
+  --success: #1CB5E0;
   --success-foreground: #FFFFFF;
 
   /* Warning */
@@ -139,7 +139,7 @@
   --warning-foreground: #201130;
 
   /* Info */
-  --info: #a5c4e4;
+  --info: #1CB5E0;
   --info-foreground: #FFFFFF;
 
   /* ===================
@@ -170,7 +170,7 @@
   /* ===================
      CHARTS
      =================== */
-  --chart-1: #06B6D4;
+  --chart-1: #1CB5E0;
   --chart-2: #D946EF;
   --chart-3: #22D3EE;
   --chart-4: #E879F9;
@@ -181,31 +181,31 @@
      =================== */
   --sidebar: #030f42;
   --sidebar-foreground: #E2E8F0;
-  --sidebar-primary: #06B6D4;
+  --sidebar-primary: #1CB5E0;
   --sidebar-primary-foreground: #FFFFFF;
   --sidebar-accent: #0F172A;
   --sidebar-accent-foreground: #E2E8F0;
   --sidebar-border: #475569;
-  --sidebar-ring: #06B6D4;
+  --sidebar-ring: #1CB5E0;
 
   /* ===================
      GRADIENT DEFINITIONS
      =================== */
 
-  /* Cyber Gradient (#06B6D4 → #22D3EE → #67E8F9) */
-  --gradient-cyber: linear-gradient(135deg, #06B6D4 0%, #22D3EE 50%, #67E8F9 100%);
+  /* Cyber Gradient (#000046 → #1CB5E0 → #67E8F9) */
+  --gradient-cyber: linear-gradient(135deg, #000046 0%, #1CB5E0 50%, #67E8F9 100%);
 
   /* Midnight Gradient (#030f42 → #0F172A → #1E293B) */
   --gradient-midnight: linear-gradient(135deg, #030f42 0%, #0F172A 50%, #1E293B 100%);
 
-  /* Neon Gradient (#06B6D4 → #D946EF) */
-  --gradient-neon: linear-gradient(135deg, #06B6D4 0%, #D946EF 100%);
+  /* Neon Gradient (#000046 → #D946EF) */
+  --gradient-neon: linear-gradient(135deg, #000046 0%, #D946EF 100%);
 
   /* Hero Background (#030f42 → #0F172A) */
   --gradient-hero-bg: linear-gradient(135deg, #030f42 0%, #0F172A 100%);
 
-  /* CTA Background (#06B6D4 → #22D3EE) */
-  --gradient-cta-bg: linear-gradient(135deg, #06B6D4 0%, #22D3EE 100%);
+  /* CTA Background (#000046 → #1CB5E0) */
+  --gradient-cta-bg: linear-gradient(135deg, #000046 0%, #1CB5E0 100%);
 }
 
 /* ===================
@@ -213,7 +213,7 @@
    =================== */
 .dark {
   /* Primary - Cyan (reversed for dark mode) */
-  --primary: #06B6D4;
+  --primary: #1CB5E0;
   --primary-foreground: #030f42;
 
   /* Secondary - Slate */
@@ -291,7 +291,7 @@
 
 /* Text Gradients */
 .text-gradient-primary {
-  background: linear-gradient(to right, #43cea2, #185a9d);
+  background: linear-gradient(to right, #000428, #1CB5E0);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

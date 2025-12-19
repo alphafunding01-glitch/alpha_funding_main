@@ -16,10 +16,10 @@ export default function HomeHeroPage() {
         "flex md:flex-row md:py-9 py-40 flex-col justify-between px-[4%] md:px-[6%] items-center bg-[#f0f0f0] text-primary"
       }
     >
-      <div className="flex relative mt-36 flex-col justify-between h-full w-full gap-4">
+      <div className="flex relative mt-36 flex-col justify-between h-full md:w-[45%] w-full gap-4">
         <div className="flex flex-col gap-4">
           {/* Small pill – use secondary color to pop */}
-          <div className="px-4 py-1 mb-2 rounded-full w-min bg-[#06b6d4]">
+          <div className="px-4 py-1 mb-2 rounded-full w-min bg-gradient-to-r from-[#000428] to-[#1CB5E0]">
             <p
               className={`text-white text-xs whitespace-nowrap font-bold ${poppins.className}`}
             >
@@ -28,21 +28,29 @@ export default function HomeHeroPage() {
           </div>
 
           <h1 className="text-3xl md:text-5xl font-bold text-gradient-primary">
-            Fast Business Loans UK | Commercial Finance Broker
+            Fast Business Loans UK
           </h1>
         </div>
-        <p className={`${poppins.className} text-sm mt-4 text-black`}>
-          Alpha Funding is a UK business finance broker helping SMEs access secured and unsecured business loans, asset finance, invoice finance, and more — with flexible terms and competitive rates from our panel of trusted lenders.
-        </p>
+        <div className="flex flex-col gap-2 mt-4">
+          <p className={`${poppins.className} text-sm md:text-base font-medium text-black`}>
+            • Secured & unsecured options
+          </p>
+          <p className={`${poppins.className} text-sm md:text-base font-medium text-black`}>
+            • Whole-of-market broker access
+          </p>
+          <p className={`${poppins.className} text-sm md:text-base font-medium text-black`}>
+            • Tailored to your cash flow
+          </p>
+        </div>
         <div className={"flex mt-8 gap-4"}>
           <Link href={"/apply-now"} className={buttonVariants({
             size: "lg",
-            className: "!bg-[#0D9488] text-white hover:!bg-[#0D9488]/90 shadow-lg hover:shadow-xl transition-all duration-300"
+            className: "!bg-[#1CB5E0] text-white hover:!bg-[#1CB5E0]/90 shadow-lg hover:shadow-xl transition-all duration-300"
           })}>
             Apply Now <ArrowUpRight />
           </Link>
           <Link href={"/check-eligibility"} className={buttonVariants({
-            size: "lg", variant: "secondary", className: "md:w-[200px] !bg-[#06b6d4] text-white hover:!bg-[#06b6d4]/90"
+            size: "lg", variant: "secondary", className: "md:w-[200px] !bg-gradient-to-r from-[#000428] to-[#1CB5E0] text-white shadow-lg hover:shadow-xl transition-all duration-300"
           })} >
             Check Eligibility <ArrowUpRight />
           </Link>
@@ -51,8 +59,8 @@ export default function HomeHeroPage() {
           <img src={"/trust-pilot.png"} className={"h-24 w-auto"} alt={"img"} />
         </div>
       </div>
-      <div className={"flex w-full pt-20 items-end justify-center flex-col"}>
-        <img className={"w-full md:w-[75%]"} src={"./hero-home.png"} alt={"hero-home"} />
+      <div className={"flex md:w-[55%] w-full pt-10 items-end justify-center flex-col"}>
+        <img className={"w-full"} src={"./hero-home.png"} alt={"hero-home"} />
       </div>
     </div>
   )

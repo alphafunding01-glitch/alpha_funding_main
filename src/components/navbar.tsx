@@ -617,13 +617,14 @@ export default function NavBar() {
                     </div >
 
                     <Link href={"/check-eligibility"}
-                        className={buttonVariants({ size: "lg", className: "hidden lg:flex bg-[#06B6D4] text-white hover:bg-[#22D3EE]" })}>
+
+                        className={buttonVariants({ size: "lg", className: "hidden lg:flex bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white hover:opacity-90 transition-opacity" })}>
                         Check Eligibility <ArrowUpRight />
                     </Link>
                 </div >
 
                 {/* Mobile CTA button - Visible on mobile */}
-                < Button size={"sm"} className={"bg-[#06B6D4] text-white hover:bg-[#22D3EE] lg:hidden"} >
+                < Button size={"sm"} className={"bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white hover:opacity-90 lg:hidden"} >
                     <Search className="w-4 h-4" />
                 </Button >
 
@@ -686,7 +687,7 @@ export default function NavBar() {
                                     className={
                                         buttonVariants({
                                             size: "lg",
-                                            className: "w-full bg-[#06B6D4] text-white hover:bg-[#22D3EE]"
+                                            className: "w-full bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white hover:opacity-90"
                                         })
                                     }
                                     onClick={() => setIsSheetOpen(false)}
