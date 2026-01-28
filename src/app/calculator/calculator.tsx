@@ -1,15 +1,16 @@
 "use client";
 
-import {useEffect, useState} from "react";
-import {Input} from "@/components/ui/input";
-import {Button, buttonVariants} from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardHeader,
     CardTitle,
-    CardContent, CardFooter,
+    CardContent,
+    CardFooter,
 } from "@/components/ui/card";
-import {Slider} from "@/components/ui/slider";
+import { Slider } from "@/components/ui/slider";
 import {
     ResponsiveContainer,
     PieChart,
@@ -18,7 +19,19 @@ import {
     Tooltip,
     Legend,
 } from "recharts";
-import {motion} from "framer-motion";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 type RateType =
     | "Annual Interest Rate"
@@ -28,6 +41,8 @@ type RateType =
     | "Factor Rate"
     | "Flat Rate";
 
+type FeeType = "fixed" | "percentage";
+
 interface CalculationResult {
     annualRate: number;
     monthlyRate: number;
@@ -35,7 +50,7 @@ interface CalculationResult {
     yieldRate: number;
     factorRate: number;
     flatRate: number;
-    mandatoryFees: number;
+    arrangementFee: number;
     totalLoanAmount: number;
     totalInterest: number;
     totalPayable: number;
@@ -48,34 +63,45 @@ export default function CalculatorPage() {
 
     const [rateType, setRateType] = useState<RateType>("Annual Interest Rate");
     const [rateValue, setRateValue] = useState<number | null>(30.0);
-    const [hasFees, setHasFees] = useState("No");
-    const [feePercentage, setFeePercentage] = useState<number | null>(0);
-    const [fixedFee, setFixedFee] = useState<number | null>(0);
+
+    // New Fee Logic
+    const [feeType, setFeeType] = useState<FeeType>("percentage");
+    const [feeValue, setFeeValue] = useState<number | null>(2.0); // Default 2%
+
+    const [email, setEmail] = useState("");
+    const [isEmailOpen, setIsEmailOpen] = useState(false);
+    const [emailSent, setEmailSent] = useState(false);
+
+    const formatNumber = (value: number) => value.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
 
     const calculateRates = (): CalculationResult | null => {
         if (!amount || !months || !rateValue) return null;
+
+        // Calculate Arrangement Fee based on user input (No hidden fees)
+        let arrangementFee = 0;
+        if (feeValue) {
+            if (feeType === "percentage") {
+                arrangementFee = amount * (feeValue / 100);
+            } else {
+                arrangementFee = feeValue;
+            }
+        }
+
+        const totalLoanAmount = amount + arrangementFee;
+        const termInYears = months / 12;
 
         let annualRate = 0;
         let totalPayable = 0;
         let monthlyPayment = 0;
         let totalInterest = 0;
 
-        // Calculate fees first
-        let mandatoryFees = 0;
-        if (hasFees === "Yes (as a percentage of the loan)" && feePercentage) {
-            mandatoryFees = amount * (feePercentage / 100);
-        } else if (hasFees === "Yes (as fixed costs)" && fixedFee) {
-            mandatoryFees = fixedFee;
-        }
-
-        const totalLoanAmount = amount + mandatoryFees;
-        const termInYears = months / 12;
-
         // Calculate based on the input rate type
         switch (rateType) {
             case "Annual Interest Rate":
                 annualRate = rateValue;
-                // Use compound interest formula for monthly payments
                 const monthlyInterestRate = annualRate / 100 / 12;
                 if (monthlyInterestRate > 0) {
                     monthlyPayment = (totalLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, months)) /
@@ -103,7 +129,7 @@ export default function CalculatorPage() {
             case "Daily Interest Rate":
                 annualRate = rateValue * 365;
                 const dailyRate = rateValue / 100;
-                const effectiveMonthlyRate = Math.pow(1 + dailyRate, 30.44) - 1; // Average days per month
+                const effectiveMonthlyRate = Math.pow(1 + dailyRate, 30.44) - 1;
                 if (effectiveMonthlyRate > 0) {
                     monthlyPayment = (totalLoanAmount * effectiveMonthlyRate * Math.pow(1 + effectiveMonthlyRate, months)) /
                         (Math.pow(1 + effectiveMonthlyRate, months) - 1);
@@ -115,7 +141,6 @@ export default function CalculatorPage() {
                 break;
 
             case "Yield":
-                // Yield is the total interest as a percentage of loan amount over the term
                 const yieldDecimal = rateValue / 100;
                 annualRate = (yieldDecimal / termInYears) * 100;
                 totalInterest = totalLoanAmount * yieldDecimal;
@@ -124,7 +149,6 @@ export default function CalculatorPage() {
                 break;
 
             case "Factor Rate":
-                // Factor rate: multiply loan amount by factor to get total repayable
                 totalPayable = totalLoanAmount * rateValue;
                 totalInterest = totalPayable - totalLoanAmount;
                 monthlyPayment = totalPayable / months;
@@ -132,27 +156,19 @@ export default function CalculatorPage() {
                 break;
 
             case "Flat Rate":
-                // Flat rate: simple interest calculation
                 const flatTermInYears = months / 12;
                 totalInterest = totalLoanAmount * (rateValue / 100) * flatTermInYears;
                 totalPayable = totalLoanAmount + totalInterest;
                 monthlyPayment = totalPayable / months;
-                // Convert flat rate to equivalent annual rate
-                // Flat rate equivalent annual = (Total Interest / Principal) / Term in years
                 annualRate = (totalInterest / totalLoanAmount) / flatTermInYears * 100;
                 break;
         }
 
-        // Calculate all rate conversions based on the calculated annual rate
         const monthlyRate = annualRate / 12;
         const dailyRate = annualRate / 365;
-        const finalTermInYears = months / 12;
         const yieldRate = (totalInterest / totalLoanAmount) * 100;
         const factorRate = totalPayable / totalLoanAmount;
-
-// For flat rate conversion: if input was flat rate, use the input value
-// Otherwise convert from annual rate
-        const flatRate = rateType === "Flat Rate" ? rateValue : annualRate / 2;
+        const flatRate = rateType === "Flat Rate" ? rateValue : annualRate / 2; // Approximation
 
         return {
             annualRate,
@@ -161,7 +177,7 @@ export default function CalculatorPage() {
             yieldRate,
             factorRate,
             flatRate,
-            mandatoryFees,
+            arrangementFee,
             totalLoanAmount,
             totalInterest,
             totalPayable,
@@ -171,380 +187,512 @@ export default function CalculatorPage() {
 
     const calculations = calculateRates();
 
+    const generatePDF = () => {
+        if (!calculations || !amount) return null;
+
+        const doc = new jsPDF();
+
+        // Header
+        doc.setFillColor(0, 4, 40); // Brand Midnight
+        doc.rect(0, 0, 210, 40, "F");
+        doc.setFontSize(22);
+        doc.setTextColor(255, 255, 255);
+        doc.text("Alpha Funding", 20, 25);
+        doc.setFontSize(12);
+        doc.setTextColor(28, 181, 224); // Brand Cyan
+        doc.text("Business Loan Quote", 150, 25);
+
+        // Quote Details
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(14);
+        doc.text("Your Quote Summary", 20, 55);
+
+        const tableData = [
+            ["Loan Amount", `£${formatNumber(amount)}`],
+            ["Mandatory Fees", `£${formatNumber(calculations.arrangementFee)} (${((calculations.arrangementFee / amount) * 100).toFixed(2)}%)`],
+            ["Total Loan Amount", `£${formatNumber(calculations.totalLoanAmount)}`],
+            ["Loan Term", `${months} Months`],
+            ["Monthly Payment", `£${formatNumber(calculations.monthlyPayment)}`],
+            ["Total Interest", `£${formatNumber(calculations.totalInterest)}`],
+            ["Total Payable", `£${formatNumber(calculations.totalPayable)}`],
+        ];
+
+        autoTable(doc, {
+            startY: 65,
+            head: [['Description', 'Value']],
+            body: tableData,
+            theme: 'striped',
+            headStyles: { fillColor: [0, 4, 40] },
+            styles: { fontSize: 11, cellPadding: 6 },
+        });
+
+        // Disclaimer
+        const finalY = (doc as any).lastAutoTable.finalY + 20;
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text("Disclaimer:", 20, finalY);
+        doc.setFontSize(9);
+        doc.text(
+            "This quote is an estimate based on the information provided. It does not constitute a guaranteed offer of funding. " +
+            "Actual rates and terms may vary based on credit checks and lender criteria.",
+            20,
+            finalY + 7,
+            { maxWidth: 170 }
+        );
+
+        return doc.output("datauristring");
+    };
+
+    const handleSendEmail = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const pdfBase64 = generatePDF();
+        if (!pdfBase64) return;
+
+        // Visual Feedback - Loading
+        const btn = document.getElementById("send-quote-btn") as HTMLButtonElement;
+        if (btn) btn.innerText = "Sending...";
+
+        try {
+            const response = await fetch("/api/send-quote-mail", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email,
+                    pdfBase64,
+                    quoteSummary: {
+                        amount: formatNumber(amount ?? 0),
+                        totalPayable: formatNumber(calculations?.totalPayable ?? 0),
+                        monthlyPayment: formatNumber(calculations?.monthlyPayment ?? 0),
+                    }
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setEmailSent(true);
+                setTimeout(() => {
+                    setIsEmailOpen(false);
+                    setEmailSent(false);
+                    setEmail("");
+                }, 3000);
+            } else {
+                alert("Failed to send email. Please try again.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred. Please try again.");
+        } finally {
+            if (btn) btn.innerText = "Send Quote";
+        }
+    };
+
     const chartData =
         calculations && amount
             ? [
-                {name: "Loan Amount", value: amount, color: "#9166aa"},
-                {
-                    name: "Total Interest",
-                    value: calculations.totalInterest,
-                    color: "#62c1a5",
-                },
-                {
-                    name: "Mandatory Fees",
-                    value: calculations.mandatoryFees,
-                    color: "#f59e0b",
-                },
+                { name: "Principal", value: amount, color: "#1CB5E0" }, // Brand Cyan
+                { name: "Total Interest", value: calculations.totalInterest, color: "#000428" }, // Brand Midnight
+                { name: "Arrangement Fees", value: calculations.arrangementFee, color: "#D946EF" }, // Brand Fuchsia
             ].filter((item) => item.value > 0)
             : [];
 
     const comparisonData =
         calculations && [
-            {
-                name: "Annual Interest Rate",
-                value: calculations.annualRate.toFixed(2) + "%",
-            },
-            {
-                name: "Monthly Interest Rate",
-                value: calculations.monthlyRate.toFixed(3) + "%",
-            },
-            {
-                name: "Daily Interest Rate",
-                value: calculations.dailyRate.toFixed(4) + "%",
-            },
-            {name: "Yield / Interest as a % of Loan", value: calculations.yieldRate.toFixed(3) + "%"},
-            {name: "Factor Rate", value: calculations.factorRate.toFixed(4)},
-            {name: "Flat Rate", value: calculations.flatRate.toFixed(1) + "%"},
+            { name: "Annual Interest Rate", value: calculations.annualRate.toFixed(2) + "%" },
+            { name: "Monthly Interest Rate", value: calculations.monthlyRate.toFixed(3) + "%" },
+            { name: "Daily Interest Rate", value: calculations.dailyRate.toFixed(4) + "%" },
+            { name: "Yield / Interest as %", value: calculations.yieldRate.toFixed(3) + "%" },
+            { name: "Factor Rate", value: calculations.factorRate.toFixed(4) },
+            { name: "Flat Rate", value: calculations.flatRate.toFixed(1) + "%" },
         ];
 
-    const formatNumber = (value: number) => value.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    });
-
     return (
-        <div className="min-h-screen bg-gray-50 p-4">
-            <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-                    Business Loan Calculator
-                </h1>
+        <div className="min-h-screen">
+            <div className="max-w-7xl mx-auto space-y-12">
+                <div className="text-center space-y-4">
+                    <h1 className="text-4xl md:text-5xl font-heading font-bold text-gradient-primary">
+                        Business Loan Calculator
+                    </h1>
+                    <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+                        Transparent, instant quotes. Adjust your terms to see exactly what you'll pay, including all fees.
+                    </p>
+                </div>
 
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                    {/* Left - Input Form */}
-                    <Card className="shadow-xl rounded-2xl">
-                        <CardHeader>
-                            <CardTitle className="text-xl font-bold text-primary">
-                                Add Your Quote Details
-                            </CardTitle>
-                            <p className="text-sm text-gray-600">
-                                Enter your loan terms below to compare costs based on interest rate,
-                                yield and factor rate.
-                            </p>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            {/* Loan Amount */}
-                            <div>
-                                <label className="text-sm font-medium">Loan Amount</label>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <span className="text-lg">£</span>
-                                    <Input
-                                        type="number"
-                                        value={amount ?? ""}
-                                        onChange={(e) => setAmount(Number(e.target.value))}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    {/* Left Panel - Inputs (Neuromorphic) */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="lg:col-span-4 relative group h-fit"
+                    >
+                        {/* Ambient Glow */}
+                        <div className="absolute -inset-1 bg-gradient-to-r from-[#1CB5E0] to-[#000428] rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" />
+
+                        <Card className="relative bg-white/80 backdrop-blur-xl border-white/20 shadow-xl rounded-2xl overflow-hidden">
+                            <CardHeader>
+                                <CardTitle className="text-xl font-heading font-bold text-brand-midnight">
+                                    Quote Details
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-8">
+                                {/* Loan Amount */}
+                                <div className="space-y-3">
+                                    <label className="text-sm font-bold text-slate-700 uppercase tracking-widest">Loan Amount</label>
+                                    <div className="relative">
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">£</span>
+                                        <Input
+                                            type="number"
+                                            value={amount ?? ""}
+                                            onChange={(e) => setAmount(Number(e.target.value))}
+                                            className="pl-10 h-12 bg-white/50 border-slate-200 focus:border-[#1CB5E0] focus:ring-[#1CB5E0] text-lg font-bold text-slate-800 rounded-xl"
+                                        />
+                                    </div>
+                                    <Slider
+                                        value={[amount ?? 0]}
                                         min={1000}
-                                        max={2000000}
+                                        max={500000}
+                                        step={1000}
+                                        onValueChange={(v) => setAmount(v[0])}
+                                        className="py-2"
                                     />
                                 </div>
-                            </div>
 
-                            {/* Months slider */}
-                            <div>
-                                <label className="text-sm font-medium">
-                                    Loan Term: {months ?? 0} months
-                                </label>
-                                <Slider
-                                    value={[months ?? 1]}
-                                    min={1}
-                                    max={120}
-                                    step={1}
-                                    onValueChange={(v) => setMonths(v[0])}
-                                    className="mt-2"
-                                />
-                            </div>
+                                {/* Term */}
+                                <div className="space-y-3">
+                                    <div className="flex justify-between">
+                                        <label className="text-sm font-bold text-slate-700 uppercase tracking-widest">Loan Term</label>
+                                        <span className="text-sm font-bold text-[#1CB5E0]">{months} Months</span>
+                                    </div>
+                                    <Slider
+                                        value={[months ?? 1]}
+                                        min={1}
+                                        max={60}
+                                        step={1}
+                                        onValueChange={(v) => setMonths(v[0])}
+                                        className="py-2"
+                                    />
+                                </div>
 
-                            {/* Rate Type */}
-                            <div>
-                                <label className="text-sm font-medium mb-2 block">
-                                    The quote I have received is based on
-                                </label>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {[
-                                        "Annual Interest Rate",
-                                        "Monthly Interest Rate",
-                                        "Daily Interest Rate",
-                                        "Yield",
-                                        "Factor Rate",
-                                        "Flat Rate",
-                                    ].map((type) => (
-                                        <Button
-                                            key={type}
-                                            variant={rateType === type ? "default" : "outline"}
-                                            size="sm"
-                                            className={`text-xs ${
-                                                rateType === type
-                                                    ? "bg-primary text-white"
-                                                    : "hover:bg-blue-100"
-                                            }`}
-                                            onClick={() => {
-                                                setRateType(type as RateType)
-                                                if (type == "Annual Interest Rate") {
-                                                    setRateValue(30)
-                                                } else if (type == "Daily Interest Rate") {
-                                                    setRateValue(0.0822)
-                                                } else if (type == "Monthly Interest Rate") {
-                                                    setRateValue(2.500)
-                                                } else if (type == "Yield") {
-                                                    setRateValue(25.406)
-                                                } else if (type == "Factor Rate") {
-                                                    setRateValue(1.2541)
-                                                } else if (type == "Flat Rate") {
-                                                    setRateValue(16.9)
-                                                }
-                                            }}
+                                {/* Interest Rate */}
+                                <div className="space-y-3">
+                                    <label className="text-sm font-bold text-slate-700 uppercase tracking-widest">Interest Rate</label>
+                                    <div className="grid grid-cols-2 gap-2 mb-2">
+                                        {[
+                                            "Annual Interest Rate",
+                                            "Monthly Interest Rate",
+                                            "Flat Rate",
+                                            "Factor Rate"
+                                        ].map((type) => (
+                                            <button
+                                                key={type}
+                                                onClick={() => {
+                                                    setRateType(type as RateType);
+                                                    if (type === "Annual Interest Rate") setRateValue(15);
+                                                    if (type === "Monthly Interest Rate") setRateValue(1.5);
+                                                    if (type === "Flat Rate") setRateValue(8);
+                                                    if (type === "Factor Rate") setRateValue(1.2);
+                                                }}
+                                                className={`text-xs px-2 py-2 rounded-lg font-bold transition-all ${rateType === type
+                                                    ? "bg-[#000428] text-white shadow-lg scale-105"
+                                                    : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                                                    }`}
+                                            >
+                                                {type.replace("Interest Rate", "Rate")}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <div className="relative">
+                                        <Input
+                                            type="number"
+                                            value={rateValue ?? ""}
+                                            onChange={(e) => setRateValue(Number(e.target.value))}
+                                            className="h-12 bg-white/50 border-slate-200 focus:border-[#1CB5E0] focus:ring-[#1CB5E0] text-lg font-bold text-slate-800 rounded-xl"
+                                            step={0.01}
+                                        />
+                                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">
+                                            {rateType === "Factor Rate" ? "x" : "%"}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Arrangement Fees */}
+                                <div className="space-y-4 p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
+                                    <label className="text-sm font-bold text-slate-700 uppercase tracking-widest">Arrangement Fees</label>
+
+                                    {/* Toggle */}
+                                    <div className="grid grid-cols-2 bg-white rounded-xl p-1 border border-slate-200 shadow-sm">
+                                        <button
+                                            onClick={() => { setFeeType("percentage"); setFeeValue(2.0); }}
+                                            className={`text-xs py-2 rounded-lg font-bold transition-all ${feeType === "percentage" ? "bg-[#1CB5E0] text-white shadow-md relative overflow-hidden" : "text-slate-400 hover:text-slate-600"}`}
                                         >
-                                            {type}
-                                        </Button>
-                                    ))}
-                                </div>
-                            </div>
+                                            <span className="relative z-10">Percentage %</span>
+                                            {feeType === "percentage" && <div className="absolute inset-0 bg-gradient-to-r from-[#1CB5E0] to-[#22D3EE]" />}
+                                        </button>
+                                        <button
+                                            onClick={() => { setFeeType("fixed"); setFeeValue(500); }}
+                                            className={`text-xs py-2 rounded-lg font-bold transition-all ${feeType === "fixed" ? "bg-[#1CB5E0] text-white shadow-md relative overflow-hidden" : "text-slate-400 hover:text-slate-600"}`}
+                                        >
+                                            <span className="relative z-10">Fixed Amount £</span>
+                                            {feeType === "fixed" && <div className="absolute inset-0 bg-gradient-to-r from-[#1CB5E0] to-[#22D3EE]" />}
+                                        </button>
+                                    </div>
 
-                            {/* Rate Value */}
-                            <div>
-                                <label className="text-sm font-medium">Rate Value</label>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <Input
-                                        type="number"
-                                        value={rateValue ?? ""}
-                                        onChange={(e) => setRateValue(Number(e.target.value))}
-                                        step={0.01}
-                                        min={0.01}
-                                        max={95}
-                                    />
-                                    <span className="text-sm">
-                                        {rateType === "Factor Rate" ? "" : "%"}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Mandatory Fees */}
-                            <div>
-                                <label className="text-sm font-medium mb-2 block">
-                                    Has the company added any mandatory fees?
-                                </label>
-                                <div className="space-y-2">
-                                    {[
-                                        "No",
-                                        "Yes (as a percentage of the loan)",
-                                        "Yes (as fixed costs)",
-                                    ].map((option) => (
-                                        <label key={option} className="flex items-center space-x-2">
-                                            <input
-                                                type="radio"
-                                                value={option}
-                                                checked={hasFees === option}
-                                                onChange={(e) => setHasFees(e.target.value)}
-                                                className="text-blue-600"
+                                    {feeType === "percentage" ? (
+                                        <div className="space-y-3">
+                                            <div className="flex justify-between text-xs font-bold text-slate-600">
+                                                <span>0%</span>
+                                                <span className="text-[#1CB5E0] text-base">{feeValue}%</span>
+                                                <span>50%</span>
+                                            </div>
+                                            <Slider
+                                                value={[feeValue ?? 0]}
+                                                min={0}
+                                                max={50}
+                                                step={0.1}
+                                                onValueChange={(v) => setFeeValue(v[0])}
                                             />
-                                            <span className="text-sm">{option}</span>
-                                        </label>
-                                    ))}
+                                        </div>
+                                    ) : (
+                                        <div className="relative">
+                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">£</span>
+                                            <Input
+                                                type="number"
+                                                value={feeValue ?? ""}
+                                                onChange={(e) => setFeeValue(Number(e.target.value))}
+                                                className="pl-10 h-10 bg-white border-slate-200 font-bold rounded-lg"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
 
-                                {hasFees === "Yes (as a percentage of the loan)" && (
-                                    <div className="mt-2">
-                                        <Input
-                                            type="number"
-                                            value={feePercentage ?? ""}
-                                            onChange={(e) => setFeePercentage(Number(e.target.value))}
-                                            placeholder="Fee percentage"
-                                            step={0.1}
-                                        />
-                                    </div>
-                                )}
+                            </CardContent>
+                        </Card>
+                    </motion.div>
 
-                                {hasFees === "Yes (as fixed costs)" && (
-                                    <div className="mt-2">
-                                        <Input
-                                            type="number"
-                                            value={fixedFee ?? ""}
-                                            onChange={(e) => setFixedFee(Number(e.target.value))}
-                                            placeholder="Fixed fee amount (£)"
-                                        />
+                    {/* Middle - Results & Chart */}
+                    <div className="lg:col-span-4 flex flex-col gap-6">
+                        {/* Results Card */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="relative group"
+                        >
+                            <div className="absolute -inset-1 bg-gradient-to-r from-[#000428] to-[#1CB5E0] rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200" />
+                            <Card className="relative border-none overflow-hidden bg-white/90 backdrop-blur-xl shadow-2xl rounded-2xl">
+                                <div className="h-2 bg-gradient-to-r from-[#000428] via-[#1CB5E0] to-[#22D3EE]" />
+                                <CardContent className="p-8 space-y-6">
+                                    <div className="text-center">
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Estimated Monthly Payment</p>
+                                        <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#000428] to-[#1CB5E0]">
+                                            £{calculations ? formatNumber(calculations.monthlyPayment) : "0.00"}
+                                        </p>
                                     </div>
-                                )}
-                            </div>
-                        </CardContent>
-                    </Card>
 
-                    {/* Middle - Chart */}
-                    <Card className="shadow-xl rounded-2xl">
-                        <CardHeader>
-                            <CardTitle className="text-lg font-bold">Loan Breakdown</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            {calculations ? (
-                                <>
-                                    <div className="h-64">
+                                    <div className="grid grid-cols-2 gap-4 pt-6 border-t border-slate-100">
+                                        <div className="text-center p-4 bg-slate-50/80 rounded-2xl border border-slate-100">
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Total Interest</p>
+                                            <p className="text-xl font-black text-[#1CB5E0]">
+                                                {calculations ? `£${formatNumber(calculations.totalInterest)}` : "£0.00"}
+                                            </p>
+                                        </div>
+                                        <div className="text-center p-4 bg-slate-50/80 rounded-2xl border border-slate-100">
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Total Payable</p>
+                                            <p className="text-xl font-black text-[#000428]">
+                                                {calculations ? `£${formatNumber(calculations.totalPayable)}` : "£0.00"}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Chart */}
+                                    <div className="h-48 w-full mt-4">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <PieChart>
                                                 <Pie
                                                     data={chartData}
                                                     innerRadius={60}
-                                                    outerRadius={100}
-                                                    paddingAngle={2}
+                                                    outerRadius={80}
+                                                    paddingAngle={5}
                                                     dataKey="value"
-                                                    cx="50%"
-                                                    cy="50%"
+                                                    stroke="none"
                                                 >
                                                     {chartData.map((entry, index) => (
-                                                        <Cell key={`cell-${index}`} fill={entry.color}/>
+                                                        <Cell key={`cell-${index}`} fill={entry.color} />
                                                     ))}
                                                 </Pie>
                                                 <Tooltip
-                                                    formatter={(val: number) => `£${val.toLocaleString()}`}
+                                                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', fontWeight: 'bold' }}
+                                                    itemStyle={{ color: '#000428' }}
                                                 />
-                                                <Legend/>
                                             </PieChart>
                                         </ResponsiveContainer>
                                     </div>
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+                    </div>
 
-                                    <div className="mt-4 space-y-3">
-                                        <div className="text-center p-4 bg-green-50 rounded-lg">
-                                            <p className="text-sm font-medium text-green-800">
-                                                TOTAL PAYABLE
-                                            </p>
-                                            <p className="text-2xl font-bold text-green-600">
-                                                £{formatNumber(calculations.totalPayable).toLocaleString()}
-                                            </p>
+                    {/* Right - Summary & breakdown */}
+                    <div className="lg:col-span-4 space-y-6">
+
+                        {/* New Quote Summary Section */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                        >
+                            <Card className="neuromorphic-card border-none overflow-hidden relative group">
+                                <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-[#D946EF] to-[#1CB5E0]" />
+                                <CardHeader>
+                                    <CardTitle className="text-xl font-heading font-bold text-brand-midnight">
+                                        Your Loan Quote Summary
+                                    </CardTitle>
+                                    <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Including Fees</p>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    <div className="space-y-3 text-sm">
+                                        <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                                            <span className="font-bold text-slate-600">Loan Amount</span>
+                                            <span className="font-black text-[#000428]">£{amount ? formatNumber(amount) : "0.00"}</span>
                                         </div>
-
-                                        <div className="text-center p-3 bg-blue-50 rounded-lg">
-                                            <p className="text-sm font-medium text-blue-800">
-                                                MONTHLY PAYMENT
-                                            </p>
-                                            <p className="text-xl font-bold text-blue-600">
-                                                £{formatNumber(calculations.monthlyPayment).toLocaleString()}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </>
-                            ) : (
-                                <p className="text-sm text-gray-500">
-                                    Enter loan details to see breakdown.
-                                </p>
-                            )}
-                            <p className={"text-xs text-gray-500 mt-4"}>
-                                Disclaimer – The calculators on this website are being provided for educational purposes only. The
-                                results are estimates based on information you provide and may not reflect actual results. The
-                                results of the calculations are not a promise or guarantee of a customer’s eligibility or terms for
-                                a specific product or service.
-                            </p>
-                        </CardContent>
-                    </Card>
-
-                    {/* Right - Summary */}
-                    <div className="space-y-6">
-                        {/* Rate Comparison */}
-                        <Card className="shadow-xl rounded-2xl">
-                            <CardHeader>
-                                <CardTitle className="text-lg font-bold">
-                                    See How Your Quote Translates
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                {comparisonData ? (
-                                    <div className="space-y-3">
-                                        <h4 className="font-bold text-sm">
-                                            Your Loan Quote Comparison (Excluding Fees)
-                                        </h4>
-                                        {comparisonData.map((item, index) => (
-                                            <div
-                                                key={index}
-                                                className="flex justify-between py-2 border-b border-gray-100"
-                                            >
-                                                <span className="text-sm font-medium">{item.name}</span>
-                                                <span className="text-sm font-bold">{item.value}</span>
+                                        <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                                            <div className="flex flex-col">
+                                                <span className="font-bold text-slate-600">Mandatory Fees</span>
+                                                {calculations && amount ? (
+                                                    <span className="text-[10px] text-slate-400">
+                                                        {((calculations.arrangementFee / amount) * 100).toFixed(2)}% of Loan Value
+                                                    </span>
+                                                ) : null}
                                             </div>
-                                        ))}
+                                            <span className="font-black text-[#D946EF]">
+                                                £{calculations ? formatNumber(calculations.arrangementFee) : "0.00"}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                                            <span className="font-bold text-slate-600">Total Loan Amount</span>
+                                            <span className="font-black text-[#000428]">
+                                                £{calculations ? formatNumber(calculations.totalLoanAmount) : "0.00"}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                                            <span className="font-bold text-slate-600">Loan Term</span>
+                                            <span className="font-black text-[#1CB5E0]">{months} Months</span>
+                                        </div>
+                                        <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                                            <span className="font-bold text-slate-600">Monthly Payment</span>
+                                            <span className="font-black text-[#000428]">
+                                                £{calculations ? formatNumber(calculations.monthlyPayment) : "0.00"}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                                            <span className="font-bold text-slate-600">Total Interest</span>
+                                            <span className="font-black text-[#1CB5E0]">
+                                                £{calculations ? formatNumber(calculations.totalInterest) : "0.00"}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center py-2 bg-slate-50 rounded-lg px-2">
+                                            <span className="font-bold text-brand-midnight uppercase">Total Payable</span>
+                                            <span className="font-black text-xl text-[#000428]">
+                                                £{calculations ? formatNumber(calculations.totalPayable) : "0.00"}
+                                            </span>
+                                        </div>
                                     </div>
-                                ) : (
-                                    <p className="text-sm text-gray-500">No comparison available.</p>
-                                )}
-                            </CardContent>
-                        </Card>
 
-                        {/* Loan Summary */}
-                        <Card className="shadow-xl rounded-2xl">
-                            <CardHeader>
-                                <CardTitle className="text-lg font-bold">
-                                    Your Loan Quote Summary (Including Fees)
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                {calculations ? (
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Loan Amount</span>
-                                            <span className="font-bold">
-                                                £{amount?.toLocaleString()}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Mandatory Fees</span>
-                                            <div className="text-right">
-                                                <div className="font-bold">
-                                                    £{calculations.mandatoryFees.toLocaleString()}
+                                    {/* Email Quote Dialog */}
+                                    <Dialog open={isEmailOpen} onOpenChange={setIsEmailOpen}>
+                                        <DialogTrigger asChild>
+                                            <Button variant="outline" className="w-full mt-4 border-2 border-[#1CB5E0] text-[#1CB5E0] hover:bg-[#1CB5E0] hover:text-white font-bold transition-all">
+                                                Get Quote by Email
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-md bg-white rounded-2xl border-none shadow-2xl">
+                                            <DialogHeader>
+                                                <DialogTitle className="text-xl font-heading font-bold text-brand-midnight">
+                                                    Email Your Quote
+                                                </DialogTitle>
+                                                <DialogDescription>
+                                                    Enter your email address to receive a detailed breakdown of this quote.
+                                                </DialogDescription>
+                                            </DialogHeader>
+
+                                            {emailSent ? (
+                                                <div className="py-6 text-center space-y-3">
+                                                    <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-6 h-6">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9.135-12.75" />
+                                                        </svg>
+                                                    </div>
+                                                    <p className="font-bold text-slate-700">Quote sent successfully!</p>
+                                                    <p className="text-xs text-slate-500">Check your inbox for the PDF.</p>
                                                 </div>
-                                                <div className="text-xs text-gray-500">
-                                                    {(
-                                                        (calculations.mandatoryFees / (amount ?? 1)) *
-                                                        100
-                                                    ).toFixed(2)}
-                                                    % of Loan Value
-                                                </div>
-                                            </div>
+                                            ) : (
+                                                <form onSubmit={handleSendEmail} className="space-y-4 py-4">
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor="email" className="font-bold text-slate-700">Email Address</Label>
+                                                        <Input
+                                                            id="email"
+                                                            type="email"
+                                                            placeholder="you@company.com"
+                                                            required
+                                                            value={email}
+                                                            onChange={(e) => setEmail(e.target.value)}
+                                                            className="bg-slate-50 border-slate-200"
+                                                        />
+                                                    </div>
+                                                    <Button id="send-quote-btn" type="submit" className="w-full bg-[#1CB5E0] hover:bg-cyan-400 text-[#000428] font-bold">
+                                                        Send Quote
+                                                    </Button>
+                                                </form>
+                                            )}
+                                        </DialogContent>
+                                    </Dialog>
+
+                                    <p className="text-[10px] text-slate-600 font-medium text-center leading-tight pt-2">
+                                        Please note that our rate comparison tool only provides an estimate of the cost of a loan.
+                                        These are not guaranteed offers.
+                                    </p>
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+
+                        {/* Existing Detailed Breakdown */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            <Card className="bg-white/80 backdrop-blur border border-white/40 shadow-xl rounded-2xl relative overflow-hidden">
+                                <CardHeader>
+                                    <CardTitle className="text-lg font-heading font-bold text-[#000428]">
+                                        Rate Breakdown
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4 relative z-10">
+                                    {comparisonData ? comparisonData.map((item, i) => (
+                                        <div key={i} className="flex justify-between items-center py-3 border-b border-slate-100/50 last:border-0 hover:bg-slate-50/50 px-2 rounded-lg transition-colors">
+                                            <span className="text-sm font-bold text-slate-500">{item.name}</span>
+                                            <span className="text-sm font-black text-[#000428]">{item.value}</span>
                                         </div>
-                                        <div className="flex justify-between border-t pt-2">
-                                            <span className="text-sm">Total Loan Amount</span>
-                                            <span className="font-bold">
-                                                £{calculations.totalLoanAmount.toLocaleString()}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Loan Term</span>
-                                            <span className="font-bold">{months} Months</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Monthly Payment Amount</span>
-                                            <span className="font-bold">
-                                                £{formatNumber(calculations.monthlyPayment).toLocaleString()}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Total Interest Amount</span>
-                                            <span className="font-bold">
-                                                £{formatNumber(calculations.totalInterest).toLocaleString()}
-                                            </span>
-                                        </div>
-                                        <div
-                                            className="flex justify-between border-t pt-3 mt-3 bg-green-50 p-3 rounded">
-                                            <span className="font-bold">Total Payable</span>
-                                            <span className="text-xl font-bold text-green-600">
-                                                £{formatNumber(calculations.totalPayable).toLocaleString()}
-                                            </span>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <p className="text-sm text-gray-500">Enter values to see summary.</p>
-                                )}
-                            </CardContent>
-                            <CardFooter>
-                                <button
-                                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                                    Apply Now
-                                </button>
-                            </CardFooter>
-                        </Card>
+                                    )) : <p>No data</p>}
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+
+                        <div className="relative p-6 rounded-2xl text-center space-y-4 overflow-hidden group">
+                            {/* Background Gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#000428] via-[#0F172A] to-[#000428]" />
+                            <div className="absolute inset-0 bg-[url('/bg-pattern.svg')] opacity-10" />
+
+                            <div className="relative z-10 space-y-4">
+                                <h3 className="text-white font-bold text-xl">Ready to proceed?</h3>
+                                <p className="text-slate-300 text-sm">Get your funding approved in as little as 24 hours.</p>
+                                <Link href="/apply-now">
+                                    <Button className="w-full bg-[#1CB5E0] hover:bg-cyan-400 text-[#000428] font-bold py-6 rounded-xl text-lg transition-transform hover:-translate-y-1 shadow-[0_0_20px_rgba(28,181,224,0.3)] hover:shadow-[0_0_30px_rgba(28,181,224,0.5)]">
+                                        Start Application
+                                    </Button>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

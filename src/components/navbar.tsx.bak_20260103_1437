@@ -1,0 +1,747 @@
+"use client";
+
+import React, { useState } from 'react';
+
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem, NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger
+} from "@/components/ui/navigation-menu";
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Card } from "@/components/ui/card";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { BiCaretRight } from "react-icons/bi";
+import { AiOutlineCaretRight } from "react-icons/ai";
+import { PiCaretRight } from "react-icons/pi";
+import { IoBookmark, IoCall, IoSearch } from "react-icons/io5";
+import { ChevronRight, Menu, X, Search, ArrowUpRight, TrendingUpIcon, LifeBuoy, Building2, Wallet, RefreshCw, Landmark, CreditCard, ShoppingCart, Layers, Cog } from "lucide-react";
+import {
+    Leaf,
+    Gamepad2,
+    Heart,
+    Beer,
+    HardHat,
+    Zap,
+    Store,
+    Car,
+    Dumbbell,
+    Cross,
+    Coffee,
+    Settings,
+    Truck,
+    Gift,
+    Briefcase,
+    Recycle,
+    ShoppingBag,
+    Cpu,
+    Package,
+    Building
+} from 'lucide-react';
+import Link from "next/link";
+import { ContactForm } from "@/sections/forms/contact-form";
+import ContactFormDialog from "@/sections/common/contact-form-dialog";
+import {
+    FaHandshake,
+    FaHome,
+    FaCreditCard,
+    FaCogs,
+    FaBuilding,
+    FaFileInvoiceDollar
+} from 'react-icons/fa';
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
+
+
+interface NavBarProps {
+    hideOnScroll?: boolean;
+}
+
+export default function NavBar({ hideOnScroll = false }: NavBarProps) {
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+    // Smart Navbar Logic
+    const { scrollY } = useScroll();
+    const [hidden, setHidden] = useState(false);
+
+    // Track scroll direction
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        if (!hideOnScroll) return;
+
+        const previous = scrollY.getPrevious() || 0;
+        // Hide if scrolling down more than 100px and current scroll is greater than previous
+        if (latest > previous && latest > 150) {
+            setHidden(true);
+        } else {
+            setHidden(false);
+        }
+    });
+
+    // Track mouse position to reveal navbar even if hidden
+    React.useEffect(() => {
+        if (!hideOnScroll) return;
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (e.clientY < 100) {
+                setHidden(false);
+            }
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, [hideOnScroll]);
+
+    const homeList = [
+        // {
+        //     label: "Meet The Team",
+        //     url: "/meet-the-team",
+        //     description: "Get to know the experts behind Alpha FUnding commercial Finance"
+        // },
+        {
+            label: "About us",
+            url: "/about-us",
+            description: "Learn more about Alpha Funding that makes us a leading finance partner"
+        },
+        {
+            label: "Contact Us",
+            url: "/contact",
+            description: "Get in touch with us all your finance-related quries"
+        },
+        {
+            label: "Join Our Team",
+            url: "/careers",
+            description: "Unlock your career potential with Alpha Funding"
+        },
+        // {
+        //     label: "FAQ",
+        //     url: "/",
+        //     description: "Frequently Asked Questions"
+        // },
+    ];
+
+    const knowledgeLinks = [
+        {
+            label: "Success Stories",
+            url: "/",
+            description: "See how we helped other businesses succeed"
+        },
+        {
+            label: "Solution Guides",
+            url: "/",
+            description: "Access our handy business finance solution"
+        },
+        {
+            label: "Industry Insights",
+            url: "/",
+            description: "Get the latest industry insights, news updates, trends & insights"
+        },
+        {
+            label: "Finance Calculator",
+            url: "/",
+            description: "Looking for financing? Check your eligibility now."
+        },
+    ]
+
+    const sectorsArray = [
+        {
+            label: "Agriculture",
+            url: "/sectors/agriculture",
+            icon: <Leaf />,
+            description: "Enhance farming machinery and tools or upgrade property."
+        },
+        // {
+        //     label: "Amusements & Gaming",
+        //     url: "/sectors/amusement-gaming-entertainment-finance-solutions",
+        //     icon: <Gamepad2/>,
+        //     description: "Finance solutions to keep your arcades engaging."
+        // },
+        {
+            label: "Beauty & Wellbeing",
+            url: "/sectors/beauty-finance-solutions",
+            icon: <Heart />,
+            description: "Loans and equipment finance to boost your beauty business."
+        },
+        // {
+        //     label: "Brewing & Distilling",
+        //     url: "/sectors/brewery-distillery-microbrewery-finance-solutions",
+        //     icon: <Beer/>,
+        //     description: "Fund brewery or distillery equipment to expand operations."
+        // },
+        {
+            label: "Construction",
+            url: "/sectors/construction-financing-solutions",
+            icon: <HardHat />,
+            description: "Attain the machinery and vehicles you need for key projects."
+        },
+        {
+            label: "Energy",
+            url: "/sectors/renewable-energy-finance-solutions",
+            icon: <Zap />,
+            description: "Increase investment in energy resources and innovation."
+        },
+        // {
+        //     label: "Franchising",
+        //     url: "/sectors/franchise-finance-solutions",
+        //     icon: <Store/>,
+        //     description: "Flexible funding for your buy-in, fit-out and staffing needs."
+        // },
+        {
+            label: "Garage & Car Sales",
+            url: "/sectors/garage-finance-solutions",
+            icon: <Car />,
+            description: "Business loans and leasing solutions to stay competitive."
+        },
+        {
+            label: "Gyms",
+            url: "/sectors/business-loans-for-gyms",
+            icon: <Dumbbell />,
+            description: "Kit your gyms out with modern equipment and top instructors."
+        },
+        {
+            label: "Healthcare",
+            url: "/sectors/healthcare-finance-solutions",
+            icon: <Cross />,
+            description: "Equipment finance and loans to improve patient care."
+        },
+        {
+            label: "Hospitality",
+            url: "/sectors/hospitality-leisure-glamping-finance-solutions",
+            icon: <Coffee />,
+            description: "Ease seasonal cash flow issues and fund expansion plans."
+        },
+        {
+            label: "Manufacturing & Engineering",
+            url: "/sectors/manufacturing-finance-solutions",
+            icon: <Settings />,
+            description: "Obtain the right equipment and develop your supply chain."
+        },
+        {
+            label: "Plant & Vehicle Hire",
+            url: "/sectors/vehicle-and-plant-hire-finance",
+            icon: <Truck />,
+            description: "Ensure you can offer the best equipment and experience."
+        },
+        {
+            label: "Printing",
+            url: "/sectors/packaging-machinery-and-printing-equipment-financing",
+            icon: <Gift />,
+            description: "Increase efficiency by investing in innovative solutions."
+        },
+        {
+            label: "Service Sectors",
+            url: "/sectors/professional-services-and-accountancy-business-financing",
+            icon: <Briefcase />,
+            description: "Financing options to fund office, asset and staffing needs."
+        },
+        {
+            label: "Waste Management",
+            url: "/sectors/waste-management-vehicle-and-recycling-equipment-finance",
+            icon: <Recycle />,
+            description: "Upgrade plant facilities and invest in greener solutions."
+        },
+        {
+            label: "Retail",
+            url: "/sectors/retail-finance-solutions",
+            icon: <ShoppingBag />,
+            description: "Asset finance and cash advances for in-store and online needs."
+        },
+        {
+            label: "Technology & Media",
+            url: "/sectors/technology-finance-solutions",
+            icon: <Cpu />,
+            description: "Hardware and software upgrades to power hybrid working."
+        },
+        {
+            label: "Transport & Logistics",
+            url: "/sectors/logistics-transport-finance-solutions",
+            icon: <Package />,
+            description: "Overcome supply chain issues and meet vehicle requirements."
+        },
+        {
+            label: "Wholesale",
+            url: "/sectors/wholesale-business-finance-solutions",
+            icon: <Building />,
+            description: "Bolster your warehouses and maintain a healthy inventory."
+        }
+    ];
+
+    const aboutItems = [
+        {
+            label: "Business Loans",
+            url: "/solutions/business-loans",
+            description: "Quick secured and unsecured Business Loan Solutions",
+            icon: <FaHandshake />
+        },
+        {
+            label: "Refinance",
+            url: "/solutions/refinance",
+            description: "Refinance solutions to unlock equity in owned assets",
+            icon: <FaHome />
+        },
+        {
+            label: "Growth Guarantee Scheme",
+            url: "/solutions/growth-guarantee-scheme",
+            description: "Growth Guarantee Scheme empowers businesses to grow",
+            icon: <TrendingUpIcon />
+        },
+        {
+            label: "Merchant Cash Advance",
+            url: "/solutions/merchant-cash-advance",
+            description: "Keep your working capital stable with a Merchant Cash Advance",
+            icon: <FaCreditCard />
+        },
+        {
+            label: "Asset & Equity Finance",
+            url: "/solutions/business-asset-equipment-finance",
+            description: "Finance your business much-needed assets and equipment",
+            icon: <FaCogs />
+        },
+        {
+            label: "Commercial Property Finance",
+            url: "/solutions/commercial-property-finance",
+            description: "Flexible commercial property finance to help your businesses expand",
+            icon: <FaBuilding />
+        },
+        {
+            label: "Invoice Finance",
+            url: "/solutions/invoice-finance",
+            description: "Invoice Finance solutions to maintain a healthy cash flow",
+            icon: <FaFileInvoiceDollar />
+        },
+        {
+            label: "Recovery Loan Scheme",
+            url: "/solutions/recovery-loan-scheme",
+            description: "Government-backed funding for pandemic-affected businesses",
+            icon: <LifeBuoy />
+        },
+        {
+            label: "Property Finance",
+            url: "/solutions/property-finance",
+            description: "Real estate development and management funding solutions",
+            icon: <Building2 />
+        },
+        {
+            label: "Business Cash Advance",
+            url: "/solutions/business-cash-advance",
+            description: "Revenue-based cash advance with flexible repayments",
+            icon: <Wallet />
+        },
+        {
+            label: "Revolving Credit Facility",
+            url: "/solutions/revolving-credit-facility",
+            description: "On-demand credit facility for flexible working capital",
+            icon: <RefreshCw />
+        },
+    ];
+
+    const otherSolutionsItems = [
+        {
+            label: "Business Bank Accounts",
+            url: "/other-solutions/business-bank-accounts",
+            description: "Find the perfect bank account for your business needs",
+            icon: <Landmark />
+        },
+        {
+            label: "Merchant Services",
+            url: "/other-solutions/merchant-services",
+            description: "Accept payments securely in person, online, or by phone",
+            icon: <ShoppingCart />
+        },
+        {
+            label: "Business Credit Cards",
+            url: "/other-solutions/business-cards",
+            description: "Corporate credit cards for expense and cash flow management",
+            icon: <CreditCard />
+        },
+        {
+            label: "Bridging Loans",
+            url: "/other-solutions/bridging-loans",
+            description: "Short-term finance to bridge financial gaps",
+            icon: <Layers />
+        },
+        {
+            label: "Machinery & Vehicle Finance",
+            url: "/other-solutions/machinery-vehicle-finance",
+            description: "Lease equipment and vehicles without capital outlay",
+            icon: <Cog />
+        },
+    ];
+
+    // Combine all links for search
+    const allLinks = [
+        ...homeList.map(item => ({ ...item, category: "Welcome to Alpha Funding" })),
+        ...aboutItems.map(item => ({ ...item, category: "Finance Solutions" })),
+        ...otherSolutionsItems.map(item => ({ ...item, category: "Other Solutions" })),
+        ...sectorsArray.map(item => ({ ...item, category: "Sectors" })),
+        ...knowledgeLinks.map(item => ({ ...item, category: "Knowledge Hub" })),
+        { label: "Partner Finance", url: "/partner", description: "Partner finance solutions", category: "Partner Finance" }
+    ];
+
+    const filteredLinks = searchQuery
+        ? allLinks.filter(item =>
+            item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.category.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        : [];
+
+    const MobileNavItem = ({ title, items, icon }: { title: any, items: any[], icon?: any }) => (
+        <AccordionItem value={title} className="border-b border-gray-200">
+            <AccordionTrigger className="text-left font-semibold text-[#030f42] hover:no-underline">
+                <div className="flex items-center gap-2">
+                    {icon && <span className="text-primary">{icon}</span>}
+                    {title}
+                </div>
+            </AccordionTrigger>
+            <AccordionContent>
+                <div className="space-y-3 pt-2">
+                    {items.map((item: any, index) => (
+                        <Link href={item.url} key={index} className="border-l-2 border-gray-100 pl-4">
+                            <div className="flex items-center gap-2 mb-1">
+                                {item.icon && <span className="text-primary text-sm">{item.icon}</span>}
+                                <p className="font-medium text-gray-700">{item.label}</p>
+                            </div>
+                            <p className="text-sm text-gray-500">{item.description}</p>
+                        </Link>
+                    ))}
+                </div>
+            </AccordionContent>
+        </AccordionItem>
+    );
+
+    // Common styles for navigation menu triggers
+    const navTriggerStyles = "uppercase bg-transparent text-[#201130] hover:bg-[#0F172A] hover:text-white focus:bg-[#0F172A] focus:text-white data-[state=open]:bg-[#0F172A] data-[state=open]:text-white";
+
+    return (
+        <motion.div
+            variants={{
+                visible: { y: 0 },
+                hidden: { y: -100 }
+            }}
+            animate={hidden ? "hidden" : "visible"}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className={"flex bg-white nav-shadow rounded-2xl justify-between fixed gap-4 left-[4%] right-[4%] md:left-[6%] md:right-[6%] top-4 py-5 px-[2%] z-50"}>
+            <div className={"flex items-center gap-6"}>
+                <Link href={"/"} className={"w-36"}>
+                    <img
+                        src={"/logo.png"}
+                        className={"h-12 w-36"}
+                        alt={"logo"}
+                    />
+                </Link>
+
+                {/* Desktop Navigation - Hidden on mobile */}
+                <div className="hidden lg:block">
+                    <NavigationMenu viewport={false}>
+                        <NavigationMenuList>
+                            <NavigationMenuItem>
+                                <NavigationMenuTrigger className={navTriggerStyles}>
+                                    Alpha Funding
+                                </NavigationMenuTrigger>
+                                <NavigationMenuContent
+                                    className={"flex p-0 gap-6 items-stretch !rounded-2xl border-none shadow-2xl !h-auto !fixed !left-1/2 !transform !-translate-x-1/2 !top-26 !w-[87.2vw]"}>
+                                    <div className={"flex px-10 flex-col py-10 justify-start"}>
+                                        <div className={"flex w-full px-4 gap-4"}>
+                                            <p className={"text-2xl font-semibold text-primary"}>
+                                                Alpha Funding
+                                            </p>
+                                        </div>
+                                        <div className={"grid grid-cols-3 gap-4 my-5"}>
+                                            {
+                                                homeList.map((item, index) => (
+                                                    <Link href={item.url} key={index}
+                                                        className={"flex rounded-xl hover:bg-secondary/10 px-4 py-2 flex-col"}>
+                                                        <div className={"flex gap-3 items-center"}>
+                                                            <IoBookmark className={"text-primary rotate-90"} />
+                                                            <p className={"text-[#475569] text-md"}>{item.label}</p>
+                                                        </div>
+                                                        <p className={"text-[#64748B]"}>
+                                                            {item.description}
+                                                        </p>
+                                                    </Link>
+                                                ))
+                                            }
+                                        </div>
+                                    </div >
+                                    <div className={"flex gap-4 bg-secondary/10 p-8 flex-col w-1/3 self-stretch"}>
+                                        <img
+                                            src={"https://images.pexels.com/photos/5922204/pexels-photo-5922204.jpeg"}
+                                            className={"h-full rounded-2xl object-cover"}
+                                            alt={"tem"}
+                                        />
+                                    </div>
+                                </NavigationMenuContent >
+                            </NavigationMenuItem >
+                            <NavigationMenuItem>
+                                <NavigationMenuTrigger className={navTriggerStyles}>Funding Options</NavigationMenuTrigger>
+                                <NavigationMenuContent
+                                    className={"flex p-0 gap-6 items-stretch !rounded-2xl border-none shadow-2xl !h-auto !fixed !left-1/2 !transform !-translate-x-1/2 !top-26 !w-[87.2vw]"}>
+                                    <div className={"flex px-10 flex-col py-10 justify-between"}>
+                                        <div className={"flex w-full px-4 gap-4"}>
+                                            <p className={"text-2xl font-semibold text-primary"}>
+                                                Funding Options
+                                            </p>
+                                        </div >
+                                        <div className={"grid grid-cols-3 gap-4 my-5"}>
+                                            {
+                                                aboutItems.map((item, index) => (
+                                                    <Link href={item.url} key={index}
+                                                        className={"flex rounded-xl hover:bg-secondary/10 px-4 py-2 flex-col"}>
+                                                        <div className={"flex gap-3 items-center"}>
+                                                            <span className={"text-primary"}>
+                                                                {item.icon}
+                                                            </span>
+                                                            <p className={"text-[#475569] text-md"}>{item.label}</p>
+                                                        </div>
+                                                        <p className={"text-[#64748B]"}>
+                                                            {item.description}
+                                                        </p>
+                                                    </Link>
+                                                ))
+                                            }
+                                        </div>
+                                    </div >
+                                    <div className={"flex gap-4 bg-secondary/10 p-8 flex-col w-1/3 self-stretch"}>
+                                        <img
+                                            src={"https://images.pexels.com/photos/7414284/pexels-photo-7414284.jpeg"}
+                                            className={"h-full rounded-2xl object-cover"}
+                                            alt={"tem"}
+                                        />
+                                    </div>
+                                </NavigationMenuContent >
+                            </NavigationMenuItem >
+                            <NavigationMenuItem>
+                                <NavigationMenuTrigger className={navTriggerStyles}>Other Solutions</NavigationMenuTrigger>
+                                <NavigationMenuContent
+                                    className={"flex p-0 gap-6 items-stretch !rounded-2xl border-none shadow-2xl !h-auto !fixed !left-1/2 !transform !-translate-x-1/2 !top-26 !w-[87.2vw]"}>
+                                    <div className={"flex px-10 flex-col py-10 justify-between"}>
+                                        <div className={"flex w-full px-4 gap-4"}>
+                                            <p className={"text-2xl font-semibold text-primary"}>
+                                                Other Solutions
+                                            </p>
+                                        </div >
+                                        <div className={"grid grid-cols-3 gap-4 my-5"}>
+                                            {
+                                                otherSolutionsItems.map((item, index) => (
+                                                    <Link href={item.url} key={index}
+                                                        className={"flex rounded-xl hover:bg-secondary/10 px-4 py-2 flex-col"}>
+                                                        <div className={"flex gap-3 items-center"}>
+                                                            <span className={"text-primary"}>
+                                                                {item.icon}
+                                                            </span>
+                                                            <p className={"text-[#475569] text-md"}>{item.label}</p>
+                                                        </div>
+                                                        <p className={"text-[#64748B]"}>
+                                                            {item.description}
+                                                        </p>
+                                                    </Link>
+                                                ))
+                                            }
+                                        </div>
+                                    </div >
+                                    <div className={"flex gap-4 bg-secondary/10 p-8 flex-col w-1/3 self-stretch"}>
+                                        <img
+                                            src={"https://images.pexels.com/photos/3184301/pexels-photo-3184301.jpeg"}
+                                            className={"h-full rounded-2xl object-cover"}
+                                            alt={"other solutions"}
+                                        />
+                                    </div>
+                                </NavigationMenuContent >
+                            </NavigationMenuItem >
+                            <NavigationMenuItem>
+                                <NavigationMenuTrigger className={navTriggerStyles}>Industries</NavigationMenuTrigger>
+                                <NavigationMenuContent
+                                    className="flex p-6 gap-6 max-h-[80vh] !overflow-y-auto items-stretch !rounded-2xl border border-gray-200 shadow-xl !h-auto !fixed !left-1/2 !transform !-translate-x-1/2 !top-26 !w-[87.2vw] bg-white"
+                                >
+                                    <div className="flex flex-col w-full">
+                                        {/* Header */}
+                                        <div className={"flex w-full px-4 pb-4 gap-4"}>
+                                            <p className={"text-2xl font-semibold text-primary"}>
+                                                Sectors
+                                            </p>
+                                        </div>
+
+                                        {/* Compact Grid */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 pb-8 gap-4">
+                                            {sectorsArray.map((item, index) => (
+                                                <Link
+                                                    href={item.url}
+                                                    key={index}
+                                                    className="flex items-start gap-4 rounded-lg hover:bg-secondary/10 p-4 transition"
+                                                >
+                                                    {/* Icon */}
+                                                    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-primary/10 text-primary text-lg">
+                                                        {item.icon}
+                                                    </div>
+
+                                                    {/* Text */}
+                                                    <div>
+                                                        <p className="text-sm font-medium text-gray-800">{item.label}</p>
+                                                        <p className="text-xs text-gray-500">{item.description}</p>
+                                                    </div>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div >
+                                </NavigationMenuContent >
+
+                            </NavigationMenuItem >
+                            <NavigationMenuItem>
+                                <NavigationMenuLink
+                                    href={"/partner"}
+                                    className={"uppercase text-[#201130] hover:text-[#D946EF] transition-colors duration-200 px-4 py-2"}
+                                >
+                                    Partner With Us
+                                </NavigationMenuLink>
+                            </NavigationMenuItem>
+                            <NavigationMenuItem>
+                                <ContactFormDialog />
+                            </NavigationMenuItem>
+                        </NavigationMenuList >
+                    </NavigationMenu >
+                </div >
+            </div >
+
+            {/* Right side actions */}
+            < div className={"flex items-center gap-6"} >
+                {/* Desktop buttons - Hidden on small screens */}
+                < div className="hidden md:flex items-center gap-4" >
+                    {/* Search input and dropdown */}
+                    < div className="relative" >
+                        <div className="flex items-center bg-white border border-[#CBD5E1] rounded-lg px-3 py-1">
+                            <Search className="w-4 h-4 text-[#64748B] mr-2" />
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                className="bg-white px-2 py-2 text-sm text-[#0F172A] placeholder-[#94A3B8] border-none outline-none w-40 focus:outline-none"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onFocus={() => setIsSearchOpen(true)}
+                                onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)}
+                            />
+                        </div>
+
+                        {
+                            isSearchOpen && searchQuery && (
+                                <div className="absolute top-full mt-2 left-0 w-64 bg-white rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto border border-[#E2E8F0]">
+                                    {filteredLinks.length > 0 ? (
+                                        filteredLinks.map((item, index) => (
+                                            <Link
+                                                href={item.url}
+                                                key={index}
+                                                className="block px-4 py-2 hover:bg-[#F1F5F9] border-b border-[#E2E8F0]"
+                                            >
+                                                <div className="font-medium text-[#0F172A]">{item.label}</div>
+                                                <div className="text-sm text-[#64748B]">{item.category}</div>
+                                            </Link>
+                                        ))
+                                    ) : (
+                                        <div className="px-4 py-2 text-[#64748B]">No results found</div>
+                                    )}
+                                </div>
+                            )
+                        }
+                    </div >
+
+                    <Link href={"/check-eligibility"}
+
+                        className={buttonVariants({ size: "lg", className: "hidden lg:flex bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white hover:opacity-90 transition-opacity" })}>
+                        Check Eligibility <ArrowUpRight />
+                    </Link>
+                </div >
+
+                {/* Mobile CTA button - Visible on mobile */}
+                < Button size={"sm"} className={"bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white hover:opacity-90 lg:hidden"} >
+                    <Search className="w-4 h-4" />
+                </Button >
+
+                {/* Mobile Menu Sheet - Only visible on mobile */}
+                < Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen} >
+                    <SheetTrigger asChild className="lg:hidden">
+                        <Button variant="ghost" size="sm" className="text-[#201130] hover:bg-[#0F172A] hover:text-white">
+                            <Menu className="h-5 w-5" />
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent side="top" className="w-full max-h-screen overflow-y-scroll sm:w-96 p-0">
+                        <div className="flex flex-col h-full">
+                            <SheetHeader className="p-6 sticky top-0 bg-primary border-b border-[#0F172A]">
+                                <Link href={"/"} className="flex items-center justify-between">
+                                    <img src="/logo.png" className="h-8" alt="logo" />
+                                </Link>
+                            </SheetHeader>
+
+                            <div className="flex-1 overflow-y-auto p-6 bg-white">
+                                <Accordion type="single" collapsible className="space-y-2">
+                                    <MobileNavItem
+                                        title="Alpha Funding"
+                                        items={homeList}
+                                    />
+                                    <MobileNavItem
+                                        title="Types Of Finance"
+                                        items={aboutItems}
+                                    />
+                                    <MobileNavItem
+                                        title="Other Solutions"
+                                        items={otherSolutionsItems}
+                                    />
+                                    <MobileNavItem
+                                        title="Sectors"
+                                        items={sectorsArray}
+                                    />
+                                    <AccordionItem value="partner-finance" className="border-b border-gray-200">
+                                        <div className="py-4">
+                                            <a href="/partner"
+                                                className="bg-white font-semibold text-[#030f42] hover:text-[#D946EF] transition-colors">
+                                                Partner With Us
+                                            </a>
+                                        </div>
+                                    </AccordionItem>
+                                </Accordion>
+                            </div>
+
+                            <div className="p-6 border-t border-[#E2E8F0] bg-[#F8FAFC]">
+                                <div className="flex gap-3 mb-4">
+                                    <Button variant="outline" size="sm" className="flex-1 border-[#CBD5E1] text-[#0F172A]">
+                                        <IoSearch className="w-4 h-4 mr-2" />
+                                        Search
+                                    </Button>
+                                    <Button variant="outline" size="sm" className="flex-1 border-[#CBD5E1] text-[#0F172A]">
+                                        <IoCall className="w-4 h-4 mr-2" />
+                                        Call
+                                    </Button>
+                                </div>
+                                <Link href={"/check-eligibility"}
+                                    className={
+                                        buttonVariants({
+                                            size: "lg",
+                                            className: "w-full bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white hover:opacity-90"
+                                        })
+                                    }
+                                    onClick={() => setIsSheetOpen(false)}
+                                >
+                                    <Search className="w-4 h-4 mr-2" />
+                                    Check Eligibility
+                                </Link>
+                            </div>
+                        </div>
+                    </SheetContent>
+                </Sheet >
+            </div >
+        </motion.div >
+    )
+}

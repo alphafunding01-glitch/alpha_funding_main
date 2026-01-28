@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, DM_Serif_Display, Work_Sans } from "next/font/google";
 import "./globals.css";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
@@ -16,6 +16,17 @@ const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "600"]
 })
+
+const dmSerif = DM_Serif_Display({
+  variable: "--font-dm-serif",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const workSans = Work_Sans({
+  variable: "--font-work-sans",
+  subsets: ["latin"],
+});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -57,16 +68,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body
-        className={`${poppins.className} antialiased`}
+        className={`${poppins.className} ${dmSerif.variable} ${workSans.variable} antialiased`}
       >
         {children}
         <div className={"flex gap-3 items-center fixed bottom-10 right-4 md:right-[6%]"}>
           <Link className={buttonVariants({
             size: "icon"
-          })} href={"https://wa.me/+44"}>
+          })} href={"https://wa.me/447366917038"}>
             <IoLogoWhatsapp />
           </Link>
-          <Link href={"tel:"} className={buttonVariants({
+          <Link href={"tel:02070787446"} className={buttonVariants({
             variant: "secondary",
             size: "icon"
           })}>

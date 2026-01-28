@@ -63,12 +63,48 @@ import {
     FaBuilding,
     FaFileInvoiceDollar
 } from 'react-icons/fa';
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 
 
-export default function NavBar() {
+interface NavBarProps {
+    hideOnScroll?: boolean;
+}
+
+export default function NavBar({ hideOnScroll = false }: NavBarProps) {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+    // Smart Navbar Logic
+    const { scrollY } = useScroll();
+    const [hidden, setHidden] = useState(false);
+
+    // Track scroll direction
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        if (!hideOnScroll) return;
+
+        const previous = scrollY.getPrevious() || 0;
+        // Hide if scrolling down more than 100px and current scroll is greater than previous
+        if (latest > previous && latest > 150) {
+            setHidden(true);
+        } else {
+            setHidden(false);
+        }
+    });
+
+    // Track mouse position to reveal navbar even if hidden
+    React.useEffect(() => {
+        if (!hideOnScroll) return;
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (e.clientY < 100) {
+                setHidden(false);
+            }
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, [hideOnScroll]);
 
     const homeList = [
         // {
@@ -88,7 +124,7 @@ export default function NavBar() {
         },
         {
             label: "Join Our Team",
-            url: "/contact",
+            url: "/careers",
             description: "Unlock your career potential with Alpha Funding"
         },
         // {
@@ -388,13 +424,19 @@ export default function NavBar() {
         </AccordionItem>
     );
 
-    // Common styles for navigation menu triggers
-    const navTriggerStyles = "uppercase bg-transparent text-[#201130] hover:bg-[#0F172A] hover:text-white focus:bg-[#0F172A] focus:text-white data-[state=open]:bg-[#0F172A] data-[state=open]:text-white";
+    // Common styles for navigation menu triggers - cyan hover with contrast
+    const navTriggerStyles = "uppercase bg-transparent text-[#201130] hover:text-[#0891B2] focus:text-[#0891B2] data-[state=open]:text-[#0891B2] data-[state=open]:bg-white/50 transition-all duration-200 hover:translate-y-[-1px]";
 
     return (
-        <div
-            className={"flex bg-white nav-shadow rounded-2xl justify-between fixed gap-4 left-[4%] right-[4%] md:left-[6%] md:right-[6%] top-4 py-5 px-[2%] z-50"}>
-            <div className={"flex items-center gap-6"}>
+        <motion.div
+            variants={{
+                visible: { y: 0 },
+                hidden: { y: -100 }
+            }}
+            animate={hidden ? "hidden" : "visible"}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className={"flex bg-[#F0F4F8] rounded-2xl justify-between fixed gap-2 xl:gap-4 left-[4%] right-[4%] md:left-[6%] md:right-[6%] top-4 py-3 px-[2%] z-50 border-t-2 border-l-2 border-white/80 border-b-2 border-r-2 border-b-slate-200/50 border-r-slate-200/50 shadow-sm"}>
+            <div className={"flex items-center gap-2 xl:gap-6"}>
                 <Link href={"/"} className={"w-36"}>
                     <img
                         src={"/logo.png"}
@@ -415,7 +457,7 @@ export default function NavBar() {
                                     className={"flex p-0 gap-6 items-stretch !rounded-2xl border-none shadow-2xl !h-auto !fixed !left-1/2 !transform !-translate-x-1/2 !top-26 !w-[87.2vw]"}>
                                     <div className={"flex px-10 flex-col py-10 justify-start"}>
                                         <div className={"flex w-full px-4 gap-4"}>
-                                            <p className={"text-2xl font-semibold text-primary"}>
+                                            <p className={"text-2xl font-semibold text-[#0F172A]"}>
                                                 Alpha Funding
                                             </p>
                                         </div>
@@ -451,7 +493,7 @@ export default function NavBar() {
                                     className={"flex p-0 gap-6 items-stretch !rounded-2xl border-none shadow-2xl !h-auto !fixed !left-1/2 !transform !-translate-x-1/2 !top-26 !w-[87.2vw]"}>
                                     <div className={"flex px-10 flex-col py-10 justify-between"}>
                                         <div className={"flex w-full px-4 gap-4"}>
-                                            <p className={"text-2xl font-semibold text-primary"}>
+                                            <p className={"text-2xl font-semibold text-[#0F172A]"}>
                                                 Funding Options
                                             </p>
                                         </div >
@@ -489,7 +531,7 @@ export default function NavBar() {
                                     className={"flex p-0 gap-6 items-stretch !rounded-2xl border-none shadow-2xl !h-auto !fixed !left-1/2 !transform !-translate-x-1/2 !top-26 !w-[87.2vw]"}>
                                     <div className={"flex px-10 flex-col py-10 justify-between"}>
                                         <div className={"flex w-full px-4 gap-4"}>
-                                            <p className={"text-2xl font-semibold text-primary"}>
+                                            <p className={"text-2xl font-semibold text-[#0F172A]"}>
                                                 Other Solutions
                                             </p>
                                         </div >
@@ -529,7 +571,7 @@ export default function NavBar() {
                                     <div className="flex flex-col w-full">
                                         {/* Header */}
                                         <div className={"flex w-full px-4 pb-4 gap-4"}>
-                                            <p className={"text-2xl font-semibold text-primary"}>
+                                            <p className={"text-2xl font-semibold text-[#0F172A]"}>
                                                 Sectors
                                             </p>
                                         </div>
@@ -549,7 +591,9 @@ export default function NavBar() {
 
                                                     {/* Text */}
                                                     <div>
-                                                        <p className="text-sm font-medium text-gray-800">{item.label}</p>
+                                                        <span className="text-[10px] font-medium text-slate-400 bg-slate-800/50 px-2 py-0.5 rounded border border-slate-700">
+                                                            Operating under applicable UK regulations
+                                                        </span>
                                                         <p className="text-xs text-gray-500">{item.description}</p>
                                                     </div>
                                                 </Link>
@@ -562,7 +606,7 @@ export default function NavBar() {
                             <NavigationMenuItem>
                                 <NavigationMenuLink
                                     href={"/partner"}
-                                    className={"uppercase text-[#201130] hover:text-[#D946EF] transition-colors duration-200 px-4 py-2"}
+                                    className={"uppercase text-[#201130] hover:text-[#0891B2] transition-all duration-200 px-4 py-2 hover:translate-y-[-1px] font-medium"}
                                 >
                                     Partner With Us
                                 </NavigationMenuLink>
@@ -576,9 +620,9 @@ export default function NavBar() {
             </div >
 
             {/* Right side actions */}
-            < div className={"flex items-center gap-6"} >
+            < div className={"flex items-center gap-2 xl:gap-6"} >
                 {/* Desktop buttons - Hidden on small screens */}
-                < div className="hidden md:flex items-center gap-4" >
+                < div className="hidden md:flex items-center gap-2 xl:gap-4" >
                     {/* Search input and dropdown */}
                     < div className="relative" >
                         <div className="flex items-center bg-white border border-[#CBD5E1] rounded-lg px-3 py-1">
@@ -586,7 +630,7 @@ export default function NavBar() {
                             <input
                                 type="text"
                                 placeholder="Search..."
-                                className="bg-white px-2 py-2 text-sm text-[#0F172A] placeholder-[#94A3B8] border-none outline-none w-40 focus:outline-none"
+                                className="bg-white px-2 py-2 text-sm text-[#0F172A] placeholder-[#94A3B8] border-none outline-none w-24 lg:w-32 xl:w-40 focus:outline-none"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 onFocus={() => setIsSearchOpen(true)}
@@ -616,9 +660,9 @@ export default function NavBar() {
                         }
                     </div >
 
-                    <Link href={"/check-eligibility"}
 
-                        className={buttonVariants({ size: "lg", className: "hidden lg:flex bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white hover:opacity-90 transition-opacity" })}>
+                    <Link href={"/check-eligibility"}
+                        className={buttonVariants({ size: "lg", className: "hidden lg:flex bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white hover:opacity-90 transition-opacity shrink-0" })}>
                         Check Eligibility <ArrowUpRight />
                     </Link>
                 </div >
@@ -664,7 +708,7 @@ export default function NavBar() {
                                     <AccordionItem value="partner-finance" className="border-b border-gray-200">
                                         <div className="py-4">
                                             <a href="/partner"
-                                                className="bg-white font-semibold text-[#030f42] hover:text-[#D946EF] transition-colors">
+                                                className="bg-white font-semibold text-[#030f42] hover:text-[#1CB5E0] transition-colors">
                                                 Partner With Us
                                             </a>
                                         </div>
@@ -700,6 +744,6 @@ export default function NavBar() {
                     </SheetContent>
                 </Sheet >
             </div >
-        </div >
+        </motion.div >
     )
 }

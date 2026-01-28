@@ -1,39 +1,49 @@
-import NavBar from "@/components/navbar";
-import {poppins} from "@/app/fonts/fonts";
-import Footer from "@/sections/common/footer";
-import CheckEligibilityForm from "@/sections/forms/check-eligibility-form";
 
+import React from 'react';
+import NavBar from "@/components/navbar";
+import Footer from "@/sections/common/footer";
+import CheckEligibilityContent from "@/sections/check-eligibility/check-eligibility-content";
+import { BreadcrumbJsonLd } from 'next-seo';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Check Eligibility | Alpha Funding',
+    description: 'Check your business finance eligibility in 60 seconds with no credit check. Get instant funding estimates tailored to your business.',
+    openGraph: {
+        title: 'Check Eligibility | Alpha Funding',
+        description: 'See how much you could borrow without checking your credit score.',
+        url: 'https://alpha-funding.co.uk/check-eligibility',
+        siteName: 'Alpha Funding',
+        images: [
+            {
+                url: 'https://alpha-funding.co.uk/og-check-eligibility.jpg',
+                width: 1200,
+                height: 630,
+            },
+        ],
+        locale: 'en_GB',
+        type: 'website',
+    },
+};
 
 export default function CheckEligibility() {
     return (
-        <div className={"flex flex-col "}>
-            <NavBar/>
-            <div className={"flex py-40 bg-light-gray flex-col"}>
-                <div
-                    className={"flex md:flex-row md:py-0 py-40 flex-col gap-16 justify-between px-[4%] md:px-[6%] min-h-screen"}>
-                    <div className={"flex flex-col justify-between h-full w-full gap-1"}>
-                        <div className={"flex flex-col gap-2"}>
-                            <div className={"px-4 py-1 rounded-full w-min bg-primary"}>
-                                <p className={`text-white text-xs whitespace-nowrap font-bold ${poppins.className}`}>
-                                    Check Eligibility
-                                </p>
-                            </div>
-                            <h1 className={"text-3xl md:text-5xl font-bold"}>
-                                Check Your Business Finance Eligibility Today!
-                            </h1>
-                        </div>
-                        <p className={`${poppins.className} text-sm mt-4`}>
-                            Want to find out if you qualify for Alpha Funding business finance solutions without impacting
-                            your credit score? Check your finance eligibility today!
-                        </p>
-
-                    </div>
-                    <div className={"flex w-full items-end justify-center flex-col"}>
-                        <CheckEligibilityForm/>
-                    </div>
-                </div>
-            </div>
-            <Footer/>
+        <div className="flex flex-col min-h-screen bg-brand-midnight">
+            <BreadcrumbJsonLd
+                items={[
+                    {
+                        name: 'Home',
+                        item: 'https://alpha-funding.co.uk',
+                    },
+                    {
+                        name: 'Check Eligibility',
+                        item: 'https://alpha-funding.co.uk/check-eligibility',
+                    },
+                ]}
+            />
+            <NavBar />
+            <CheckEligibilityContent />
+            <Footer />
         </div>
     )
 }

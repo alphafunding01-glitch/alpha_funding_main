@@ -1,11 +1,14 @@
 import NavBar from "@/components/navbar";
 import Footer from "@/sections/common/footer";
-import {Button} from "@/components/ui/button";
-import {ArrowUpRight} from "lucide-react";
-import {poppins} from "@/app/fonts/fonts";
+import PartnerContent from "@/sections/partner/partner-content";
 import WhyChooseSolution from "@/sections/solutions/why-choose-solution";
 import CheckEligibleSection from "@/sections/common/find-eligible-section";
-import BecomePartnerForm from "@/sections/forms/become-partner-form";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Partner With Us | Alpha Funding',
+    description: 'Join the Alpha Funding partner network. Offer your clients premium business finance solutions and grow your business.',
+};
 
 export default function PartnerPage() {
     const content = [
@@ -68,43 +71,12 @@ export default function PartnerPage() {
     ];
 
     return (
-        <div className={"flex flex-col "}>
-            <NavBar/>
-            <div className={"flex bg-light-gray flex-col"}>
-                {/* Hero Section */}
-                <div
-                    className={"flex md:flex-row md:py-0 py-40 flex-col justify-between px-[4%] md:px-[6%] items-center min-h-screen"}>
-                    <div className={"flex flex-col justify-between h-full w-full gap-1"}>
-                        <div className={"flex flex-col gap-2"}>
-                            <div className={"px-4 py-1 rounded-full w-min bg-primary"}>
-                                <p className={`text-white text-xs whitespace-nowrap font-bold ${poppins.className}`}>
-                                    Partner and Vendor Finance from Alpha Funding
-                                </p>
-                            </div>
-                            <h1 className={"text-3xl md:text-5xl font-bold"}>
-                                Unlock more sales opportunities with Alpha Funding’s partner finance
-                            </h1>
-                        </div>
-                        <p className={`${poppins.className} text-sm mt-4`}>
-                            Alpha Funding’s partner and vendor finance programs give your customers
-                            the flexibility to purchase what they need without the pressure of
-                            upfront costs. Whether you’re a supplier, manufacturer, service
-                            provider, or industry association, our tailored finance solutions
-                            help you drive sales, improve client satisfaction, and fuel
-                            long-term business growth.
-                        </p>
-                        <div className={"flex mt-8 gap-4"}>
-                            <BecomePartnerForm/>
-                        </div>
-                    </div>
-                    <div className={"flex w-full pt-20 items-end justify-center flex-col"}>
-                        <img
-                            className={"w-full md:w-[80%] rounded-[18px]"}
-                            src={"https://images.pexels.com/photos/3184301/pexels-photo-3184301.jpeg"}
-                            alt={"partner-finance-hero"}
-                        />
-                    </div>
-                </div>
+        <div className="flex flex-col min-h-screen">
+            <NavBar hideOnScroll={true} />
+
+            <div className="flex-grow">
+                {/* Hero & Form Section */}
+                <PartnerContent />
 
                 {/* Benefits Section */}
                 <WhyChooseSolution
@@ -121,9 +93,10 @@ export default function PartnerPage() {
                     answers={content}
                 />
 
-                <CheckEligibleSection/>
+                <CheckEligibleSection />
             </div>
-            <Footer/>
+
+            <Footer />
         </div>
     );
 }

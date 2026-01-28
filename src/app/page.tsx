@@ -1,94 +1,92 @@
-import Image from "next/image";
-import NavBar from "@/components/navbar";
-import HomeHeroPage from "@/sections/home/home-hero-page";
-import Homehero2 from "@/sections/home/home-hero-2";
-import HomeBusinessFinanceWorks from "@/sections/home/home-business-finance-works";
-import HomeWhyChooseUs from "@/sections/home/home-why-choose-us";
-import HomeReviewSection from "@/sections/home/home-review-section";
-import Footer from "@/sections/common/footer";
-import CheckEligibleSection from "@/sections/common/find-eligible-section";
-import BusinessBannerSection from "@/sections/common/read-business-banner";
-import WhyAlphaFunding from "@/sections/home/home-why-alpha-funding";
-import CookieConsent from "@/components/cookies-dialog";
-import { OrganizationJsonLd, BreadcrumbJsonLd } from 'next-seo';
+import React from "react";
 import type { Metadata } from 'next';
-import HomeFaqSection from "@/sections/home/home-faq-section";
 
+// New Refined Sections
+import HomeHeroSection from "@/sections/home/home-hero-section";
+import HomeTrustBar from "@/sections/home/home-trust-bar";
+import HomeAIEligibilitySection from "@/sections/home/home-ai-eligibility-section";
+import HomeProductsGrid from "@/sections/home/home-products-grid";
+import HomeHowItWorks from "@/sections/home/home-how-it-works";
+import HomeWhyAlpha from "@/sections/home/home-why-alpha";
+import HomeTestimonials from "@/sections/home/home-testimonials";
+import HomeCalculatorCTA from "@/sections/home/home-calculator-cta";
+import HomeFaq from "@/sections/home/home-faq";
+import HomeFinalCTA from "@/sections/home/home-final-cta";
+import ScrollProgress from "@/components/ui/scroll-progress";
+import NavBar from "@/components/navbar";
+import Footer from "@/sections/common/footer";
+
+// SEO Metadata
 export const metadata: Metadata = {
-    title: 'Business Loans UK | Commercial Finance Broker | Alpha Funding',
-    description: 'Fast business loans from £10k–£10M. UK commercial finance broker with decisions in 24–48 hours. Secured, unsecured, asset, invoice & property finance for SMEs.',
+    title: "Business Loans UK | Fast Funding £10k-£10M | Alpha Funding",
+    description: "Get business funding in 24-48 hours. Compare 50+ UK lenders. No upfront fees. 97% approval rate. Check eligibility in 60 seconds.",
     openGraph: {
-        url: 'https://www.alpha-funding.co.uk/',
-        title: 'Business Loans UK | Commercial Finance Broker | Alpha Funding',
-        description: 'Fast business loans from £10k–£10M. UK commercial finance broker with decisions in 24–48 hours. Secured, unsecured, asset, invoice & property finance for SMEs.',
-        images: [
-            {
-                url: 'https://www.alpha-funding.co.uk/og-home.jpg',
-                width: 1200,
-                height: 630,
-                alt: 'Alpha Funding - Business Finance Solutions',
-            },
-        ],
+        title: "Business Loans UK | Fast Funding £10k-£10M | Alpha Funding",
+        description: "Get business funding in 24-48 hours. Compare 50+ UK lenders.",
+        type: 'website',
+        locale: 'en_GB',
+        url: 'https://alphafunding.uk',
+        siteName: 'Alpha Funding',
     },
 };
 
 export default function Home() {
     return (
-        <div className={"flex flex-col "}>
-            <OrganizationJsonLd
-                type="Organization"
-                name="Alpha Funding"
-                url="https://www.alpha-funding.co.uk"
-                logo="https://www.alpha-funding.co.uk/logo.png"
-                description="Alpha Funding provides flexible business finance solutions including business loans, refinance, merchant cash advance, and commercial property finance."
-                sameAs={[
-                    'https://www.linkedin.com/company/alpha-funding',
-                    'https://twitter.com/alphafunding',
-                ]}
-                address={[
-                    {
-                        streetAddress: '307 Euston Road',
-                        addressLocality: 'London',
-                        addressRegion: 'London',
-                        postalCode: 'NW1 3AD',
-                        addressCountry: 'GB',
-                    },
-                    {
-                        streetAddress: 'Commerce House, Campbeltown Rd, Tranmere',
-                        addressLocality: 'Wirral',
-                        addressRegion: 'Merseyside',
-                        postalCode: 'CH41 9HP',
-                        addressCountry: 'GB',
-                    },
-                ]}
-                contactPoint={{
-                    telephone: '+44-20-7078-7446',
-                    contactType: 'customer service',
-                    email: 'contact@alpha-funding.co.uk',
+        <main className="flex flex-col min-h-screen bg-white">
+            <NavBar />
+            {/* Visual Feedback Components */}
+            <ScrollProgress />
+
+            {/* Hero Section - Glassmorphic / Parallax */}
+            <HomeHeroSection />
+
+            {/* Trust Bar - Animated Stats Counter */}
+            <HomeTrustBar />
+
+            {/* AI Eligibility Widget - Generative UI Engine */}
+            <HomeAIEligibilitySection />
+
+            {/* Products Grid - Bento Style */}
+            <HomeProductsGrid />
+
+            {/* How It Works - Scroll Linked Timeline */}
+            <HomeHowItWorks />
+
+            {/* Why Alpha - Feature Bento Grid */}
+            <HomeWhyAlpha />
+
+            {/* Testimonials - Glassmorphic Carousel */}
+            <HomeTestimonials />
+
+            {/* Calculator CTA - Floating Neuromorphic Card */}
+            <HomeCalculatorCTA />
+
+            {/* FAQ Section - Neuromorphic Accordion */}
+            <HomeFaq />
+
+            {/* Final CTA Banner - Animated Mesh Gradient */}
+            <HomeFinalCTA />
+
+            <Footer />
+
+            {/* Structured Data for SEO: Organization */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Organization",
+                        "name": "Alpha Funding Business Finance",
+                        "url": "https://alphafunding.uk",
+                        "logo": "https://alphafunding.uk/logo.png",
+                        "contactPoint": {
+                            "@type": "ContactPoint",
+                            "telephone": "+44-000-000-000",
+                            "contactType": "customer service"
+                        }
+                    })
                 }}
             />
-            <BreadcrumbJsonLd
-                items={[
-                    {
-                        name: 'Home',
-                        item: 'https://www.alpha-funding.co.uk',
-                    },
-                ]}
-            />
-            <NavBar />
-            <div className={"flex bg-light-gray flex-col"}>
-                <HomeHeroPage />
-                <Homehero2 />
-                <HomeWhyChooseUs />
-                <HomeBusinessFinanceWorks />
-                <CheckEligibleSection />
-                <WhyAlphaFunding />
-                <HomeReviewSection />
-                <HomeFaqSection />
-                <BusinessBannerSection />
-                <CookieConsent />
-            </div>
-            <Footer />
-        </div>
+        </main>
     );
 }

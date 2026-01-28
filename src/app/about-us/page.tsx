@@ -1,26 +1,25 @@
+import React from "react";
 import NavBar from "@/components/navbar";
-import AboutUsHero from "@/sections/about-us/about-us-hero";
-import AboutUsStory from "@/sections/about-us/about-us-story";
-import AboutUsMissionVision from "@/sections/about-us/about-us-mission-vission";
-import AboutUsValues from "@/sections/about-us/about-us-values";
-import CheckEligibleSection from "@/sections/common/find-eligible-section";
 import Footer from "@/sections/common/footer";
 import { BreadcrumbJsonLd } from 'next-seo';
+import AboutUsContent from "@/sections/about-us/about-us-content";
+
+// Define Metadata here
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'About Us',
-    description: 'Learn about Alpha Funding - your trusted partner for flexible business finance solutions. Discover our mission, values, and commitment to supporting UK businesses.',
+    title: 'UK Commercial Finance Broker | Alpha Funding',
+    description: 'Alpha Funding connects UK businesses with the right finance—fast. No runaround. No radio silence. Just expert guidance and funding decisions in 24-48 hours.',
     openGraph: {
         url: 'https://www.alpha-funding.co.uk/about-us',
-        title: 'About Alpha Funding - Business Finance Experts',
-        description: 'Discover how Alpha Funding helps UK businesses grow with flexible finance solutions and expert support.',
+        title: 'Alpha Funding - UK Commercial Finance Broker',
+        description: 'You Built Your Business. We Help You Fund What\'s Next. Expert guidance and funding decisions in 24-48 hours.',
         images: [
             {
                 url: 'https://www.alpha-funding.co.uk/og-about.jpg',
                 width: 1200,
                 height: 630,
-                alt: 'About Alpha Funding',
+                alt: 'Alpha Funding Team',
             },
         ],
     },
@@ -41,15 +40,9 @@ export default function AboutUs() {
                 ]}
             />
             <NavBar />
-            <div className={"flex bg-light-gray flex-col"}>
-                <AboutUsHero />
-                <AboutUsStory />
-                <AboutUsMissionVision />
-                <AboutUsValues />
-                <div className={"bg-white"}>
-                    <CheckEligibleSection />
-                </div>
-            </div>
+            <main className="flex-grow pt-36">
+                <AboutUsContent />
+            </main>
             <Footer />
         </div>
     )

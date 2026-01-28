@@ -1,0 +1,137 @@
+
+"use client"
+
+import React, { useEffect, useState } from 'react';
+import { useChat } from '@ai-sdk/react';
+import { Card, CardContent } from "@/components/ui/card";
+import { ShieldCheck, Sparkles, Loader2, Building2 } from "lucide-react";
+
+interface CompanyExpertProps {
+    company: any;
+    onUpdateFields: (data: any) => void;
+}
+
+export function CompanyExpertSection({ company, onUpdateFields }: CompanyExpertProps) {
+    const [hasTriggered, setHasTriggered] = useState(false);
+    const [isFetchingDetail, setIsFetchingDetail] = useState(false);
+
+    const chat = useChat() as any;
+    const { messages, append, isLoading } = chat;
+
+    useEffect(() => {
+        async function fetchFullDetails() {
+            if (!company || hasTriggered) return;
+
+            setHasTriggered(true);
+            setIsFetchingDetail(true);
+
+            try {
+                const response = await fetch(`/api/companies-house/company/${company.company_number}`);
+                if (response.ok) {
+                    const details = await response.json();
+
+                    // Filter only for directors/active decision makers
+                    const decisionMakers = (details.officers || []).filter((o: any) =>
+                        (o.officer_role?.toLowerCase().includes('director') ||
+                            o.officer_role?.toLowerCase().includes('member')) &&
+                        !o.resigned_on
+                    );
+
+                    // nature_of_business is often in 'sic_codes'
+                    const nature = details.sic_codes ? details.sic_codes.join(', ') : (details.type || "Private Limited Company");
+                    const incDate = details.date_of_creation || "";
+
+                    // Extract first primary director for pre-fill
+                    const primaryDirector = decisionMakers[0];
+                    let directorNames = { first: "", last: "" };
+
+                    if (primaryDirector && primaryDirector.name) {
+                        const parts = primaryDirector.name.split(',').map((p: string) => p.trim());
+                        if (parts.length >= 2) {
+                            directorNames.last = parts[0];
+                            directorNames.first = parts[1].split(' ')[0]; // Take first part of the names
+                        }
+                    }
+
+                    onUpdateFields({
+                        company_number: company.company_number,
+                        nature_of_business: nature,
+                        incorporation_date: incDate,
+                        directors: decisionMakers,
+                        prefill: {
+                            first_name: directorNames.first,
+                            sur_name: directorNames.last
+                        }
+                    });
+
+                    if (append) {
+                        const directorSummary = decisionMakers.length > 0
+                            ? `Directors: ${decisionMakers.map((d: any) => d.name).join(', ')}.`
+                            : 'No active directors listed.';
+
+                        append({
+                            role: 'user',
+                            content: `Analyzed company: ${details.company_name}. Status: ${details.company_status}. Incorporated on ${incDate}. ${directorSummary} Industry: ${nature}. Summarize eligibility for business funding and mention the management stability.`
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching CH details:", error);
+            } finally {
+                setIsFetchingDetail(false);
+            }
+        }
+
+        fetchFullDetails();
+    }, [company, hasTriggered, append, onUpdateFields]);
+
+    if (!company) return null;
+
+    const analysisMessage = messages?.find((m: any) => m.role === 'assistant')?.content;
+
+    return (
+        <Card className="border-[#1CB5E0]/30 bg-blue-50/20 overflow-hidden mt-4 animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="bg-[#1CB5E0]/10 p-2 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#1CB5E0]" />
+                    <span className="text-[10px] font-bold text-[#1CB5E0] uppercase tracking-wider">Generative Verification</span>
+                </div>
+                <div className="flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                    <span className="text-[10px] text-green-600 font-medium">Verified by CH</span>
+                </div>
+            </div>
+            <CardContent className="p-4">
+                <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center border border-slate-100">
+                        {isFetchingDetail || isLoading ? (
+                            <Loader2 className="w-6 h-6 text-[#1CB5E0] animate-spin" />
+                        ) : (
+                            <ShieldCheck className="w-6 h-6 text-[#1CB5E0]" />
+                        )}
+                    </div>
+                    <div className="flex-grow">
+                        <h4 className="font-bold text-slate-900 leading-tight">{company.title}</h4>
+                        <p className="text-[11px] text-slate-500 mt-0.5">Reg: {company.company_number}</p>
+
+                        <div className="mt-3">
+                            <div className="text-[11px] text-slate-600 bg-white/60 p-2 rounded-lg border border-[#1CB5E0]/10 min-h-[40px] relative">
+                                {isFetchingDetail ? (
+                                    <div className="flex items-center gap-2 animate-pulse">
+                                        Synchronizing registrar data...
+                                    </div>
+                                ) : isLoading ? (
+                                    <div className="flex items-center gap-2 italic">
+                                        Analyzing business history...
+                                    </div>
+                                ) : (
+                                    analysisMessage || "Success: Business data synchronized. High eligibility score based on longevity."
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+    );
+}

@@ -46,7 +46,7 @@ export default function BecomePartnerForm() {
     async function onSubmit(values: z.infer<typeof partnerFormSchema>) {
         setLoading(true);
         try {
-            const res = await fetch("/api/sendPartnerMail", {
+            const res = await fetch("/api/send-partner-mail", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),

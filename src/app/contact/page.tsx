@@ -1,14 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { ArrowUpRight } from "lucide-react";
-import { poppins } from "@/app/fonts/fonts";
-import Footer from "@/sections/common/footer";
-import NavBar from "@/components/navbar";
-import { ContactForm } from "@/sections/forms/contact-form";
-import { LocalBusinessJsonLd, BreadcrumbJsonLd } from 'next-seo';
+import { BreadcrumbJsonLd, LocalBusinessJsonLd } from 'next-seo';
 import type { Metadata } from 'next';
+import ContactPageContent from '@/sections/contact/contact-page-content';
+import NavBar from '@/components/navbar';
+import Footer from '@/sections/common/footer';
 
 export const metadata: Metadata = {
-    title: 'Contact Us',
+    title: 'Contact Us | Alpha Funding',
     description: 'Get in touch with Alpha Funding\'s team of finance specialists. Contact us for bespoke business finance solutions tailored to your company\'s needs.',
     openGraph: {
         url: 'https://www.alpha-funding.co.uk/contact',
@@ -27,7 +24,7 @@ export const metadata: Metadata = {
 
 export default function Contact() {
     return (
-        <div className={"flex flex-col bg-light-gray"}>
+        <div className="flex flex-col min-h-screen pt-36">
             <LocalBusinessJsonLd
                 type="FinancialService"
                 name="Alpha Funding"
@@ -76,31 +73,8 @@ export default function Contact() {
                     },
                 ]}
             />
-            <NavBar />
-            <div className={"flex flex-col"}>
-                <div
-                    className={"flex md:flex-row md:py-0 gap-8 pt-10 flex-col justify-between px-[4%] md:px-[6%] min-h-screen"}>
-                    <div className={"flex flex-col mt-48 justify-between h-full w-full gap-1"}>
-                        <div className={"flex flex-col gap-2"}>
-                            <div className={"px-4 py-1 rounded-full w-min bg-primary"}>
-                                <p className={`text-white text-xs whitespace-nowrap font-bold ${poppins.className}`}>
-                                    Contact Us
-                                </p>
-                            </div>
-                            <h1 className={"text-3xl md:text-5xl font-bold"}>
-                                Contact Alpha Funding Friendly Team of Finance Specialists
-                            </h1>
-                        </div>
-                        <p className={`${poppins.className} text-sm mt-4`}>
-                            Looking for bespoke business finance solutions to meet your company's needs and goals? Get
-                            in touch with our helpful team of experts.
-                        </p>
-                    </div>
-                    <div className={"flex w-full md:pt-20 items-end justify-center flex-col"}>
-                        <ContactForm />
-                    </div>
-                </div>
-            </div>
+            <NavBar hideOnScroll={true} />
+            <ContactPageContent />
             <Footer />
         </div>
     )

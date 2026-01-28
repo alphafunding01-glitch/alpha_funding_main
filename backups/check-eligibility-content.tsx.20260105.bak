@@ -1,0 +1,370 @@
+// Alpha Funding - Check Eligibility Page V2
+// Design: Hybrid Glassmorphism 2.0 + Bento Grid
+// Date: 2026-01-03
+
+"use client";
+
+import React, { useState } from "react";
+import {
+    Shield, CheckCircle, Clock, Lock, Sparkles,
+    ArrowRight, Building2, User, FileText
+} from "lucide-react";
+import { motion } from "framer-motion";
+
+// ═══════════════════════════════════════════════════════════════
+// ANIMATION VARIANTS
+// ═══════════════════════════════════════════════════════════════
+
+const leftPanelVariants = {
+    hidden: { opacity: 0, y: 32 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.7, ease: "easeOut" as const }
+    }
+};
+
+const rightPanelVariants = {
+    hidden: { opacity: 0, y: 32 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.7, ease: "easeOut" as const, delay: 0.2 }
+    }
+};
+
+// ═══════════════════════════════════════════════════════════════
+// UI COMPONENTS
+// ═══════════════════════════════════════════════════════════════
+
+const BentoCard = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
+    <div
+        className={`
+      bg-white/[0.08] backdrop-blur-[16px] 
+      border border-white/[0.12] rounded-2xl p-6
+      hover:bg-white/[0.12] hover:border-brand-cyan/30 hover:-translate-y-[2px] 
+      transition-all duration-300
+      ${className}
+    `}
+    >
+        {children}
+    </div>
+);
+
+const GlassInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+    <input
+        {...props}
+        className={`
+      w-full py-3.5 px-4 bg-white/5 border border-white/10 rounded-xl
+      text-[15px] text-white placeholder-slate-400
+      focus:outline-none focus:border-brand-cyan focus:bg-brand-cyan/5 focus:ring-[3px] focus:ring-brand-cyan/15
+      transition-all duration-200
+      ${props.className}
+    `}
+    />
+);
+
+const StepCircle = ({ active, completed, number }: { active: boolean, completed: boolean, number: number }) => {
+    let baseClasses = "w-12 h-12 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300 z-10 border-2";
+
+    if (completed) {
+        return <div className={`${baseClasses} bg-brand-cyan/20 border-brand-cyan text-brand-cyan`}>{number}</div>;
+    }
+    if (active) {
+        return <div className={`${baseClasses} bg-brand-cyan border-brand-cyan text-brand-midnight shadow-[0_0_20px_rgba(28,181,224,0.4)]`}>{number}</div>;
+    }
+    return <div className={`${baseClasses} bg-white/5 border-white/10 text-slate-400`}>{number}</div>;
+};
+
+// ═══════════════════════════════════════════════════════════════
+// MAIN COMPONENT
+// ═══════════════════════════════════════════════════════════════
+
+export default function CheckEligibilityContent() {
+    const [currentStep, setCurrentStep] = useState(1);
+    const [amount, setAmount] = useState(50000);
+    const [isSoleTrader, setIsSoleTrader] = useState(false);
+
+    // AI Estimate Calculation
+    const minEst = (amount * 0.7).toLocaleString('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 });
+    const maxEst = (amount * 1.5).toLocaleString('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 });
+
+    return (
+        <section className="min-h-screen bg-gradient-hero relative overflow-hidden flex items-start justify-center p-6 pt-32 lg:pt-40 pb-20">
+
+            {/* ════════════ Background Layers ════════════ */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                {/* Mesh Overlays */}
+                <div className="absolute top-[20%] left-[40%] w-[800px] h-[800px] bg-brand-cyan/15 rounded-full blur-[120px] mix-blend-screen opacity-50" />
+                <div className="absolute top-0 right-[20%] w-[600px] h-[600px] bg-brand-fuchsia/10 rounded-full blur-[100px] mix-blend-screen opacity-50" />
+                <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-cyan/10 rounded-full blur-[100px] mix-blend-screen opacity-50" />
+
+                {/* Grid Pattern */}
+                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-[length:50px_50px] opacity-[0.02]" />
+            </div>
+
+            <div className="container max-w-[1400px] mx-auto relative z-10">
+                <div className="grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-16 items-center">
+
+                    {/* ════════════ LEFT PANEL: Bento Grid ════════════ */}
+                    <motion.div
+                        variants={leftPanelVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="flex flex-col text-center lg:text-left items-center lg:items-start"
+                    >
+                        {/* Badge */}
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/[0.08] backdrop-blur-sm border border-white/[0.12] rounded-full mb-6">
+                            <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse shadow-[0_0_8px_rgba(28,181,224,0.6)]" />
+                            <span className="text-[13px] font-medium text-brand-cyan-light">No Credit Check Required</span>
+                        </div>
+
+                        {/* Headline */}
+                        <h1 className="font-heading text-4xl lg:text-[3.5rem] leading-[1.1] text-white mb-4">
+                            Check Your <span className="bg-gradient-to-r from-brand-cyan to-brand-cyan-light bg-clip-text text-transparent">Funding Eligibility</span> in 60 Seconds
+                        </h1>
+
+                        {/* Subtitle */}
+                        <p className="text-lg text-slate-cool mb-10 max-w-lg">
+                            Find out what business finance you qualify for — instantly. No impact on your credit score. No obligation.
+                        </p>
+
+                        {/* Bento Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-[500px] lg:max-w-none">
+
+                            {/* Card 1: Featured */}
+                            <BentoCard className="col-span-1 sm:col-span-2 flex items-center gap-5 !p-7">
+                                <div className="w-12 h-12 rounded-[14px] flex items-center justify-center bg-gradient-to-br from-brand-cyan to-brand-fuchsia shadow-lg">
+                                    <Shield className="w-6 h-6 text-white" />
+                                </div>
+                                <div className="text-left">
+                                    <h3 className="font-semibold text-white text-base mb-1">Your Data is Protected</h3>
+                                    <p className="text-sm text-slate-cool">256-bit encryption. We never share your information without consent.</p>
+                                </div>
+                            </BentoCard>
+
+                            {/* Card 2: Stat */}
+                            <BentoCard className="flex flex-col justify-center">
+                                <span className="font-heading text-3xl text-brand-cyan">32%</span>
+                                <span className="text-sm text-slate-cool mt-1">of our funded clients were previously rejected elsewhere</span>
+                            </BentoCard>
+
+                            {/* Card 3: Stat */}
+                            <BentoCard className="flex flex-col justify-center">
+                                <span className="font-heading text-3xl text-brand-cyan">24h</span>
+                                <span className="text-sm text-slate-cool mt-1">average time from enquiry to funding decision</span>
+                            </BentoCard>
+
+                            {/* Card 4: Benefit */}
+                            <BentoCard>
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-cyan to-brand-fuchsia flex items-center justify-center mb-4">
+                                    <CheckCircle className="w-5 h-5 text-white" />
+                                </div>
+                                <h4 className="font-semibold text-white">Soft Search Only</h4>
+                                <p className="text-sm text-slate-cool mt-1">Won't affect your credit score</p>
+                            </BentoCard>
+
+                            {/* Card 5: Benefit */}
+                            <BentoCard>
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-cyan to-brand-fuchsia flex items-center justify-center mb-4">
+                                    <Clock className="w-5 h-5 text-white" />
+                                </div>
+                                <h4 className="font-semibold text-white">Instant Results</h4>
+                                <p className="text-sm text-slate-cool mt-1">Know your options in seconds</p>
+                            </BentoCard>
+
+                        </div>
+                    </motion.div>
+
+
+                    {/* ════════════ RIGHT PANEL: Glass Form 2.0 ════════════ */}
+                    <motion.div
+                        variants={rightPanelVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="relative"
+                    >
+                        {/* Glow Blob */}
+                        <div className="absolute -top-24 -right-24 w-64 h-64 bg-brand-cyan/15 rounded-full blur-3xl pointer-events-none" />
+
+                        {/* Floating Secure Badge */}
+                        <div className="absolute top-5 right-5 z-20 flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/15 border border-emerald-500/30 rounded-full text-emerald-400 text-xs font-medium">
+                            <Shield className="w-3.5 h-3.5" />
+                            Secure Form
+                        </div>
+
+                        <div className="bg-white/[0.06] backdrop-blur-[24px] border border-white/10 rounded-[28px] p-8 lg:p-10 shadow-[0_25px_50px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-hidden">
+
+                            {/* Form Header */}
+                            <div className="mb-8">
+                                <h2 className="font-heading text-2xl text-white mb-2">Tell Us About Your Business</h2>
+                                <p className="text-[15px] text-slate-cool">Complete this quick form to see your options</p>
+                            </div>
+
+                            {/* Step Progress */}
+                            <div className="relative flex justify-between mb-8">
+                                <div className="absolute top-1/2 left-6 right-6 h-[2px] bg-white/10 -translate-y-1/2 -z-0" />
+                                <div className="flex flex-col items-center gap-2 relative z-10">
+                                    <StepCircle active={currentStep === 1} completed={currentStep > 1} number={1} />
+                                    <span className={`text-[11px] whitespace-nowrap ${currentStep >= 1 ? 'text-brand-cyan-light' : 'text-slate-cool'}`}>Business</span>
+                                </div>
+                                <div className="flex flex-col items-center gap-2 relative z-10">
+                                    <StepCircle active={currentStep === 2} completed={currentStep > 2} number={2} />
+                                    <span className={`text-[11px] whitespace-nowrap ${currentStep >= 2 ? 'text-brand-cyan-light' : 'text-slate-cool'}`}>Contact</span>
+                                </div>
+                                <div className="flex flex-col items-center gap-2 relative z-10">
+                                    <StepCircle active={currentStep === 3} completed={currentStep > 3} number={3} />
+                                    <span className={`text-[11px] whitespace-nowrap ${currentStep >= 3 ? 'text-brand-cyan-light' : 'text-slate-cool'}`}>Review</span>
+                                </div>
+                            </div>
+
+                            {/* Form Fields Step 1 */}
+                            <div className="space-y-6">
+
+                                {/* Company Name */}
+                                <div>
+                                    <label className="block text-[13px] font-medium text-slate-light mb-2">
+                                        Company Name <span className="text-brand-cyan">*</span>
+                                    </label>
+                                    <GlassInput placeholder="Enter your company name" />
+                                </div>
+
+                                {/* Sole Trader Checkbox */}
+                                <div className="flex items-center gap-3 my-2">
+                                    <div
+                                        onClick={() => setIsSoleTrader(!isSoleTrader)}
+                                        className={`
+                                w-5 h-5 rounded-[6px] border-2 cursor-pointer flex items-center justify-center transition-all
+                                ${isSoleTrader ? 'bg-brand-cyan border-brand-cyan' : 'border-white/20 bg-transparent'}
+                            `}
+                                    >
+                                        {isSoleTrader && <CheckCircle className="w-3.5 h-3.5 text-white" />}
+                                    </div>
+                                    <span className="text-sm text-slate-light cursor-pointer hover:text-white transition-colors" onClick={() => setIsSoleTrader(!isSoleTrader)}>
+                                        I am a sole trader
+                                    </span>
+                                </div>
+
+                                {/* Funding Amount Slider */}
+                                <div>
+                                    <label className="block text-[13px] font-medium text-slate-light mb-2">
+                                        How much would you like to borrow? <span className="text-brand-cyan">*</span>
+                                    </label>
+                                    <div className="relative mb-4">
+                                        <span className="absolute left-4 top-3.5 text-slate-cool">£</span>
+                                        <GlassInput
+                                            type="text"
+                                            value={amount.toLocaleString()}
+                                            className="pl-9 font-mono"
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <input
+                                        type="range"
+                                        min="10000"
+                                        max="500000"
+                                        step="5000"
+                                        value={amount}
+                                        onChange={(e) => setAmount(parseInt(e.target.value))}
+                                        className="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-brand-cyan hover:accent-brand-cyan-light"
+                                    />
+                                    <div className="flex justify-between text-xs text-slate-gray mt-2">
+                                        <span>£10,000</span>
+                                        <span>£500,000+</span>
+                                    </div>
+                                </div>
+
+                                {/* AI Estimate Box */}
+                                <div className="my-6 p-5 rounded-2xl bg-gradient-to-r from-brand-cyan/10 to-brand-fuchsia/10 border border-brand-cyan/20 relative overflow-hidden">
+                                    <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-brand-cyan to-brand-fuchsia" />
+
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-cyan/15 rounded-full text-[11px] font-semibold uppercase tracking-wider text-brand-cyan-light">
+                                            <Sparkles className="w-3.5 h-3.5" />
+                                            AI Estimate
+                                        </div>
+                                        <span className="text-sm font-semibold text-white">Based on similar businesses</span>
+                                    </div>
+
+                                    <div className="flex items-baseline gap-3 mt-3">
+                                        <span className="font-heading text-3xl text-brand-cyan">{minEst} - {maxEst}</span>
+                                        <span className="text-sm text-slate-cool">likely approval range</span>
+                                    </div>
+                                    <p className="text-xs text-slate-gray mt-3">This is an estimate based on businesses like yours. Actual approval depends on full assessment.</p>
+                                </div>
+
+                                {/* Name Fields */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-[13px] font-medium text-slate-light mb-2">
+                                            First Name <span className="text-brand-cyan">*</span>
+                                        </label>
+                                        <GlassInput placeholder="John" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-[13px] font-medium text-slate-light mb-2">
+                                            Last Name <span className="text-brand-cyan">*</span>
+                                        </label>
+                                        <GlassInput placeholder="Smith" />
+                                    </div>
+                                </div>
+
+                                {/* Contact Fields */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-[13px] font-medium text-slate-light mb-2">
+                                            Contact Number <span className="text-brand-cyan">*</span>
+                                        </label>
+                                        <GlassInput type="tel" placeholder="07XXX XXX XXX" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-[13px] font-medium text-slate-light mb-2">
+                                            Email Address <span className="text-brand-cyan">*</span>
+                                        </label>
+                                        <GlassInput type="email" placeholder="john@company.co.uk" />
+                                    </div>
+                                </div>
+
+                                {/* Consent Checkboxes */}
+                                <div className="flex flex-col gap-3 mt-6">
+                                    <label className="flex items-start gap-3 p-4 bg-white/[0.03] border border-white/[0.06] rounded-xl cursor-pointer hover:bg-white/5 transition-colors group">
+                                        <div className="mt-0.5 w-5 h-5 rounded-[6px] border-2 border-white/20 flex items-center justify-center bg-transparent group-hover:border-white/30">
+                                            {/* Add logic for checked state if needed */}
+                                        </div>
+                                        <span className="text-sm text-slate-light leading-relaxed">
+                                            I have read and accept the <span className="text-brand-cyan-light hover:underline">privacy policy</span>
+                                        </span>
+                                    </label>
+                                    <label className="flex items-start gap-3 p-4 bg-white/[0.03] border border-white/[0.06] rounded-xl cursor-pointer hover:bg-white/5 transition-colors group">
+                                        <div className="mt-0.5 w-5 h-5 rounded-[6px] border-2 border-white/20 flex items-center justify-center bg-transparent group-hover:border-white/30">
+                                            {/* Add logic for checked state if needed */}
+                                        </div>
+                                        <span className="text-sm text-slate-light leading-relaxed">
+                                            I have read and accept the <span className="text-brand-cyan-light hover:underline">terms of business</span>
+                                        </span>
+                                    </label>
+                                </div>
+
+                                {/* Submit Button */}
+                                <button className="w-full py-4 bg-gradient-to-r from-brand-cyan to-brand-cyan-light text-brand-midnight font-semibold rounded-[14px] shadow-[0_4px_20px_rgba(28,181,224,0.3)] hover:shadow-[0_8px_30px_rgba(28,181,224,0.4)] hover:-translate-y-[2px] active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2.5 text-base">
+                                    Check My Eligibility
+                                    <ArrowRight className="w-5 h-5" />
+                                </button>
+
+                                {/* Security Note */}
+                                <div className="flex items-center justify-center gap-2 text-[13px] text-slate-gray mt-2">
+                                    <Lock className="w-4 h-4 opacity-60" />
+                                    Your information is encrypted and secure
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </motion.div>
+
+                </div>
+            </div>
+        </section>
+    );
+}
