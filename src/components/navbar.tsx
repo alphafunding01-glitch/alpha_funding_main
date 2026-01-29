@@ -591,9 +591,7 @@ export default function NavBar({ hideOnScroll = false }: NavBarProps) {
 
                                                     {/* Text */}
                                                     <div>
-                                                        <span className="text-[10px] font-medium text-slate-400 bg-slate-800/50 px-2 py-0.5 rounded border border-slate-700">
-                                                            Operating under applicable UK regulations
-                                                        </span>
+                                                        <p className="text-sm font-medium text-gray-800">{item.label}</p>
                                                         <p className="text-xs text-gray-500">{item.description}</p>
                                                     </div>
                                                 </Link>
