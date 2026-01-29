@@ -67,7 +67,7 @@ export default function HomeFinalCTA() {
                         </h2>
 
                         <p className="text-slate-300 font-body text-xl max-w-2xl mx-auto leading-relaxed">
-                            Join 2,000+ UK companies who've secured funding through Alpha Funding.
+                            Join 700+ UK companies who've secured funding through Alpha Funding.
                             Your dedicated advisor is waiting to find your perfect deal.
                         </p>
 

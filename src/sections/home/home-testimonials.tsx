@@ -463,7 +463,7 @@ const HeaderSection = () => (
                 whileInView={{ opacity: 1, y: 0 }}
                 className="text-4xl md:text-5xl font-heading font-bold text-white max-w-2xl"
             >
-                Trusted by 199 UK Businesses
+                Trusted by UK Businesses
             </motion.h2>
             <motion.p
                 initial={{ opacity: 0 }}
@@ -714,8 +714,8 @@ export default function HomeTestimonials() {
                                 key={idx}
                                 onClick={() => { stopAutoPlay(); setActiveIndex(idx); startAutoPlay(); }}
                                 className={`h-2.5 rounded-full transition-all duration-300 ${idx === activeIndex
-                                        ? "w-8 bg-[#1CB5E0]"
-                                        : "w-2.5 bg-white/20 hover:bg-white/40"
+                                    ? "w-8 bg-[#1CB5E0]"
+                                    : "w-2.5 bg-white/20 hover:bg-white/40"
                                     }`}
                                 aria-label={`Go to review set ${idx + 1}`}
                             />
