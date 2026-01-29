@@ -505,34 +505,153 @@ const HeaderSection = () => (
     </div>
 );
 
-const AISummaryBox = () => (
-    <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="relative bg-gradient-to-r from-[#1CB5E0]/5 to-[#D946EF]/5 border border-[#1CB5E0]/15 rounded-[24px] p-6 md:p-8 mb-16 overflow-hidden"
-    >
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#1CB5E0] to-[#D946EF] opacity-50" />
+const summaries = [
+    "Clients consistently highlight the speed of our service — many receiving funds within 24-48 hours. Business owners appreciate the streamlined process that eliminates traditional banking delays. Our team's proactive communication keeps clients informed at every stage, turning what's typically a stressful experience into a straightforward one.",
+    "Reviews frequently mention our advisors by name — Aadil, Devang, Naina, Mohsin, and the wider team receive praise for their dedication and personal approach. Clients value having a single point of contact who understands their situation and advocates on their behalf throughout the funding journey.",
+    "A significant number of our clients found us after being turned down by traditional banks. Reviews reveal a pattern — businesses struggling to secure funding elsewhere found solutions through our 200+ lender network. Our advisors specialize in understanding why previous applications failed and finding alternative routes to approval.",
+    "Clear communication stands out across client feedback. Reviewers consistently mention being kept informed at every stage — no chasing, no radio silence, no uncertainty. Our team's proactive approach means clients always know where their application stands, transforming what's typically an anxious wait into a confident process.",
+    "Many reviews come from repeat clients and long-term relationships. Business owners return to us for subsequent funding rounds, citing the trust built during their first experience. Our advisors remember client circumstances and provide continuity — a personal banking relationship without the bank."
+];
 
-        <div className="flex flex-col md:flex-row gap-6 items-start">
-            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-[#1CB5E0]/15 flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-[#1CB5E0]" />
-            </div>
+const AISummaryBox = () => {
+    const [phase, setPhase] = useState<'loading' | 'generating' | 'complete'>('loading');
+    const [summary, setSummary] = useState("");
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isInView, setIsInView] = useState(false);
 
-            <div className="space-y-3">
-                <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1CB5E0]/15 text-[#1CB5E0] text-[11px] font-bold uppercase tracking-wider">
-                    AI Summary
+    // Random summary selection
+    useEffect(() => {
+        const randomIndex = Math.floor(Math.random() * summaries.length);
+        setSummary(summaries[randomIndex]);
+    }, []);
+
+    // Intersection Observer
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && !isInView) {
+                    setIsInView(true);
+                }
+            },
+            { threshold: 0.3 }
+        );
+
+        if (containerRef.current) {
+            observer.observe(containerRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, [isInView]);
+
+    // Animation Sequence
+    useEffect(() => {
+        if (isInView) {
+            // Phase 1: Loading (0.8s)
+            const loadingTimer = setTimeout(() => {
+                setPhase('generating');
+            }, 800);
+
+            return () => clearTimeout(loadingTimer);
+        }
+    }, [isInView]);
+
+    // Completion Timer based on word count
+    useEffect(() => {
+        if (phase === 'generating') {
+            const wordCount = summary.split(" ").length;
+            const duration = wordCount * 30 + 600; // rough estimate
+            const completionTimer = setTimeout(() => {
+                setPhase('complete');
+            }, duration + 500); // extra buffer
+
+            return () => clearTimeout(completionTimer);
+        }
+    }, [phase, summary]);
+
+    return (
+        <motion.div
+            ref={containerRef}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className={`relative bg-gradient-to-r from-[#1CB5E0]/5 to-[#D946EF]/5 border border-[#1CB5E0]/15 rounded-[24px] p-6 md:p-8 mb-16 overflow-hidden transition-shadow duration-1000 ${phase === 'complete' ? 'shadow-[0_0_30px_rgba(28,181,224,0.12)]' : ''}`}
+            style={phase === 'complete' ? { animation: 'glow-pulse 3s infinite' } : {}}
+        >
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#1CB5E0] to-[#D946EF] opacity-50" />
+
+            <div className="flex flex-col md:flex-row gap-6 items-start">
+                <div className={`flex-shrink-0 w-12 h-12 rounded-xl bg-[#1CB5E0]/15 flex items-center justify-center transition-all duration-1000 ${phase === 'loading' ? 'animate-pulse' : ''}`}>
+                    <Sparkles className={`w-6 h-6 text-[#1CB5E0] ${phase === 'loading' ? 'opacity-70' : 'opacity-100'}`} />
                 </div>
-                <p className="text-[15px] leading-relaxed text-slate-200">
-                    Customers consistently praise our professionalism, transparency, and dedication.
-                    Our team takes time to understand unique needs and works tirelessly to find suitable funding solutions.
-                    The straightforward process, clear communication, and proactive assistance make complex procedures simple.
-                    Clients appreciate personalized attention and our commitment to securing the best possible outcomes.
-                </p>
+
+                <div className="space-y-3 w-full">
+                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1CB5E0]/15 text-[#1CB5E0] text-[11px] font-bold uppercase tracking-wider">
+                        AI Summary
+                    </div>
+
+                    <div className="relative min-h-[80px]">
+                        {/* Loading State (Skeleton) */}
+                        <AnimatePresence>
+                            {phase === 'loading' && (
+                                <motion.div
+                                    initial={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="space-y-3 pt-1"
+                                >
+                                    <div className="h-3.5 w-[95%] rounded bg-white/5 overflow-hidden relative ai-skeleton" />
+                                    <div className="h-3.5 w-[100%] rounded bg-white/5 overflow-hidden relative ai-skeleton" />
+                                    <div className="h-3.5 w-[90%] rounded bg-white/5 overflow-hidden relative ai-skeleton" />
+                                    <div className="h-3.5 w-[60%] rounded bg-white/5 overflow-hidden relative ai-skeleton" />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {/* Text Generation */}
+                        {(phase === 'generating' || phase === 'complete') && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <p className="text-[15px] leading-relaxed text-slate-200">
+                                    {summary.split(" ").map((word, i) => (
+                                        <span
+                                            key={i}
+                                            className="inline-block mr-1 opacity-0"
+                                            style={{
+                                                animation: `word-reveal 150ms ease-out forwards`,
+                                                animationDelay: `${i * 30}ms`,
+                                                transform: 'translateY(4px)',
+                                                filter: 'blur(2px)'
+                                            }}
+                                        >
+                                            {word}
+                                        </span>
+                                    ))}
+                                    {phase === 'generating' && (
+                                        <span className="inline-block w-1.5 h-4 bg-[#1CB5E0] ml-0.5 align-middle animate-[blink_0.6s_infinite]" />
+                                    )}
+                                </p>
+
+                                {phase === 'complete' && (
+                                    <motion.p
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 0.5, duration: 0.5 }}
+                                        className="text-[12px] text-slate-500 italic mt-4"
+                                    >
+                                        Analysis based on 199 verified reviews
+                                    </motion.p>
+                                )}
+                            </motion.div>
+                        )}
+                    </div>
+                </div>
             </div>
-        </div>
-    </motion.div>
-);
+        </motion.div>
+    );
+};
 
 const TestimonialCard = ({ review }: { review: Testimonial }) => {
     return (

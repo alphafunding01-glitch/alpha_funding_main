@@ -32,6 +32,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { SmartCalculatorInsights } from "@/components/smart-calculator-insights";
 
 type RateType =
     | "Annual Interest Rate"
@@ -531,6 +532,16 @@ export default function CalculatorPage() {
                                 </CardContent>
                             </Card>
                         </motion.div>
+
+                        {/* Smart AI Insights */}
+                        <SmartCalculatorInsights
+                            amount={amount}
+                            months={months}
+                            monthlyPayment={calculations?.monthlyPayment ?? 0}
+                            totalInterest={calculations?.totalInterest ?? 0}
+                            totalPayable={calculations?.totalPayable ?? 0}
+                            annualRate={calculations?.annualRate ?? 0}
+                        />
                     </div>
 
                     {/* Right - Summary & breakdown */}

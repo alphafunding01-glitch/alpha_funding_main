@@ -211,7 +211,7 @@ export default function CheckEligibilityContent() {
 
                             {/* Card 3: Stat */}
                             <BentoCard className="flex flex-col justify-center">
-                                <span className="font-heading text-3xl text-brand-cyan">24h</span>
+                                <span className="font-heading text-3xl text-brand-cyan">24-48h</span>
                                 <span className="text-sm text-slate-cool mt-1">average time from enquiry to funding decision</span>
                             </BentoCard>
 
