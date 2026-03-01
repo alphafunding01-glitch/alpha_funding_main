@@ -201,7 +201,7 @@ export default function Footer() {
                                     </div>
                                     <div className="text-sm text-slate-600">
                                         <p className="font-medium text-[#0F172A]">London Office</p>
-                                        <p>307 Euston Road, London NW1 3AD</p>
+                                        <p>Ealing Aurora 71-79 Uxbridge Rd, London W5 5SL</p>
                                         <p className="font-medium mt-2 text-[#0F172A]">Wirral Office</p>
                                         <p>Commerce House, Campbeltown Rd, Tranmere, Wirral, CH41 9HP</p>
                                     </div>
@@ -232,6 +232,9 @@ export default function Footer() {
                         </Link>
                     </div>
                     <p className="text-xs text-slate-400">© {new Date().getFullYear()} Alpha Funding. All rights reserved.</p>
+                    <p className="text-[10px] text-slate-400 mt-2 max-w-xl mx-auto italic opacity-70">
+                        Alpha Funding Limited, registered at Commerce House Campbeltown Road, Tranmere, Wirral, United Kingdom, CH41 9HP. Company Registration number: 13425543 . Alpha Funding Limited is not authorised by the Financial Conduct Authority and can only complete non-regulated introductions. We work with a Panel of Lenders whose particulars will be supplied upon request to find a potentially suitable arrangement for consideration. We will receive commission from lenders. Different lenders pay different amounts depending on different commission models. For transparency we work with the following commission models: fixed fee, fixed rate of commission, percentage of the amount you borrow and rate for risk (this is based on the risk profile of the business - amend with the applicable/ appropriate commission models.) Further details of the commission model, calculation and amount will be disclosed to you throughout your customer journey.
+                    </p>
                 </div>
             </div>
         </footer>

@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
 import { NextRequest, NextResponse } from "next/server";
 
-const SMTP_SERVER_USERNAME = "demonking4529@gmail.com";
-const SMTP_SERVER_PASSWORD = "ymze zfrp iisj lylq"; // Note: User aware this needs updating later
+const SMTP_SERVER_USERNAME = process.env.SMTP_USER ?? "";
+const SMTP_SERVER_PASSWORD = process.env.SMTP_PASS ?? ""; // Note: User aware this needs updating later
 const INTERNAL_BCC = "contact@alpha-funding.co.uk";
 
 const transporter = nodemailer.createTransport({

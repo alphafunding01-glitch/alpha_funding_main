@@ -331,7 +331,10 @@ export async function POST(request: NextRequest) {
         });
 
         return new Response(stream, {
-            headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+            headers: {
+                'Content-Type': 'text/plain; charset=utf-8',
+                'Cache-Control': 'no-store, no-cache, must-revalidate',
+            },
         });
 
     } catch (error: any) {

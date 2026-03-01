@@ -6,12 +6,12 @@ import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { cn } from "@/lib/utils"
-import { 
-    Loader2, Search, Building2, CheckCircle2, Sparkles, 
-    ArrowRight, ArrowLeft, Check, Edit2, Shield, Lock, Banknote, ExternalLink 
+import {
+    Loader2, Search, Building2, CheckCircle2, Sparkles,
+    ArrowRight, ArrowLeft, Check, Edit2, Shield, Lock, Banknote, ExternalLink
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { useCompletion } from "@ai-sdk/react"
+import { getAiEstimate, searchCompanies, getCompanyProfile, getCompanyOfficers } from "@/actions"
 import { CompanyDetailsGenerator } from "@/components/company-details-generator"
 import { LeadScoreVisualization } from "@/components/lead-score-visualization"
 
@@ -109,7 +109,7 @@ GlassSelect.displayName = "GlassSelect";
 // --- Step Circle Component ---
 const StepCircle = ({ active, completed, number }: { active: boolean, completed: boolean, number: number }) => {
     const base = "w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 border-2";
-    
+
     if (completed) {
         return (
             <div className={cn(base, "bg-emerald-500/20 border-emerald-500 text-emerald-400")}>
@@ -132,14 +132,14 @@ const StepCircle = ({ active, completed, number }: { active: boolean, completed:
 };
 
 // --- Enhanced AI Estimate Box Component ---
-const AIEstimateBox = ({ 
-    amount, 
+const AIEstimateBox = ({
+    amount,
     selectedCompany = null,
     companyAge = null,
     sicCodes = [],
     hasCharges = null,
     numberOfDirectors = 1
-}: { 
+}: {
     amount: number;
     selectedCompany?: any;
     companyAge?: number | null;
@@ -162,10 +162,9 @@ const AIEstimateBox = ({
     const [scrambleMin, setScrambleMin] = useState(0);
     const [scrambleMax, setScrambleMax] = useState(0);
 
-    const { complete, completion, isLoading } = useCompletion({
-        api: '/api/ai-estimate',
-        streamProtocol: 'text',
-    });
+    // Server Action Result State
+    const [resultData, setResultData] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const phaseLabels: Record<string, string> = {
         'idle': 'AI ESTIMATE',
@@ -180,8 +179,8 @@ const AIEstimateBox = ({
     // Trigger estimation on input change (debounced) - only if company selected
     useEffect(() => {
         if (amount <= 0 || !selectedCompany) return;
-        
-        const timer = setTimeout(() => {
+
+        const timer = setTimeout(async () => {
             setPhase('analyzing');
             setProgressWidth(0);
             setReasoning("");
@@ -190,15 +189,27 @@ const AIEstimateBox = ({
             setVisibleTags(0);
             setRecommendedProduct(null);
             setAlternativeProduct(null);
-            
-            // Send full data for realistic calculation
-            complete(JSON.stringify({
-                amount,
-                companyAge,
-                sicCodes,
-                hasCharges,
-                numberOfDirectors
-            }));
+            setResultData(null);
+            setIsLoading(true);
+
+            try {
+                // Call Server Action
+                const response = await getAiEstimate({
+                    amount,
+                    companyAge,
+                    sicCodes,
+                    hasCharges,
+                    // numberOfDirectors // Action doesn't use this yet
+                } as any);
+
+                if (response.success) {
+                    setResultData(response.data);
+                }
+            } catch (error) {
+                console.error("AI Estimate validation error", error);
+            } finally {
+                setIsLoading(false);
+            }
         }, 300);
 
         return () => clearTimeout(timer);
@@ -207,7 +218,7 @@ const AIEstimateBox = ({
     // Progress bar animation
     useEffect(() => {
         if (phase === 'idle' || phase === 'done') return;
-        
+
         const targetProgress = {
             'analyzing': 25,
             'processing': 50,
@@ -255,40 +266,55 @@ const AIEstimateBox = ({
         return () => clearInterval(interval);
     }, [phase, amount]);
 
-    // Parse completion when stream ends
+    // Process result when ready and animation phase allows
     useEffect(() => {
-        if (completion && !isLoading && (phase === 'calculating' || phase === 'processing')) {
+        if (resultData && (phase === 'calculating')) {
             try {
-                const data = JSON.parse(completion);
+                const data = resultData;
                 setPhase('revealing');
-                
+
                 // Count up animation
                 const duration = 500;
                 const startTime = Date.now();
                 const startMin = scrambleMin;
                 const startMax = scrambleMax;
-                const finalMin = data.min;
-                const finalMax = data.max;
-                
+                const finalMin = data.minEstimate || 0;
+                const finalMax = data.maxEstimate || 0;
+
                 const animate = () => {
                     const elapsed = Date.now() - startTime;
                     const progress = Math.min(elapsed / duration, 1);
                     const ease = 1 - Math.pow(1 - progress, 3);
-                    
+
                     setDisplayMin(Math.round(startMin + (finalMin - startMin) * ease));
                     setDisplayMax(Math.round(startMax + (finalMax - startMax) * ease));
-                    
+
                     if (progress < 1) {
                         requestAnimationFrame(animate);
                     } else {
                         setReasoning(data.reasoning || "");
                         setTags(data.tags || []);
-                        setRecommendedProduct(data.recommendedProduct || null);
-                        setAlternativeProduct(data.alternativeProduct || null);
+
+                        // Map string products to objects
+                        if (data.recommendedProduct) {
+                            setRecommendedProduct({
+                                name: data.recommendedProduct,
+                                href: `/products/${data.recommendedProduct.toLowerCase().replace(/ /g, '-')}`
+                            });
+                        }
+
+                        if (data.alternativeProduct) {
+                            setAlternativeProduct({
+                                name: data.alternativeProduct,
+                                href: `/products/${data.alternativeProduct.toLowerCase().replace(/ /g, '-')}`,
+                                note: "Alternative"
+                            });
+                        }
+
                         setPhase('text');
                     }
                 };
-                
+
                 requestAnimationFrame(animate);
             } catch {
                 // Fallback to simple calculation
@@ -301,12 +327,12 @@ const AIEstimateBox = ({
                 setPhase('done');
             }
         }
-    }, [completion, isLoading, phase]);
+    }, [resultData, phase, scrambleMin, scrambleMax, amount]);
 
     // Word-by-word text reveal
     useEffect(() => {
         if (phase !== 'text' || !reasoning) return;
-        
+
         const words = reasoning.split(' ');
         if (visibleWords >= words.length) {
             setTimeout(() => setPhase('done'), 200);
@@ -339,7 +365,7 @@ const AIEstimateBox = ({
             <div className="relative rounded-2xl border border-white/10 bg-gradient-to-br from-[#1CB5E0]/5 to-[#D946EF]/5 p-6 my-6 opacity-70">
                 {/* Top accent line - dimmer */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#1CB5E0]/30 to-[#D946EF]/30 rounded-t-2xl" />
-                
+
                 {/* Badge - grayed out */}
                 <div className="flex items-center gap-2 mb-4">
                     <Sparkles className="w-4 h-4 text-slate-500" />
@@ -347,11 +373,11 @@ const AIEstimateBox = ({
                         AI Estimate
                     </span>
                 </div>
-                
+
                 {/* Placeholder message */}
                 <div className="text-center py-4">
                     <p className="text-slate-400 text-sm">
-                        {!selectedCompany 
+                        {!selectedCompany
                             ? "Select a company above to see your AI-powered funding estimate"
                             : "Adjust the funding amount to calculate your estimate"
                         }
@@ -385,18 +411,18 @@ const AIEstimateBox = ({
         )}>
             {/* Top gradient line */}
             <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#1CB5E0] to-[#D946EF]" />
-            
+
             {/* Progress bar */}
             {isProcessing && (
                 <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5">
-                    <motion.div 
+                    <motion.div
                         className="h-full bg-gradient-to-r from-[#1CB5E0] to-[#D946EF]"
                         style={{ width: `${progressWidth}%` }}
                         transition={{ duration: 0.3 }}
                     />
                 </div>
             )}
-            
+
             {/* Badge row */}
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -415,7 +441,7 @@ const AIEstimateBox = ({
                     <span className="text-[11px] text-slate-500">Checking 200+ lenders...</span>
                 )}
             </div>
-            
+
             {/* Estimate display */}
             <div className="flex items-baseline gap-2 flex-wrap">
                 {isProcessing ? (
@@ -428,7 +454,7 @@ const AIEstimateBox = ({
                     <div className="h-9 w-64 rounded-lg bg-white/5 ai-skeleton" />
                 ) : (
                     // Final values
-                    <motion.span 
+                    <motion.span
                         className="font-heading text-3xl font-bold text-white"
                         initial={{ scale: 1 }}
                         animate={{ scale: phase === 'revealing' ? [1, 1.05, 1] : 1 }}
@@ -444,13 +470,13 @@ const AIEstimateBox = ({
                     likely approval range
                 </span>
             </div>
-            
+
             {/* Reasoning text */}
             {reasoning && !isProcessing && (
                 <div className="mt-3 text-sm text-slate-400 leading-relaxed">
                     {words.slice(0, visibleWords).map((word, i) => (
-                        <span 
-                            key={i} 
+                        <span
+                            key={i}
                             className="inline-block mr-1 animate-[word-reveal_0.2s_ease-out_forwards]"
                         >
                             {word}
@@ -461,12 +487,12 @@ const AIEstimateBox = ({
                     )}
                 </div>
             )}
-            
+
             {/* Tags */}
             {tags.length > 0 && phase === 'done' && (
                 <div className="flex flex-wrap gap-2 mt-4">
                     {tags.slice(0, visibleTags).map((tag, i) => (
-                        <span 
+                        <span
                             key={i}
                             className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400 animate-[word-reveal_0.2s_ease-out_forwards]"
                         >
@@ -475,18 +501,18 @@ const AIEstimateBox = ({
                     ))}
                 </div>
             )}
-            
+
             {/* Product Recommendation */}
             {phase === 'done' && recommendedProduct && (
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
                     className="mt-5 space-y-3"
                 >
                     {/* Primary Product */}
-                    <a 
-                        href={recommendedProduct.href} 
+                    <a
+                        href={recommendedProduct.href}
                         className="flex items-center justify-between p-3 rounded-xl bg-[#1CB5E0]/10 border border-[#1CB5E0]/20 hover:bg-[#1CB5E0]/15 transition-all group"
                     >
                         <div className="flex items-center gap-3">
@@ -500,11 +526,11 @@ const AIEstimateBox = ({
                         </div>
                         <ArrowRight className="w-4 h-4 text-[#1CB5E0] group-hover:translate-x-1 transition-transform" />
                     </a>
-                    
+
                     {/* Alternative Product (for higher amounts) */}
                     {alternativeProduct && alternativeProduct.note && (
-                        <a 
-                            href={alternativeProduct.href} 
+                        <a
+                            href={alternativeProduct.href}
                             className="flex items-center justify-between p-3 rounded-xl bg-amber-500/5 border border-amber-500/20 hover:bg-amber-500/10 transition-all group"
                         >
                             <div className="flex items-center gap-3">
@@ -521,7 +547,7 @@ const AIEstimateBox = ({
                     )}
                 </motion.div>
             )}
-            
+
             {/* Disclaimer */}
             <div className="mt-4 pt-3 border-t border-white/5 text-[11px] text-slate-500">
                 Indicative estimate only. Actual funding depends on business assessment.
@@ -552,13 +578,13 @@ export default function CheckEligibilityForm() {
 
     const form = useForm<FormValues>({
         defaultValues: {
-            company_name: "", 
-            borrow_amount: "50000", 
+            company_name: "",
+            borrow_amount: "50000",
             if_not_company: false,
-            privacy_policy: false, 
+            privacy_policy: false,
             terms_of_business: false,
-            purpose_of_funding: "", 
-            urgency: "", 
+            purpose_of_funding: "",
+            urgency: "",
             annual_revenue: "",
             final_consent: false,
             first_name: "",
@@ -573,7 +599,7 @@ export default function CheckEligibilityForm() {
     const borrowAmount = parseInt(form.watch("borrow_amount")) || 0;
 
     // Calculate company age for AI estimate (null if no data available)
-    const companyAge = companyProfile?.date_of_creation 
+    const companyAge = companyProfile?.date_of_creation
         ? Math.floor((Date.now() - new Date(companyProfile.date_of_creation).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
         : null;
 
@@ -583,14 +609,17 @@ export default function CheckEligibilityForm() {
             if (companyName && companyName.length > 2 && !selectedCompany && !soleTraderChecked) {
                 setIsSearching(true);
                 try {
-                    const res = await fetch(`/api/companies-house/search?q=${encodeURIComponent(companyName)}`);
-                    const data = await res.json();
-                    setSearchResults(data.items || []);
-                    setShowResults(true);
+                    const res = await searchCompanies(companyName);
+                    if (res.success && res.data) {
+                        setSearchResults(res.data);
+                        setShowResults(true);
+                    } else {
+                        setSearchResults([]);
+                    }
                 } catch { } finally { setIsSearching(false); }
-            } else { 
-                setSearchResults([]); 
-                setShowResults(false); 
+            } else {
+                setSearchResults([]);
+                setShowResults(false);
             }
         }, 500);
         return () => clearTimeout(timer);
@@ -600,32 +629,36 @@ export default function CheckEligibilityForm() {
     const fetchCompanyData = useCallback(async (companyNumber: string) => {
         setIsLoadingProfile(true);
         try {
-            // Parallel fetch
+            // Parallel fetch using Server Actions
             const [profileRes, officersRes] = await Promise.all([
-                fetch(`/api/companies-house/profile?number=${companyNumber}`),
-                fetch(`/api/companies-house/officers?number=${companyNumber}`)
+                getCompanyProfile(companyNumber),
+                getCompanyOfficers(companyNumber)
             ]);
-            
-            const profile = await profileRes.json();
-            const officersData = await officersRes.json();
-            
-            setCompanyProfile(profile);
-            setOfficers(officersData.items || []);
 
-            // Auto-fill form fields
-            const address = profile.registered_office_address || {};
-            form.setValue("company_address", [address.address_line_1, address.address_line_2].filter(Boolean).join(', '));
-            form.setValue("city", address.locality || '');
-            form.setValue("postcode", address.postal_code || '');
-            form.setValue("incorporation_date", profile.date_of_creation || '');
-            
-            // If only one director, auto-select
-            if (officersData.items?.length === 1) {
-                const director = officersData.items[0];
-                setSelectedDirector(director);
-                const [lastName, firstName] = director.name.split(', ');
-                form.setValue("first_name", firstName || '');
-                form.setValue("last_name", lastName || '');
+            if (profileRes.success && profileRes.data) {
+                const profile = profileRes.data as any; // Cast to match existing type if needed
+                setCompanyProfile(profile);
+
+                // Auto-fill form fields
+                const address = profile.registered_office_address || {};
+                form.setValue("company_address", [address.address_line_1, address.address_line_2].filter(Boolean).join(', '));
+                form.setValue("city", address.locality || '');
+                form.setValue("postcode", address.postal_code || '');
+                form.setValue("incorporation_date", profile.date_of_creation || '');
+            }
+
+            if (officersRes.success && officersRes.data) {
+                const items = officersRes.data;
+                setOfficers(items);
+
+                // If only one director, auto-select
+                if (items.length === 1) {
+                    const director = items[0];
+                    setSelectedDirector(director);
+                    const [lastName, firstName] = director.name.split(', ');
+                    form.setValue("first_name", firstName || '');
+                    form.setValue("last_name", lastName || '');
+                }
             }
         } catch (error) {
             console.error("Failed to fetch company data:", error);
@@ -639,7 +672,7 @@ export default function CheckEligibilityForm() {
         form.setValue("company_name", company.title);
         form.setValue("company_number", company.company_number);
         setShowResults(false);
-        
+
         // Fetch full profile
         if (company.company_number) {
             fetchCompanyData(company.company_number);
@@ -658,12 +691,12 @@ export default function CheckEligibilityForm() {
     // Step 1 Submit
     const handleStep1Submit = async () => {
         const isValid = await form.trigger(["company_name", "borrow_amount", "first_name", "last_name", "contact_number", "email_address"]);
-        
+
         if (!isValid) {
             toast.error("Please fill all required fields");
             return;
         }
-        
+
         if (!privacyChecked || !termsChecked) {
             toast.error("Please accept the privacy policy and terms of business");
             return;
@@ -684,7 +717,7 @@ export default function CheckEligibilityForm() {
                     has_charges: companyProfile?.has_charges || false,
                     privacy_policy: privacyChecked,
                     terms_of_business: termsChecked,
-                    reference_id: newRefId, 
+                    reference_id: newRefId,
                     submission_type: "PARTIAL",
                     ai_estimate_min: Math.round(borrowAmount * 0.5 / 1000),
                     ai_estimate_max: Math.round(borrowAmount * 1.0 / 1000)
@@ -692,10 +725,10 @@ export default function CheckEligibilityForm() {
             });
             setStep(2);
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        } catch { 
-            toast.error("Network error. Please try again."); 
-        } finally { 
-            setLoading(false); 
+        } catch {
+            toast.error("Network error. Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -730,22 +763,22 @@ export default function CheckEligibilityForm() {
                     privacy_policy: privacyChecked,
                     terms_of_business: termsChecked,
                     final_consent: finalConsentChecked,
-                    reference_id: referenceId, 
+                    reference_id: referenceId,
                     submission_type: "COMPLETE",
                     ai_estimate_min: Math.round(borrowAmount * 0.5 / 1000),
                     ai_estimate_max: Math.round(borrowAmount * 1.0 / 1000)
                 }),
             });
-            if (res.ok) { 
-                setStep('SUCCESS'); 
-                window.scrollTo({ top: 0, behavior: 'smooth' }); 
-            } else { 
-                toast.error("Submission failed. Please try again."); 
+            if (res.ok) {
+                setStep('SUCCESS');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                toast.error("Submission failed. Please try again.");
             }
-        } catch { 
-            toast.error("Something went wrong."); 
-        } finally { 
-            setLoading(false); 
+        } catch {
+            toast.error("Something went wrong.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -753,9 +786,9 @@ export default function CheckEligibilityForm() {
     if (step === 'SUCCESS') {
         return (
             <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-3xl p-10 lg:p-16 text-center">
-                <motion.div 
-                    initial={{ scale: 0 }} 
-                    animate={{ scale: 1 }} 
+                <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
                     transition={{ type: "spring", stiffness: 200, damping: 15 }}
                     className="w-20 h-20 bg-[#1CB5E0] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_40px_rgba(28,181,224,0.3)]"
                 >
@@ -940,7 +973,7 @@ export default function CheckEligibilityForm() {
                             </div>
 
                             {/* AI Estimate with company data */}
-                            <AIEstimateBox 
+                            <AIEstimateBox
                                 amount={borrowAmount}
                                 selectedCompany={selectedCompany || soleTraderChecked}
                                 companyAge={companyAge}
@@ -1094,8 +1127,8 @@ export default function CheckEligibilityForm() {
                                             onClick={() => form.setValue("urgency", opt)}
                                             className={cn(
                                                 "p-4 rounded-xl border cursor-pointer transition-all",
-                                                form.watch("urgency") === opt 
-                                                    ? "border-[#1CB5E0] bg-[#1CB5E0]/10" 
+                                                form.watch("urgency") === opt
+                                                    ? "border-[#1CB5E0] bg-[#1CB5E0]/10"
                                                     : "border-white/10 bg-white/5 hover:border-white/20"
                                             )}
                                         >

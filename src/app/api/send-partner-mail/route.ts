@@ -1,35 +1,35 @@
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-const SMTP_SERVER_USERNAME = "demonking4529@gmail.com";
-const SMTP_SERVER_PASSWORD = "ymze zfrp iisj lylq";
+const SMTP_SERVER_USERNAME = process.env.SMTP_USER ?? "";
+const SMTP_SERVER_PASSWORD = process.env.SMTP_PASS ?? "";
 
 const RECIPIENTS = [
-    "contact@alpha fundingcf.com"
+  "contact@alphafundingcf.com"
 ];
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: SMTP_SERVER_USERNAME,
-        pass: SMTP_SERVER_PASSWORD,
-    },
+  service: "gmail",
+  auth: {
+    user: SMTP_SERVER_USERNAME,
+    pass: SMTP_SERVER_PASSWORD,
+  },
 });
 
 export async function POST(request: NextRequest) {
-    try {
-        const body = await request.json();
+  try {
+    const body = await request.json();
 
-        const {firstName, lastName, email, contactNo, jobProfile, description} = body;
+    const { firstName, lastName, email, contactNo, jobProfile, description } = body;
 
-        if (!firstName || !lastName || !email || !contactNo || !jobProfile || !description) {
-            return NextResponse.json(
-                {success: false, error: "Missing required fields."},
-                {status: 400}
-            );
-        }
+    if (!firstName || !lastName || !email || !contactNo || !jobProfile || !description) {
+      return NextResponse.json(
+        { success: false, error: "Missing required fields." },
+        { status: 400 }
+      );
+    }
 
-        const htmlContent = `
+    const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 700px; margin: auto; background: #f9f9f9; padding: 20px;">
         <div style="background: #fff; padding: 20px; border-radius: 8px;">
           <h2 style="border-bottom: 2px solid #28a745; padding-bottom: 8px;">
@@ -45,31 +45,31 @@ export async function POST(request: NextRequest) {
           </table>
           <p style="margin-top:20px; font-size:12px; color:#555;">
             📅 Received: ${new Date().toLocaleString("en-UK", {
-            timeZone: "Europe/London",
-        })}
+      timeZone: "Europe/London",
+    })}
           </p>
         </div>
       </div>
     `;
 
-        await transporter.sendMail({
-            from: `"Partner Form" <${SMTP_SERVER_USERNAME}>`,
-            to: RECIPIENTS,
-            subject: `New Partner Request - ${firstName} ${lastName}`,
-            html: htmlContent,
-            replyTo: email,
-        });
+    await transporter.sendMail({
+      from: `"Partner Form" <${SMTP_SERVER_USERNAME}>`,
+      to: RECIPIENTS,
+      subject: `New Partner Request - ${firstName} ${lastName}`,
+      html: htmlContent,
+      replyTo: email,
+    });
 
-        return NextResponse.json({success: true, message: "Partner form submitted successfully!"});
-    } catch (error: any) {
-        console.error("Partner API Error:", error);
-        return NextResponse.json(
-            {success: false, error: "Failed to send partner form", details: error.message},
-            {status: 500}
-        );
-    }
+    return NextResponse.json({ success: true, message: "Partner form submitted successfully!" });
+  } catch (error: any) {
+    console.error("Partner API Error:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to send partner form", details: error.message },
+      { status: 500 }
+    );
+  }
 }
 
 export async function GET() {
-    return NextResponse.json({message: "Partner Form API is working ✅"});
+  return NextResponse.json({ message: "Partner Form API is working ✅" });
 }

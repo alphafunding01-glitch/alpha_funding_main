@@ -435,8 +435,8 @@ export default function NavBar({ hideOnScroll = false }: NavBarProps) {
             }}
             animate={hidden ? "hidden" : "visible"}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className={"flex bg-[#F0F4F8] rounded-2xl justify-between fixed gap-2 xl:gap-4 left-[4%] right-[4%] md:left-[6%] md:right-[6%] top-4 py-3 px-[2%] z-50 border-t-2 border-l-2 border-white/80 border-b-2 border-r-2 border-b-slate-200/50 border-r-slate-200/50 shadow-sm"}>
-            <div className={"flex items-center gap-2 xl:gap-6"}>
+            className={"flex bg-[#F0F4F8] rounded-2xl justify-between fixed gap-2 lg:gap-4 left-[2%] right-[2%] md:left-[4%] md:right-[4%] top-4 py-3 px-[2%] z-50 border-t-2 border-l-2 border-white/80 border-b-2 border-r-2 border-b-slate-200/50 border-r-slate-200/50 shadow-sm"}>
+            <div className={"flex items-center gap-2 lg:gap-4 xl:gap-6"}>
                 <Link href={"/"} className={"w-36"}>
                     <img
                         src={"/logo.png"}
@@ -618,9 +618,9 @@ export default function NavBar({ hideOnScroll = false }: NavBarProps) {
             </div >
 
             {/* Right side actions */}
-            < div className={"flex items-center gap-2 xl:gap-6"} >
+            < div className={"flex items-center gap-2 lg:gap-4"} >
                 {/* Desktop buttons - Hidden on small screens */}
-                < div className="hidden md:flex items-center gap-2 xl:gap-4" >
+                < div className="hidden md:flex items-center gap-2 lg:gap-3" >
                     {/* Search input and dropdown */}
                     < div className="relative" >
                         <div className="flex items-center bg-white border border-[#CBD5E1] rounded-lg px-3 py-1">

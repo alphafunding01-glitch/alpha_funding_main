@@ -43,7 +43,7 @@ export default function TermsOfServicePage() {
                             <ul className="list-disc pl-5 grid gap-2 md:grid-cols-2">
                                 <li><a className="hover:underline" href="#about-service">About Our Service</a></li>
                                 <li><a className="hover:underline" href="#eligibility">Eligibility & Your Responsibilities</a></li>
-                                <li><a className="hover:underline" href="#credit-checks">Credit Checks & Verification</a></li>
+
                                 <li><a className="hover:underline" href="#data-protection">Data Protection (UK GDPR)</a></li>
                                 <li><a className="hover:underline" href="#commission">Commission & Fees</a></li>
                                 <li><a className="hover:underline" href="#limitations">Limitations of Liability</a></li>
@@ -130,27 +130,11 @@ export default function TermsOfServicePage() {
                             </p>
                         </section>
 
-                        {/* Section 3: Credit Checks */}
-                        <section id="credit-checks" className="scroll-mt-24 mt-10">
-                            <h2 className="text-2xl font-semibold">3. Credit Checks & Identity Verification</h2>
-                            <p className="mt-4 leading-relaxed">
-                                You agree that our lender panel may conduct identity verification and credit checks
-                                on your business and its directors, owners, or guarantors. These checks may include:
-                            </p>
-                            <ul className="list-disc pl-6 mt-2 space-y-2 leading-relaxed">
-                                <li><strong>Soft credit searches:</strong> Initial eligibility checks that do not affect your credit score</li>
-                                <li><strong>Hard credit searches:</strong> Full credit checks conducted by lenders upon formal application, which may impact your credit score</li>
-                            </ul>
-                            <p className="mt-4 leading-relaxed">
-                                Credit reference agencies may link records of financially associated individuals (e.g.,
-                                joint account holders). These links remain until you or your associate requests a
-                                disassociation directly with the credit reference agency.
-                            </p>
-                        </section>
+
 
                         {/* Section 4: Data Protection */}
                         <section id="data-protection" className="scroll-mt-24 mt-10">
-                            <h2 className="text-2xl font-semibold">4. Data Protection (UK GDPR Compliance)</h2>
+                            <h2 className="text-2xl font-semibold">3. Data Protection (UK GDPR Compliance)</h2>
                             <p className="mt-4 leading-relaxed">
                                 We are committed to protecting your personal data in accordance with the UK General Data
                                 Protection Regulation (UK GDPR), the Data Protection Act 2018, and the Data (Use and
@@ -158,13 +142,13 @@ export default function TermsOfServicePage() {
                                 read our <a href="/privacy-policy" className="underline hover:text-primary">Privacy Policy</a>.
                             </p>
 
-                            <h3 className="text-xl font-medium mt-6">4.1 Data Controller</h3>
+                            <h3 className="text-xl font-medium mt-6">3.1 Data Controller</h3>
                             <p className="mt-2 leading-relaxed">
                                 Alpha Funding Finance Limited is the data controller for personal data collected through
                                 our Service.
                             </p>
 
-                            <h3 className="text-xl font-medium mt-6">4.2 Lawful Basis for Processing</h3>
+                            <h3 className="text-xl font-medium mt-6">3.2 Lawful Basis for Processing</h3>
                             <p className="mt-2 leading-relaxed">We process your data under the following lawful bases:</p>
                             <ul className="list-disc pl-6 mt-2 space-y-2 leading-relaxed">
                                 <li><strong>Contract:</strong> To provide our Service and fulfil our obligations to you</li>
@@ -173,7 +157,7 @@ export default function TermsOfServicePage() {
                                 <li><strong>Consent:</strong> For marketing communications (where applicable)</li>
                             </ul>
 
-                            <h3 className="text-xl font-medium mt-6">4.3 Data We Collect</h3>
+                            <h3 className="text-xl font-medium mt-6">3.3 Data We Collect</h3>
                             <ul className="list-disc pl-6 mt-2 space-y-2 leading-relaxed">
                                 <li><strong>Business information:</strong> Company name, registration number, trading address, financial data</li>
                                 <li><strong>Personal information:</strong> Names, contact details, dates of birth of directors and guarantors</li>
@@ -181,7 +165,7 @@ export default function TermsOfServicePage() {
                                 <li><strong>Technical data:</strong> IP addresses, browser type, device information, cookies</li>
                             </ul>
 
-                            <h3 className="text-xl font-medium mt-6">4.4 Who We Share Data With</h3>
+                            <h3 className="text-xl font-medium mt-6">3.4 Who We Share Data With</h3>
                             <ul className="list-disc pl-6 mt-2 space-y-2 leading-relaxed">
                                 <li>Finance providers on our lender panel (only with your consent for identifiable data)</li>
 
@@ -193,14 +177,14 @@ export default function TermsOfServicePage() {
                                 We will never sell your personal data to third parties for marketing purposes.
                             </p>
 
-                            <h3 className="text-xl font-medium mt-6">4.5 Data Retention</h3>
+                            <h3 className="text-xl font-medium mt-6">3.5 Data Retention</h3>
                             <p className="mt-2 leading-relaxed">
                                 We retain your data for the period necessary to fulfil the purposes outlined in these
                                 Terms and to comply with legal obligations. In accordance with The Small and Medium Sized
                                 Business (Finance Platforms) Regulations 2015, we retain relevant records for a minimum
                                 of five years from creation. </p>
 
-                            <h3 className="text-xl font-medium mt-6">4.6 Your Data Rights</h3>
+                            <h3 className="text-xl font-medium mt-6">3.6 Your Data Rights</h3>
                             <p className="mt-2 leading-relaxed">Under UK GDPR, you have the following rights:</p>
                             <ul className="list-disc pl-6 mt-2 space-y-2 leading-relaxed">
                                 <li><strong>Right of access:</strong> Request a copy of your personal data (Subject Access Request)</li>
@@ -218,12 +202,12 @@ export default function TermsOfServicePage() {
                                 <a href="https://ico.org.uk" className="underline hover:text-primary ml-1" target="_blank" rel="noopener noreferrer">ico.org.uk</a>.
                             </p>
 
-                            <h3 className="text-xl font-medium mt-6">4.7 International Transfers</h3>
+                            <h3 className="text-xl font-medium mt-6">3.7 International Transfers</h3>
                             <p className="mt-2 leading-relaxed">
                                 Your data is primarily processed within the UK and EEA. Where transfers occur outside these regions, safeguards aligned with applicable data protection standards are in place. International service partners involved in processing operate within their respective regulatory frameworks.
                             </p>
 
-                            <h3 className="text-xl font-medium mt-6">4.8 Cookies</h3>
+                            <h3 className="text-xl font-medium mt-6">3.8 Cookies</h3>
                             <p className="mt-2 leading-relaxed">
                                 We use cookies and similar technologies to improve your experience. Essential cookies are
                                 required for the Service to function. Non-essential cookies (analytics, marketing) require
@@ -234,7 +218,7 @@ export default function TermsOfServicePage() {
 
                         {/* Section 5: Commission & Fees */}
                         <section id="commission" className="scroll-mt-24 mt-10">
-                            <h2 className="text-2xl font-semibold">5. Commission & Fees</h2>
+                            <h2 className="text-2xl font-semibold">4. Commission & Fees</h2>
                             <p className="mt-4 leading-relaxed">
                                 Our Service is free for you to use. We may receive commission from finance providers for
                                 successful introductions.
@@ -247,7 +231,7 @@ export default function TermsOfServicePage() {
 
                         {/* Section 6: Limitations */}
                         <section id="limitations" className="scroll-mt-24 mt-10">
-                            <h2 className="text-2xl font-semibold">6. Limitations of Liability</h2>
+                            <h2 className="text-2xl font-semibold">5. Limitations of Liability</h2>
                             <p className="mt-4 leading-relaxed">To the fullest extent permitted by law:</p>
                             <ul className="list-disc pl-6 mt-2 space-y-2 leading-relaxed">
                                 <li>We do not guarantee that our Service will result in successful funding</li>
@@ -268,7 +252,7 @@ export default function TermsOfServicePage() {
 
                         {/* Section 7: Intellectual Property */}
                         <section id="ip" className="scroll-mt-24 mt-10">
-                            <h2 className="text-2xl font-semibold">7. Intellectual Property</h2>
+                            <h2 className="text-2xl font-semibold">6. Intellectual Property</h2>
                             <p className="mt-4 leading-relaxed">
                                 All intellectual property rights in the Service, including copyright, trademarks, database
                                 rights, domain names, design rights, and patents, are owned by Alpha Funding or our licensors.
@@ -289,7 +273,7 @@ export default function TermsOfServicePage() {
 
                         {/* Section 8: Client Money */}
                         <section id="client-money" className="scroll-mt-24 mt-10">
-                            <h2 className="text-2xl font-semibold">8. Client Money</h2>
+                            <h2 className="text-2xl font-semibold">7. Client Money</h2>
                             <p className="mt-4 leading-relaxed">
                                 Alpha Funding Finance Limited does not hold, handle, or manage client money in any form.
                                 All financial transactions are conducted directly between you and the finance provider.
@@ -298,7 +282,7 @@ export default function TermsOfServicePage() {
 
                         {/* Section 9: Complaints */}
                         <section id="complaints" className="scroll-mt-24 mt-10">
-                            <h2 className="text-2xl font-semibold">9. Complaints</h2>
+                            <h2 className="text-2xl font-semibold">8. Complaints</h2>
                             <p className="mt-4 leading-relaxed">
                                 We take complaints seriously and aim to resolve issues promptly and fairly.
                             </p>
@@ -331,48 +315,48 @@ export default function TermsOfServicePage() {
 
                         {/* Section 10: General Terms */}
                         <section id="general" className="scroll-mt-24 mt-10">
-                            <h2 className="text-2xl font-semibold">10. General Terms</h2>
+                            <h2 className="text-2xl font-semibold">9. General Terms</h2>
 
-                            <h3 className="text-xl font-medium mt-6">10.1 Changes to These Terms</h3>
+                            <h3 className="text-xl font-medium mt-6">9.1 Changes to These Terms</h3>
                             <p className="mt-2 leading-relaxed">
                                 We may update these Terms from time to time. Material changes will be notified via email
                                 or prominently on our website. Continued use of the Service after changes constitutes
                                 acceptance of the updated Terms.
                             </p>
 
-                            <h3 className="text-xl font-medium mt-6">10.2 Communications</h3>
+                            <h3 className="text-xl font-medium mt-6">9.2 Communications</h3>
                             <p className="mt-2 leading-relaxed">
                                 We may send notices to the email address you provided when registering. You agree to
                                 receive communications electronically. It is your responsibility to keep your contact
                                 details up to date.
                             </p>
 
-                            <h3 className="text-xl font-medium mt-6">10.3 Severability</h3>
+                            <h3 className="text-xl font-medium mt-6">9.3 Severability</h3>
                             <p className="mt-2 leading-relaxed">
                                 If any provision of these Terms is found invalid or unenforceable, the remaining
                                 provisions shall continue in full force and effect.
                             </p>
 
-                            <h3 className="text-xl font-medium mt-6">10.4 No Waiver</h3>
+                            <h3 className="text-xl font-medium mt-6">9.4 No Waiver</h3>
                             <p className="mt-2 leading-relaxed">
                                 Failure to exercise or enforce any right or provision of these Terms shall not constitute
                                 a waiver of such right or provision.
                             </p>
 
-                            <h3 className="text-xl font-medium mt-6">10.5 Assignment</h3>
+                            <h3 className="text-xl font-medium mt-6">9.5 Assignment</h3>
                             <p className="mt-2 leading-relaxed">
                                 We may assign or transfer these Terms and our rights and obligations to a third party.
                                 You may not assign your rights under these Terms without our prior written consent.
                             </p>
 
-                            <h3 className="text-xl font-medium mt-6">10.6 Governing Law</h3>
+                            <h3 className="text-xl font-medium mt-6">9.6 Governing Law</h3>
                             <p className="mt-2 leading-relaxed">
                                 These Terms are governed by and construed in accordance with the laws of England and
                                 Wales. Both parties agree to submit to the exclusive jurisdiction of the courts of
                                 England and Wales for any disputes arising from these Terms.
                             </p>
 
-                            <h3 className="text-xl font-medium mt-6">10.7 Entire Agreement</h3>
+                            <h3 className="text-xl font-medium mt-6">9.7 Entire Agreement</h3>
                             <p className="mt-2 leading-relaxed">
                                 These Terms, together with our Privacy Policy and any other policies referenced herein,
                                 constitute the entire agreement between you and Alpha Funding regarding use of the Service.

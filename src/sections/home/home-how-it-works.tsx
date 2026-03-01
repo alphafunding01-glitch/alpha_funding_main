@@ -18,7 +18,7 @@ const steps = [
         id: 2,
         title: "Compare Options",
         icon: BarChart3,
-        description: "We search 50+ lenders instantly to find the best rates and terms for your specific profile.",
+        description: "We search 50+ lenders to find the best rates and terms for your specific profile.",
         badge: "2"
     },
     {
@@ -51,7 +51,7 @@ export default function HomeHowItWorks() {
     });
 
     return (
-        <section ref={containerRef} className="py-24 bg-white relative overflow-hidden">
+        <section ref={containerRef} className="py-28 bg-white relative overflow-hidden">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="text-center max-w-2xl mx-auto mb-20">
                     <motion.h2

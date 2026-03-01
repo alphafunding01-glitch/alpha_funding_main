@@ -23,6 +23,9 @@ function Counter({ value, suffix }: { value: string, suffix?: string }) {
     }
 
     const target = parseInt(value.replace(/[^0-9]/g, ""));
+    const match = value.match(/^([^0-9]*)([0-9]+)(.*)$/);
+    const prefix = match ? match[1] : "";
+    const computedSuffix = match ? match[3] : "";
 
     useEffect(() => {
         if (!isInView) return;
@@ -47,7 +50,7 @@ function Counter({ value, suffix }: { value: string, suffix?: string }) {
 
     return (
         <span ref={ref} className="text-3xl font-heading font-black text-brand-midnight">
-            {count}{value.replace(/[0-9]/g, "")}
+            {prefix}{count}{computedSuffix}
         </span>
     );
 }
@@ -93,7 +96,7 @@ export default function HomeTrustBar() {
     const stats = [
         { icon: Clock, value: "24-48 hr", label: "Average Decision Time" },
         { icon: Percent, value: "6.9%", label: "Interest rate starting from" },
-        { icon: TrendingUp, value: "£200M+", label: "Approval to Date" },
+        { icon: TrendingUp, value: "£370M+", label: "Approval to Date" },
         { icon: Building2, value: "50+", label: "Lender Partners" },
     ];
 

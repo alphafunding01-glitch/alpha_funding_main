@@ -113,14 +113,14 @@ export function calculateEligibility(formData: QualificationFormData): Qualifica
     if (score >= 85) {
         status = 'high';
         message = "Excellent profile! You qualify for our most competitive rates and fastest lenders.";
-        recommendedProducts.push('Business Loan (Prime)', 'Revolving Credit Line', 'Asset Finance');
+        recommendedProducts.push('Business Loans', 'Revolving Credit Facility', 'Business Asset Equipment Finance');
     } else if (score >= 60) {
         status = 'medium';
-        recommendedProducts.push('Unsecured Business Loan', 'Merchant Cash Advance');
+        recommendedProducts.push('Business Loans', 'Merchant Cash Advance');
     } else if (score >= 40) {
         status = 'low';
         message = "Funding is possible, but may require a personal guarantee or higher rates.";
-        recommendedProducts.push('Merchant Cash Advance', 'Secured Loan');
+        recommendedProducts.push('Merchant Cash Advance', 'Business Loans');
     } else {
         status = 'ineligible';
         message = "Based on the data, standard lending may be difficult at this time.";

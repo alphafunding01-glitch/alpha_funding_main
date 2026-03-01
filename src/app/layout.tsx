@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, DM_Serif_Display, Work_Sans } from "next/font/google";
+
 import "./globals.css";
 import { Poppins } from "next/font/google";
-import Link from "next/link";
-import { IoCall } from "react-icons/io5";
-import { IoLogoWhatsapp } from "react-icons/io";
-import { buttonVariants } from "@/components/ui/button";
+import { ChatWidgetClient } from "@/components/chat/chat-widget-client";
+import CookiesBanner from "@/components/common/cookies-banner";
+import FloatingContactButtons from "@/components/common/floating-contact-buttons";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,19 +71,9 @@ export default function RootLayout({
         className={`${poppins.className} ${dmSerif.variable} ${workSans.variable} antialiased`}
       >
         {children}
-        <div className={"flex gap-3 items-center fixed bottom-10 right-4 md:right-[6%]"}>
-          <Link className={buttonVariants({
-            size: "icon"
-          })} href={"https://wa.me/447366917038"}>
-            <IoLogoWhatsapp />
-          </Link>
-          <Link href={"tel:02070787446"} className={buttonVariants({
-            variant: "secondary",
-            size: "icon"
-          })}>
-            <IoCall />
-          </Link>
-        </div>
+        <CookiesBanner />
+        <FloatingContactButtons />
+        <ChatWidgetClient />
       </body>
     </html>
   );

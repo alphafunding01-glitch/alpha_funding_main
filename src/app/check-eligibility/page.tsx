@@ -50,8 +50,9 @@ export default function CheckEligibility() {
                                             <Clock className="w-6 h-6 text-[#1CB5E0]" />
                                         </div>
                                         <div>
-                                            <div className="text-2xl font-bold text-white mb-0.5">24h</div>
+                                            <div className="text-2xl font-bold text-white mb-0.5">24-48hrs</div>
                                             <div className="text-sm text-slate-400">average time from enquiry to funding decision</div>
+                                            <div className="text-[10px] text-slate-500 mt-1">* For loans up to £100,000</div>
                                         </div>
                                     </div>
                                 </div>

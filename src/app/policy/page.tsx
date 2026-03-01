@@ -298,13 +298,7 @@ export default function PrivacyPolicyPage() {
                                     </p>
                                 </div>
 
-                                <div className="p-4 border rounded-lg">
-                                    <h3 className="font-medium mb-2">Credit Reference Agencies</h3>
-                                    <p className="text-sm text-muted-foreground">
-                                        Experian, Equifax, and TransUnion for credit checks and identity verification.
-                                        These agencies may share your data with other organisations.
-                                    </p>
-                                </div>
+
 
 
 

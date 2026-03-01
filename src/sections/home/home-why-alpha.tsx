@@ -33,8 +33,8 @@ const features = [
     },
     {
         icon: ShieldCheck,
-        title: "Soft Credit Check",
-        description: "Check eligibility without affecting your credit score or transparency."
+        title: "Trusted UK Finance Broker",
+        description: "Check eligibility without affecting your credit score."
     },
     {
         icon: Repeat,
@@ -45,16 +45,16 @@ const features = [
 
 export default function HomeWhyAlpha() {
     return (
-        <section className="py-24 bg-[#f8fafc] relative">
+        <section className="py-28 bg-[#f8fafc] relative">
             <div className="container mx-auto px-4 md:px-6">
-                <div className="grid lg:grid-cols-5 gap-16 items-center">
+                <div className="grid lg:grid-cols-[0.8fr_1.3fr] gap-16 items-center">
                     {/* Left Side */}
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
                         variants={containerVariants}
-                        className="lg:col-span-2 space-y-8"
+                        className="space-y-10"
                     >
                         <motion.div variants={itemVariants}>
                             <h2 className="text-4xl md:text-5xl font-heading font-bold text-brand-midnight leading-tight">
@@ -79,7 +79,7 @@ export default function HomeWhyAlpha() {
                         {/* Social Proof Mini Section */}
                         <motion.div variants={itemVariants} className="pt-8 flex flex-wrap gap-8 opacity-60">
                             <div className="flex flex-col">
-                                <span className="text-2xl font-black text-brand-midnight">£200M+</span>
+                                <span className="text-2xl font-black text-brand-midnight">£370M+</span>
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Approved</span>
                             </div>
                             <div className="flex flex-col">
@@ -90,7 +90,7 @@ export default function HomeWhyAlpha() {
                     </motion.div>
 
                     {/* Right Side - Bento Feature Grid */}
-                    <div className="lg:col-span-3">
+                    <div className="w-full">
                         <motion.div
                             variants={containerVariants}
                             initial="hidden"

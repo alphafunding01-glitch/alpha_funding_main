@@ -507,7 +507,7 @@ const HeaderSection = () => (
 
 const summaries = [
     "Clients consistently highlight the speed of our service — many receiving funds within 24-48 hours. Business owners appreciate the streamlined process that eliminates traditional banking delays. Our team's proactive communication keeps clients informed at every stage, turning what's typically a stressful experience into a straightforward one.",
-    "Reviews frequently mention our advisors by name — Aadil, Devang, Naina, Mohsin, and the wider team receive praise for their dedication and personal approach. Clients value having a single point of contact who understands their situation and advocates on their behalf throughout the funding journey.",
+    "Reviews frequently mention our advisors by name — Aadil, Devang, Mohsin, and the wider team receive praise for their dedication and personal approach. Clients value having a single point of contact who understands their situation and advocates on their behalf throughout the funding journey.",
     "A significant number of our clients found us after being turned down by traditional banks. Reviews reveal a pattern — businesses struggling to secure funding elsewhere found solutions through our 200+ lender network. Our advisors specialize in understanding why previous applications failed and finding alternative routes to approval.",
     "Clear communication stands out across client feedback. Reviewers consistently mention being kept informed at every stage — no chasing, no radio silence, no uncertainty. Our team's proactive approach means clients always know where their application stands, transforming what's typically an anxious wait into a confident process.",
     "Many reviews come from repeat clients and long-term relationships. Business owners return to us for subsequent funding rounds, citing the trust built during their first experience. Our advisors remember client circumstances and provide continuity — a personal banking relationship without the bank."
@@ -574,7 +574,7 @@ const AISummaryBox = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className={`relative bg-gradient-to-r from-[#1CB5E0]/5 to-[#D946EF]/5 border border-[#1CB5E0]/15 rounded-[24px] p-6 md:p-8 mb-16 overflow-hidden transition-shadow duration-1000 ${phase === 'complete' ? 'shadow-[0_0_30px_rgba(28,181,224,0.12)]' : ''}`}
+            className={`relative bg-gradient-to-r from-[#1CB5E0]/12 to-[#D946EF]/10 border border-[#1CB5E0]/30 rounded-[24px] p-6 md:p-8 mb-16 overflow-hidden transition-shadow duration-1000 ${phase === 'complete' ? 'shadow-[0_0_30px_rgba(28,181,224,0.2)]' : ''}`}
             style={phase === 'complete' ? { animation: 'glow-pulse 3s infinite' } : {}}
         >
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#1CB5E0] to-[#D946EF] opacity-50" />
@@ -614,7 +614,7 @@ const AISummaryBox = () => {
                                 animate={{ opacity: 1 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <p className="text-[15px] leading-relaxed text-slate-200">
+                                <p className="text-[15px] leading-relaxed text-white">
                                     {summary.split(" ").map((word, i) => (
                                         <span
                                             key={i}
@@ -622,8 +622,6 @@ const AISummaryBox = () => {
                                             style={{
                                                 animation: `word-reveal 150ms ease-out forwards`,
                                                 animationDelay: `${i * 30}ms`,
-                                                transform: 'translateY(4px)',
-                                                filter: 'blur(2px)'
                                             }}
                                         >
                                             {word}
@@ -639,7 +637,7 @@ const AISummaryBox = () => {
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ delay: 0.5, duration: 0.5 }}
-                                        className="text-[12px] text-slate-500 italic mt-4"
+                                        className="text-[12px] text-slate-400 italic mt-4"
                                     >
                                         Analysis based on 199 verified reviews
                                     </motion.p>
@@ -768,7 +766,7 @@ export default function HomeTestimonials() {
 
     return (
         <section
-            className="py-24 min-h-screen relative overflow-hidden"
+            className="py-28 min-h-screen relative overflow-hidden"
             style={{ background: "linear-gradient(135deg, #030f42, #0F172A)" }}
         >
             {/* Background Effects */}

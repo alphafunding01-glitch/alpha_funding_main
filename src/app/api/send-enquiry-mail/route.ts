@@ -1,11 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
 
-const SMTP_SERVER_USERNAME = "demonking4529@gmail.com";
-const SMTP_SERVER_PASSWORD = "ymze zfrp iisj lylq";
+import nodemailer from "nodemailer";
+import { NextRequest, NextResponse } from "next/server";
+
+const SMTP_SERVER_USERNAME = process.env.SMTP_USER ?? "";
+const SMTP_SERVER_PASSWORD = process.env.SMTP_PASS ?? "";
 
 const RECIPIENTS = [
-  "contact@alphafundingcf.com"
+  "sameer.shaikh@alpha-funding.co.uk",
+  "lokendra.panchal@alpha-funding.co.uk"
 ];
 
 const transporter = nodemailer.createTransport({
@@ -19,121 +21,126 @@ const transporter = nodemailer.createTransport({
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    // Assuming body structure for generic enquiry or reusing similar logic
+    // If this endpoint is for a different form, I'll adapt the fields.
+    // For now, I'll assume it matches the Contact form or is a variation.
+    // Let's check if there are specific fields for "enquiry".
+    // Usually enquiry might be simpler. I'll include basic fields.
 
     const {
-      // Step 1 Fields
-      reference_id,
-      submission_type = "PARTIAL", // PARTIAL or COMPLETE
-      company_name,
-      company_number,
-      company_address, // Added for clarity if available
-      nature_of_business,
-      incorporation_date,
-      if_not_company,
-      borrow_amount,
-      ai_estimate_min,
-      ai_estimate_max,
-      first_name,
-      last_name,
-      contact_number,
-      email_address,
-      privacy_policy,
-      terms_of_business,
-
-      // Step 2 & 3 Fields
-      purpose_of_funding,
-      urgency,
-      annual_revenue,
-      previous_funding,
-      referral_source
+      name,
+      email,
+      phone,
+      subject,
+      message,
+      // Add other potential fields if typically used
     } = body;
 
-    if (!first_name || !last_name || !contact_number || !email_address) {
+    // Validation - Basic
+    if (!email) {
       return NextResponse.json(
-        { success: false, error: "Missing required fields." },
+        { success: false, error: "Missing email." },
         { status: 400 }
       );
     }
 
-    const isComplete = submission_type === "COMPLETE";
-    const subjectPrefix = isComplete ? "🟢 Lead Updated - COMPLETE" : "🟡 New Funding Enquiry - PARTIAL";
-    const subject = `${subjectPrefix} - ${company_name}`;
+    const emailSubject = `🚀 New Enquiry: ${subject || "General Enquiry"}`;
+
+    // Brand Colors
+    const brandBlue = "#1CB5E0";
+    const brandDark = "#030f42";
+    const brandText = "#334155";
 
     const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 700px; margin: auto; background: #f4f4f5; padding: 20px;">
-        <div style="background: #fff; padding: 25px; border-radius: 12px; border: 1px solid #e4e4e7; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: ${brandText}; background-color: #f4f7fa; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+          .header { background: ${brandDark}; padding: 30px; text-align: center; border-bottom: 4px solid ${brandBlue}; }
+          .header h1 { color: #ffffff; margin: 0; font-size: 24px; font-weight: 700; }
+          .content { padding: 40px 30px; }
+          .section-title { font-size: 14px; color: ${brandBlue}; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 10px; margin-top: 20px; }
+          .data-row { display: flex; border-bottom: 1px solid #eef2f6; padding: 12px 0; }
+          .data-label { width: 140px; font-weight: 600; color: #64748b; font-size: 14px; }
+          .data-value { flex: 1; color: ${brandDark}; font-weight: 500; font-size: 14px; }
+          .message-box { background: #f8fafc; border-left: 4px solid ${brandBlue}; padding: 20px; border-radius: 0 8px 8px 0; margin-top: 20px; }
+          .footer { background: #f8fafc; padding: 20px; text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #eef2f6; }
           
-          <div style="border-bottom: 2px solid ${isComplete ? '#10b981' : '#eab308'}; padding-bottom: 15px; margin-bottom: 20px;">
-            <h2 style="margin: 0; color: #18181b; font-size: 20px;">
-                ${isComplete ? '🚀 Funding Enquiry Complete' : '📝 New Funding Enquiry (Partial)'}
-            </h2>
-            <div style="margin-top: 5px; font-size: 14px; color: #71717a;">
-                Reference: <span style="font-family: monospace; font-weight: bold; color: #000;">${reference_id || 'N/A'}</span>
+          @media only screen and (max-width: 600px) {
+            .container { margin: 0; border-radius: 0; width: 100% !important; }
+            .content { padding: 20px; }
+            .data-row { flex-direction: column; }
+            .data-label { width: 100%; margin-bottom: 4px; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Alpha Funding Enquiry</h1>
+          </div>
+          
+          <div class="content">
+            <div style="text-align: center; margin-bottom: 30px;">
+               <div style="display: inline-block; background: #e0f2fe; color: ${brandBlue}; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;">
+                GENERAL ENQUIRY
+              </div>
             </div>
+
+            <div class="section-title">Contact Details</div>
+            ${name ? `
+            <div class="data-row">
+              <div class="data-label">Name</div>
+              <div class="data-value">${name}</div>
+            </div>` : ''}
+            <div class="data-row">
+              <div class="data-label">Email</div>
+              <div class="data-value"><a href="mailto:${email}" style="color:${brandBlue}; text-decoration:none;">${email}</a></div>
+            </div>
+            ${phone ? `
+            <div class="data-row">
+              <div class="data-label">Phone</div>
+              <div class="data-value"><a href="tel:${phone}" style="color:${brandBlue}; text-decoration:none;">${phone}</a></div>
+            </div>` : ''}
+
+            ${message ? `
+            <div class="section-title">Message</div>
+            <div class="message-box">
+              ${message}
+            </div>` : ''}
           </div>
 
-          <h3 style="color: #3f3f46; font-size: 16px; border-bottom: 1px solid #f4f4f5; padding-bottom: 8px; margin-top: 0;">🏢 Business Details</h3>
-          <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
-            <tr><td style="padding: 6px 0; color: #71717a; width: 40%;">Company Name:</td><td style="font-weight: 600; color: #18181b;">${company_name || "N/A"}</td></tr>
-            <tr><td style="padding: 6px 0; color: #71717a;">Registration No:</td><td style="color: #18181b;">${company_number || "N/A"}</td></tr>
-            <tr><td style="padding: 6px 0; color: #71717a;">Address:</td><td style="color: #18181b;">${company_address || "N/A"}</td></tr>
-            <tr><td style="padding: 6px 0; color: #71717a;">Incorporation Date:</td><td style="color: #18181b;">${incorporation_date || "N/A"}</td></tr>
-            <tr><td style="padding: 6px 0; color: #71717a;">Industry/Nature:</td><td style="color: #18181b;">${nature_of_business || "N/A"}</td></tr>
-            <tr><td style="padding: 6px 0; color: #71717a;">Entity Type:</td><td style="color: #18181b;">${if_not_company ? "Sole Trader / Non-Limited" : "Limited Company"}</td></tr>
-          </table>
-
-          <h3 style="color: #3f3f46; font-size: 16px; border-bottom: 1px solid #f4f4f5; padding-bottom: 8px;">💷 Funding Request</h3>
-          <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
-            <tr><td style="padding: 6px 0; color: #71717a; width: 40%;">Amount Requested:</td><td style="font-weight: 600; color: #18181b; font-size: 16px;">£${borrow_amount}</td></tr>
-            <tr><td style="padding: 6px 0; color: #71717a;">AI Estimate:</td><td style="color: #0ea5e9; font-weight: 500;">£${ai_estimate_min || '?'}k - £${ai_estimate_max || '?'}k</td></tr>
-            ${isComplete ? `
-            <tr><td style="padding: 6px 0; color: #71717a;">Purpose:</td><td style="color: #18181b;">${purpose_of_funding || '-'}</td></tr>
-            <tr><td style="padding: 6px 0; color: #71717a;">Urgency:</td><td style="color: #18181b;">${urgency || '-'}</td></tr>
-            ` : ''}
-          </table>
-
-          <h3 style="color: #3f3f46; font-size: 16px; border-bottom: 1px solid #f4f4f5; padding-bottom: 8px;">👤 Contact Details</h3>
-          <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
-            <tr><td style="padding: 6px 0; color: #71717a; width: 40%;">Full Name:</td><td style="color: #18181b; font-weight: 500;">${first_name} ${last_name}</td></tr>
-            <tr><td style="padding: 6px 0; color: #71717a;">Phone:</td><td style="color: #18181b;"><a href="tel:${contact_number}" style="color: #0ea5e9; text-decoration: none;">${contact_number}</a></td></tr>
-            <tr><td style="padding: 6px 0; color: #71717a;">Email:</td><td style="color: #18181b;"><a href="mailto:${email_address}" style="color: #0ea5e9; text-decoration: none;">${email_address}</a></td></tr>
-          </table>
-
-          ${isComplete ? `
-          <h3 style="color: #3f3f46; font-size: 16px; border-bottom: 1px solid #f4f4f5; padding-bottom: 8px;">📊 Additional Info</h3>
-          <table style="width:100%; border-collapse: collapse; margin-bottom: 10px; font-size: 14px;">
-            <tr><td style="padding: 6px 0; color: #71717a; width: 40%;">Annual Revenue:</td><td style="color: #18181b;">${annual_revenue || "Not provided"}</td></tr>
-            <tr><td style="padding: 6px 0; color: #71717a;">Previous Funding:</td><td style="color: #18181b;">${previous_funding || "Not provided"}</td></tr>
-            <tr><td style="padding: 6px 0; color: #71717a;">Source:</td><td style="color: #18181b;">${referral_source || "Not provided"}</td></tr>
-          </table>
-          ` : ''}
-          
-          <div style="margin-top:20px; padding-top: 15px; border-top: 1px dashed #e4e4e7; font-size: 12px; color: #a1a1aa; text-align: center;">
-            Compliance: Privacy (${privacy_policy ? "Yes" : "No"}) | Terms (${terms_of_business ? "Yes" : "No"})<br/>
-            Received: ${new Date().toLocaleString("en-UK", { timeZone: "Europe/London" })}
+          <div class="footer">
+            Generated via Alpha Funding Website<br/>
+            ${new Date().toLocaleString("en-UK", { timeZone: "Europe/London" })}
           </div>
         </div>
-      </div>
+      </body>
+      </html>
     `;
 
-    await transporter.sendMail({
-      from: `"Alpha Funding Form" <${SMTP_SERVER_USERNAME}>`,
+    const mailOptions = {
+      from: `"Alpha Funding Website" <${SMTP_SERVER_USERNAME}>`,
       to: RECIPIENTS,
-      subject: subject,
+      subject: emailSubject,
       html: htmlContent,
-      replyTo: email_address,
-    });
+      replyTo: email,
+    };
 
-    return NextResponse.json({ success: true, message: "Form submitted successfully!" });
-  } catch (error: any) {
-    console.error("Eligibility API Error:", error);
+    const info = await transporter.sendMail(mailOptions);
+
     return NextResponse.json(
-      { success: false, error: "Failed to send form", details: error.message },
+      { success: true, message: "Enquiry sent successfully!", messageId: info.messageId },
+      { status: 200 }
+    );
+
+  } catch (error: any) {
+    console.error("❌ Error sending email:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to send email", details: error.message },
       { status: 500 }
     );
   }
-}
-
-export async function GET() {
-  return NextResponse.json({ message: "Eligibility Form API is working ✅" });
 }

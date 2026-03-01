@@ -59,7 +59,7 @@ export default function HomeCalculatorCTA() {
                                 </h2>
                                 <p className="text-slate-400 font-body text-xl max-w-2xl mx-auto leading-relaxed">
                                     Instant estimates. No commitment. No credit check required.
-                                    Compare 50+ lenders. Decisions in 24 hours. No upfront fees.
+                                    Compare 50+ lenders. Decisions in 24-48 hours. No upfront fees.
                                     Get a clear picture of your funding costs in seconds.
                                 </p>
                             </div>

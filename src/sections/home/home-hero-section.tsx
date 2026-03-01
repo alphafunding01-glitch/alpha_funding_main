@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import AnimatedFundingDashboard from '@/components/hero/animated-funding-dashboard';
+import Image from "next/image";
 import { TrendingUp, Clock, CheckCircle2, Zap, Shield, ArrowRight } from 'lucide-react';
 import { containerVariants, itemVariants } from "@/lib/animation-variants";
 
@@ -13,7 +13,7 @@ export default function HomeHeroSection() {
     const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
     return (
-        <section className="relative min-h-[90vh] flex items-center pt-36 pb-20 overflow-hidden bg-[#030f42]">
+        <section className="relative min-h-[90vh] flex items-center pt-44 pb-28 overflow-hidden bg-[#030f42]">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#1CB5E0]/10 rounded-full blur-[120px] -mr-48 -mt-48 animate-pulse" />
@@ -22,7 +22,7 @@ export default function HomeHeroSection() {
             </div>
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="grid lg:grid-cols-[0.8fr_1.3fr] gap-16 items-center">
                     {/* Left Content */}
                     <motion.div
                         initial="hidden"
@@ -81,7 +81,7 @@ export default function HomeHeroSection() {
                                     </div>
                                 ))}
                                 <div className="w-10 h-10 rounded-full border-2 border-[#030f42] bg-brand-cyan flex items-center justify-center text-[10px] font-bold text-brand-midnight">
-                                    500+
+                                    5000+
                                 </div>
                             </div>
                             <div className="text-xs">
@@ -89,7 +89,7 @@ export default function HomeHeroSection() {
                                     <TrendingUp className="w-3 h-3" />
                                     <span>TRUSTED BY UK COMPANIES</span>
                                 </div>
-                                <p className="text-slate-500 font-medium">£50M+ in funding facilitated</p>
+                                <p className="text-slate-500 font-medium">£200M+ in funding facilitated</p>
                             </div>
                         </motion.div>
                     </motion.div>
@@ -101,12 +101,29 @@ export default function HomeHeroSection() {
                         transition={{ duration: 1, ease: 'easeOut', delay: 0.5 }}
                         className="relative w-full flex justify-center lg:justify-end z-10"
                     >
-                        <div className="w-full max-w-[420px]">
-                            <AnimatedFundingDashboard />
+                        <div className="relative w-full max-w-[700px] group -ml-8 lg:-ml-0">
+                            {/* Soft Gradient Glow Backend */}
+                            <div className="absolute -inset-1 bg-gradient-to-r from-[#1CB5E0] via-cyan-400 to-blue-500 rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+
+                            {/* Border Gradient */}
+                            <div className="relative p-[1px] rounded-2xl bg-gradient-to-r from-[#1CB5E0] via-cyan-400 to-blue-500/50">
+                                <div className="relative rounded-2xl overflow-hidden bg-[#030f42]">
+                                    <Image
+                                        src="/alpha-about.png"
+                                        alt="Alpha Funding Dashboard Interface"
+                                        width={800}
+                                        height={600}
+                                        className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-[1.02]"
+                                        priority
+                                    />
+                                    {/* Overlay sheen effect on hover */}
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                                </div>
+                            </div>
                         </div>
 
                         {/* Background glow behind visual */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#1CB5E0]/5 rounded-full blur-[100px] z-0 pointer-events-none" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#1CB5E0]/10 rounded-full blur-[100px] z-0 pointer-events-none" />
                     </motion.div>
                 </div>
             </div>

@@ -1,123 +1,157 @@
-// app/api/sendMail/route.ts
+
 import nodemailer from "nodemailer";
 import { NextRequest, NextResponse } from "next/server";
 
-const SMTP_SERVER_USERNAME = "demonking4529@gmail.com";
-const SMTP_SERVER_PASSWORD = "ymze zfrp iisj lylq";
+const SMTP_SERVER_USERNAME = process.env.SMTP_USER ?? "";
+const SMTP_SERVER_PASSWORD = process.env.SMTP_PASS ?? "";
 
 const RECIPIENTS = [
-    "contact@alpha fundingcf.com"
+  "sameer.shaikh@alpha-funding.co.uk",
+  "lokendra.panchal@alpha-funding.co.uk"
 ];
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: SMTP_SERVER_USERNAME,
-        pass: SMTP_SERVER_PASSWORD,
-    },
+  service: "gmail",
+  auth: {
+    user: SMTP_SERVER_USERNAME,
+    pass: SMTP_SERVER_PASSWORD,
+  },
 });
 
-// Handle OPTIONS (CORS preflight)
-export async function OPTIONS(request: NextRequest) {
-    return new NextResponse(null, { status: 200 });
-}
-
-// Handle POST (form submission)
 export async function POST(request: NextRequest) {
-    try {
-        const body = await request.json();
+  try {
+    const body = await request.json();
+    const {
+      first_name,
+      middle_names,
+      sur_name,
+      email,
+      contact,
+      company_name,
+      job_title,
+      website_link,
+      message,
+    } = body;
 
-        const {
-            first_name,
-            middle_names,
-            sur_name,
-            email,
-            contact,
-            company_name,
-            job_title,
-            website_link,
-            message,
-        } = body;
+    // Validation
+    if (!first_name || !sur_name || !email || !contact) {
+      return NextResponse.json(
+        { success: false, error: "Missing required fields." },
+        { status: 400 }
+      );
+    }
 
-        // ✅ Validation
-        if (!first_name || !sur_name || !email || !contact || !company_name || !job_title) {
-            return NextResponse.json(
-                { success: false, error: "Missing required fields." },
-                { status: 400 }
-            );
-        }
+    const emailSubject = `🚀 New Lead: ${first_name} ${sur_name} - Contact Form`;
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return NextResponse.json(
-                { success: false, error: "Invalid email format." },
-                { status: 400 }
-            );
-        }
+    // Brand Colors
+    const brandBlue = "#1CB5E0";
+    const brandDark = "#030f42";
+    const brandText = "#334155";
 
-        const emailSubject = `📩 New Contact Form Submission from ${first_name} ${sur_name}`;
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: ${brandText}; background-color: #f4f7fa; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+          .header { background: ${brandDark}; padding: 30px; text-align: center; border-bottom: 4px solid ${brandBlue}; }
+          .header h1 { color: #ffffff; margin: 0; font-size: 24px; font-weight: 700; }
+          .content { padding: 40px 30px; }
+          .section-title { font-size: 14px; color: ${brandBlue}; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 10px; margin-top: 20px; }
+          .data-row { display: flex; border-bottom: 1px solid #eef2f6; padding: 12px 0; }
+          .data-label { width: 140px; font-weight: 600; color: #64748b; font-size: 14px; }
+          .data-value { flex: 1; color: ${brandDark}; font-weight: 500; font-size: 14px; }
+          .message-box { background: #f8fafc; border-left: 4px solid ${brandBlue}; padding: 20px; border-radius: 0 8px 8px 0; margin-top: 20px; }
+          .footer { background: #f8fafc; padding: 20px; text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #eef2f6; }
+          
+          /* Mobile Responsiveness */
+          @media only screen and (max-width: 600px) {
+            .container { margin: 0; border-radius: 0; width: 100% !important; }
+            .content { padding: 20px; }
+            .data-row { flex-direction: column; }
+            .data-label { width: 100%; margin-bottom: 4px; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Alpha Funding Lead</h1>
+          </div>
+          
+          <div class="content">
+            <div style="text-align: center; margin-bottom: 30px;">
+              <div style="display: inline-block; background: #e0f2fe; color: ${brandBlue}; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;">
+                CONTACT FORM SUBMISSION
+              </div>
+            </div>
 
-        const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 700px; margin: auto; background: #f9f9f9; padding: 20px;">
-        <div style="background: #fff; padding: 20px; border-radius: 8px;">
-          <h2 style="border-bottom: 2px solid #007bff; padding-bottom: 8px; margin-bottom: 20px;">
-            📋 New Contact Form Submission
-          </h2>
+            <div class="section-title">Personal Details</div>
+            <div class="data-row">
+              <div class="data-label">Full Name</div>
+              <div class="data-value">${first_name} ${middle_names || ""} ${sur_name}</div>
+            </div>
+            <div class="data-row">
+              <div class="data-label">Email Address</div>
+              <div class="data-value"><a href="mailto:${email}" style="color:${brandBlue}; text-decoration:none;">${email}</a></div>
+            </div>
+            <div class="data-row">
+              <div class="data-label">Phone Number</div>
+              <div class="data-value"><a href="tel:${contact}" style="color:${brandBlue}; text-decoration:none;">${contact}</a></div>
+            </div>
 
-          <table style="width:100%; border-collapse: collapse;">
-            <tr><td><b>Full Name:</b></td><td>${first_name} ${middle_names || ""} ${sur_name}</td></tr>
-            <tr><td><b>Email:</b></td><td><a href="mailto:${email}">${email}</a></td></tr>
-            <tr><td><b>Contact Number:</b></td><td><a href="tel:${contact}">${contact}</a></td></tr>
-            <tr><td><b>Company Name:</b></td><td>${company_name}</td></tr>
-            <tr><td><b>Job Title:</b></td><td>${job_title}</td></tr>
-            ${
-            website_link
-                ? `<tr><td><b>Website:</b></td><td><a href="${website_link}" target="_blank">${website_link}</a></td></tr>`
-                : ""
-        }
-          </table>
+            <div class="section-title">Business Information</div>
+            <div class="data-row">
+              <div class="data-label">Company Name</div>
+              <div class="data-value">${company_name}</div>
+            </div>
+            <div class="data-row">
+              <div class="data-label">Job Title</div>
+              <div class="data-value">${job_title}</div>
+            </div>
+             ${website_link ? `
+            <div class="data-row">
+              <div class="data-label">Website</div>
+              <div class="data-value"><a href="${website_link}" target="_blank" style="color:${brandBlue}; text-decoration:none;">${website_link}</a></div>
+            </div>` : ''}
 
-          ${
-            message
-                ? `<div style="margin-top:20px; padding: 10px; background:#eef7ff; border-left: 4px solid #007bff;">
-                  <b>Message:</b><br/> ${message}
-                </div>`
-                : ""
-        }
+            ${message ? `
+            <div class="section-title">Message</div>
+            <div class="message-box">
+              ${message}
+            </div>` : ''}
+          </div>
 
-          <p style="margin-top:20px; font-size:12px; color:#555;">
-            📅 Received: ${new Date().toLocaleString("en-UK", {
-            timeZone: "Europe/London",
-        })}
-          </p>
+          <div class="footer">
+            Generated via Alpha Funding Website<br/>
+            ${new Date().toLocaleString("en-UK", { timeZone: "Europe/London" })}
+          </div>
         </div>
-      </div>
+      </body>
+      </html>
     `;
 
-        const mailOptions = {
-            from: `"Alpha Funding Contact Form" <${SMTP_SERVER_USERNAME}>`,
-            to: RECIPIENTS,
-            subject: emailSubject,
-            html: htmlContent,
-            replyTo: email,
-        };
+    const mailOptions = {
+      from: `"Alpha Funding Website" <${SMTP_SERVER_USERNAME}>`,
+      to: RECIPIENTS,
+      subject: emailSubject,
+      html: htmlContent,
+      replyTo: email,
+    };
 
-        const info = await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail(mailOptions);
 
-        return NextResponse.json(
-            { success: true, message: "Form submitted successfully!", messageId: info.messageId },
-            { status: 200 }
-        );
-    } catch (error: any) {
-        console.error("❌ Error:", error);
-        return NextResponse.json(
-            { success: false, error: "Failed to send email", details: error.message },
-            { status: 500 }
-        );
-    }
-}
+    return NextResponse.json(
+      { success: true, message: "Form submitted successfully!", messageId: info.messageId },
+      { status: 200 }
+    );
 
-// For GET testing
-export async function GET() {
-    return NextResponse.json({ message: "Contact Form API is working ✅" });
+  } catch (error: any) {
+    console.error("❌ Error sending email:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to send email", details: error.message },
+      { status: 500 }
+    );
+  }
 }

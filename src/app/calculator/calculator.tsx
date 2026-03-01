@@ -234,8 +234,8 @@ export default function CalculatorPage() {
         doc.text("Disclaimer:", 20, finalY);
         doc.setFontSize(9);
         doc.text(
-            "This quote is an estimate based on the information provided. It does not constitute a guaranteed offer of funding. " +
-            "Actual rates and terms may vary based on credit checks and lender criteria.",
+            "This quote is an indicative estimate based on the information provided. It does not constitute a guaranteed offer of funding. " +
+            "Actual rates and terms may vary based on credit checks and lender criteria. This is a conditional offer.",
             20,
             finalY + 7,
             { maxWidth: 170 }
@@ -345,7 +345,7 @@ export default function CalculatorPage() {
                                         <Input
                                             type="number"
                                             value={amount ?? ""}
-                                            onChange={(e) => setAmount(Number(e.target.value))}
+                                            onChange={(e) => setAmount(e.target.value === "" ? null : Number(e.target.value))}
                                             className="pl-10 h-12 bg-white/50 border-slate-200 focus:border-[#1CB5E0] focus:ring-[#1CB5E0] text-lg font-bold text-slate-800 rounded-xl"
                                         />
                                     </div>
@@ -368,7 +368,7 @@ export default function CalculatorPage() {
                                     <Slider
                                         value={[months ?? 1]}
                                         min={1}
-                                        max={60}
+                                        max={72}
                                         step={1}
                                         onValueChange={(v) => setMonths(v[0])}
                                         className="py-2"
@@ -407,7 +407,7 @@ export default function CalculatorPage() {
                                         <Input
                                             type="number"
                                             value={rateValue ?? ""}
-                                            onChange={(e) => setRateValue(Number(e.target.value))}
+                                            onChange={(e) => setRateValue(e.target.value === "" ? null : Number(e.target.value))}
                                             className="h-12 bg-white/50 border-slate-200 focus:border-[#1CB5E0] focus:ring-[#1CB5E0] text-lg font-bold text-slate-800 rounded-xl"
                                             step={0.01}
                                         />
@@ -460,7 +460,7 @@ export default function CalculatorPage() {
                                             <Input
                                                 type="number"
                                                 value={feeValue ?? ""}
-                                                onChange={(e) => setFeeValue(Number(e.target.value))}
+                                                onChange={(e) => setFeeValue(e.target.value === "" ? null : Number(e.target.value))}
                                                 className="pl-10 h-10 bg-white border-slate-200 font-bold rounded-lg"
                                             />
                                         </div>
@@ -507,13 +507,38 @@ export default function CalculatorPage() {
                                     </div>
 
                                     {/* Chart */}
-                                    <div className="h-48 w-full mt-4">
+
+                                    {/* Smart AI Insights (Moved Up) */}
+                                    <SmartCalculatorInsights
+                                        amount={amount}
+                                        months={months}
+                                        monthlyPayment={calculations?.monthlyPayment ?? 0}
+                                        totalInterest={calculations?.totalInterest ?? 0}
+                                        totalPayable={calculations?.totalPayable ?? 0}
+                                        annualRate={calculations?.annualRate ?? 0}
+                                        className="mt-0 shadow-none border-t border-x-0 border-b-0 border-slate-100 rounded-none bg-transparent px-0 pb-0 pt-6"
+                                    />
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+
+                        {/* Pie Chart (Moved Below) */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            <Card className="bg-white/90 backdrop-blur-xl border-none shadow-xl rounded-2xl overflow-hidden relative">
+                                <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-[#1CB5E0] to-[#D946EF]" />
+                                <CardContent className="p-6">
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 text-center">Cost Breakdown</p>
+                                    <div className="h-64 w-full">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <PieChart>
                                                 <Pie
                                                     data={chartData}
-                                                    innerRadius={60}
-                                                    outerRadius={80}
+                                                    innerRadius={80}
+                                                    outerRadius={100}
                                                     paddingAngle={5}
                                                     dataKey="value"
                                                     stroke="none"
@@ -526,22 +551,18 @@ export default function CalculatorPage() {
                                                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', fontWeight: 'bold' }}
                                                     itemStyle={{ color: '#000428' }}
                                                 />
+                                                <Legend
+                                                    verticalAlign="bottom"
+                                                    height={36}
+                                                    iconType="circle"
+                                                    formatter={(value) => <span className="text-xs font-bold text-slate-500">{value}</span>}
+                                                />
                                             </PieChart>
                                         </ResponsiveContainer>
                                     </div>
                                 </CardContent>
                             </Card>
                         </motion.div>
-
-                        {/* Smart AI Insights */}
-                        <SmartCalculatorInsights
-                            amount={amount}
-                            months={months}
-                            monthlyPayment={calculations?.monthlyPayment ?? 0}
-                            totalInterest={calculations?.totalInterest ?? 0}
-                            totalPayable={calculations?.totalPayable ?? 0}
-                            annualRate={calculations?.annualRate ?? 0}
-                        />
                     </div>
 
                     {/* Right - Summary & breakdown */}
@@ -659,8 +680,8 @@ export default function CalculatorPage() {
                                     </Dialog>
 
                                     <p className="text-[10px] text-slate-600 font-medium text-center leading-tight pt-2">
-                                        Please note that our rate comparison tool only provides an estimate of the cost of a loan.
-                                        These are not guaranteed offers.
+                                        Please note that our rate comparison tool only provides an indicative offer/estimate of the cost of a loan.
+                                        These are conditional offers and not guaranteed.
                                     </p>
                                 </CardContent>
                             </Card>

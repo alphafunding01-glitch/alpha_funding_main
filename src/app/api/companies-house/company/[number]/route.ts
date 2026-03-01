@@ -1,7 +1,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
-const COMPANIES_HOUSE_API_KEY = process.env.COMPANIES_HOUSE_API_KEY || '94b47d68-9fae-48fe-bb54-9e1cb99c697c';
+const COMPANIES_HOUSE_API_KEY = process.env.COMPANIES_HOUSE_API_KEY;
 
 export async function GET(
     request: NextRequest,

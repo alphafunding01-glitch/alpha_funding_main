@@ -1,13 +1,32 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Zap, ShieldCheck, Users } from "lucide-react";
 
 export default function HomeFinalCTA() {
+    const [isBusinessHours, setIsBusinessHours] = useState(false);
+
+    useEffect(() => {
+        const checkBusinessHours = () => {
+            const now = new Date();
+            const ukTime = new Date(now.toLocaleString("en-US", { timeZone: "Europe/London" }));
+            const day = ukTime.getDay();
+            const hour = ukTime.getHours();
+
+            // Mon(1) - Fri(5), 9am - 5pm (17:00)
+            const isOpen = day >= 1 && day <= 5 && hour >= 9 && hour < 17;
+            setIsBusinessHours(isOpen);
+        };
+
+        checkBusinessHours();
+        const interval = setInterval(checkBusinessHours, 60000); // Check every minute
+        return () => clearInterval(interval);
+    }, []);
+
     return (
-        <section className="relative overflow-hidden min-h-[500px] flex items-center bg-[#030f42]">
+        <section className="relative overflow-hidden min-h-[500px] py-28 flex items-center bg-[#030f42]">
             {/* Animated Mesh Gradient Background */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#000046] via-[#1CB5E0]/20 to-[#67E8F9]/10" />
@@ -49,11 +68,11 @@ export default function HomeFinalCTA() {
                         <div className="flex justify-center flex-wrap gap-8 mb-10 opacity-60 grayscale hover:grayscale-0 transition-all">
                             <div className="flex items-center gap-2">
                                 <Zap className="w-4 h-4 text-[#1CB5E0]" />
-                                <span className="text-[10px] font-bold text-white uppercase tracking-widest">Funding in 24h</span>
+                                <span className="text-[10px] font-bold text-white uppercase tracking-widest">Funding in 24-48hrs</span>
                             </div>
                             <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full border border-white/10">
                                 <ShieldCheck className="w-4 h-4 text-[#1CB5E0]" />
-                                <span className="text-sm text-slate-200">Authorised under applicable regulations</span>
+                                <span className="text-sm text-slate-200">Trusted Finance UK Broker</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Users className="w-4 h-4 text-[#1CB5E0]" />
@@ -67,8 +86,8 @@ export default function HomeFinalCTA() {
                         </h2>
 
                         <p className="text-slate-300 font-body text-xl max-w-2xl mx-auto leading-relaxed">
-                            Join 700+ UK companies who've secured funding through Alpha Funding.
-                            Your dedicated advisor is waiting to find your perfect deal.
+                            Join UK companies who've secured funding through Alpha Funding.
+                            Your dedicated manager is waiting to find your perfect deal.
                         </p>
 
                         <div className="pt-6">
@@ -80,8 +99,17 @@ export default function HomeFinalCTA() {
                         </div>
 
                         <p className="text-slate-500 text-sm mt-8 flex items-center justify-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                            9 advisors currently online to assist you
+                            {isBusinessHours ? (
+                                <>
+                                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                    9 advisors currently online to assist you
+                                </>
+                            ) : (
+                                <>
+                                    <span className="w-2 h-2 rounded-full bg-slate-400" />
+                                    <span>Leave a message. Advisors available 9-5 Mon-Fri. <Link href="/contact" className="text-[#1CB5E0] hover:underline">Contact Us</Link></span>
+                                </>
+                            )}
                         </p>
                     </motion.div>
                 </div>

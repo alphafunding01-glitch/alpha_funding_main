@@ -21,7 +21,7 @@ interface ProductProps {
 const products: ProductProps[] = [
     {
         title: "Business Loans",
-        description: "Unsecured & secured funding from £10k to £2M. Decisions in 24 hours with interest rates from 4.9% per annum.",
+        description: "Unsecured & secured funding from £10k to £2M. Decisions in 24 hours with interest rates from 6.9% per annum.",
         icon: Landmark,
         href: "/solutions/business-loans",
         isWide: true
@@ -73,7 +73,7 @@ const products: ProductProps[] = [
 
 export default function HomeProductsGrid() {
     return (
-        <section className="py-24 bg-slate-50 relative">
+        <section className="py-28 bg-slate-50 relative">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <motion.div

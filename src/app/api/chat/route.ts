@@ -13,9 +13,9 @@ export async function POST(request: Request) {
         return new Response(JSON.stringify({
             id: 'msg_' + Date.now(),
             role: 'assistant',
-            content: 'I have analyzed the business data from Companies House. Highly eligible for a Commercial Loan based on their 2+ years of operation.',
+            content: 'AI analysis requires ANTHROPIC_API_KEY to be configured. Add your key to enable real-time business intelligence.',
             parts: [
-                { type: 'text', text: 'Business verified. Incorporated in 2021. Secure for funding up to £1M.' }
+                { type: 'text', text: 'Configure ANTHROPIC_API_KEY to unlock AI-powered company analysis.' }
             ]
         }), {
             headers: { 'Content-Type': 'application/json' }

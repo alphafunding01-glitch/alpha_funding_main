@@ -13,6 +13,7 @@ interface SmartCalculatorInsightsProps {
     totalInterest: number;
     totalPayable: number;
     annualRate: number;
+    className?: string; // Allow styling overrides
 }
 
 // Dynamic insight templates
@@ -71,7 +72,9 @@ export const SmartCalculatorInsights: React.FC<SmartCalculatorInsightsProps> = (
     monthlyPayment,
     totalInterest,
     totalPayable,
+
     annualRate,
+    className,
 }) => {
     const [phase, setPhase] = useState<'idle' | 'analyzing' | 'calculating' | 'done'>('idle');
     const [displayMonthly, setDisplayMonthly] = useState(0);
@@ -135,7 +138,7 @@ export const SmartCalculatorInsights: React.FC<SmartCalculatorInsightsProps> = (
         if (amount <= 50000) {
             return { name: 'Business Loan', href: '/solutions/business-loans' };
         } else if (amount <= 100000) {
-            return { name: 'Revolving Credit', href: '/solutions/revolving-credit-facility' };
+            return { name: 'Revolving Credit Facility', href: '/solutions/revolving-credit-facility' };
         } else if (amount <= 250000) {
             return { name: 'Secured Business Loan', href: '/solutions/business-loans' };
         } else {
@@ -212,7 +215,8 @@ export const SmartCalculatorInsights: React.FC<SmartCalculatorInsightsProps> = (
             className={cn(
                 "relative overflow-hidden rounded-2xl border p-5 mt-6",
                 "bg-gradient-to-br from-[#1CB5E0]/5 via-transparent to-[#D946EF]/5",
-                isProcessing ? "border-[#1CB5E0]/40" : "border-[#1CB5E0]/20"
+                isProcessing ? "border-[#1CB5E0]/40" : "border-[#1CB5E0]/20",
+                className
             )}
         >
             {/* Top gradient line */}
