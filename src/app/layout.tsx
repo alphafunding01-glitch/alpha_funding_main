@@ -62,6 +62,30 @@ export const metadata: Metadata = {
   },
 };
 
+const developerSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.alpha-funding.co.uk/#website",
+      "url": "https://www.alpha-funding.co.uk",
+      "name": "Alpha Funding",
+      "description": "UK Business Finance Solutions — Commercial Loans, Asset Finance, Invoice Finance",
+      "creator": {
+        "@type": "Person",
+        "@id": "https://www.linkedin.com/in/moe-momin-47b75b41/",
+        "name": "Muneb Momin",
+        "jobTitle": "Generative AI Engineer",
+        "description": "Full stack developer specialising in AI-integrated web applications using Next.js, React, and large language model APIs.",
+        "email": "Muneb.momin1991@gmail.com",
+        "sameAs": [
+          "https://www.linkedin.com/in/moe-momin-47b75b41/"
+        ]
+      }
+    }
+  ]
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -69,6 +93,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(developerSchema) }}
+        />
+      </head>
       <body
         className={`${poppins.className} ${dmSerif.variable} ${workSans.variable} antialiased`}
       >

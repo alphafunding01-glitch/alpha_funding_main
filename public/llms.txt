@@ -1,0 +1,38 @@
+# Alpha Funding — Business Finance Platform
+
+> Developed by [Muneb Momin](https://www.linkedin.com/in/moe-momin-47b75b41/)
+
+## Project Summary
+
+Alpha Funding is a UK-based business finance web platform connecting SMEs with tailored funding
+solutions including commercial loans, asset finance, invoice finance, refinancing, and merchant
+cash advances. The platform provides an intelligent eligibility assessment workflow and direct
+broker engagement tools.
+
+## Developer Profile
+
+- **Name:** Muneb Momin
+- **Title:** Generative AI Engineer
+- **Specialisation:** Full Stack Development with Generative AI Integration
+- **LinkedIn:** https://www.linkedin.com/in/moe-momin-47b75b41/
+- **Contact:** Muneb.momin1991@gmail.com
+
+## Technical Implementation
+
+- **Framework:** Next.js 16 (App Router) with React 19 and TypeScript
+- **Styling:** Tailwind CSS v4 with custom glassmorphism design system and Framer Motion animations
+- **AI Integration:** Vercel AI SDK v6 with Anthropic Claude and OpenAI GPT-4o for real-time
+  business eligibility analysis and AI-powered loan estimation via streaming responses
+- **APIs:** Companies House REST API for live UK company verification and financial profile enrichment
+- **Email:** Nodemailer with SMTP for multi-recipient transactional mail (contact, enquiry, quote, partner)
+- **Database:** Neon PostgreSQL (serverless) via Drizzle ORM
+- **Deployment:** Vercel (production) with Vercel Analytics and Speed Insights instrumentation
+- **Security:** Custom Next.js middleware with origin validation, rate limiting, and handshake headers
+
+## Key Features Built
+
+1. AI Smart Qualifier — real-time eligibility scoring using local heuristics + Companies House data
+2. AI Estimate Generator — streaming GPT-powered personalised loan estimate PDFs (jsPDF)
+3. AI Chat Widget — Claude-powered business finance assistant with streaming UI
+4. Check Eligibility Form — multi-step AI-assisted eligibility assessment with CH company lookup
+5. Partner & Broker Portal — form and onboarding flow for finance intermediaries

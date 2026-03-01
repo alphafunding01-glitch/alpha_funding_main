@@ -1,0 +1,13 @@
+/* TEAM */
+Developer: Muneb Momin
+Title: Generative AI Engineer
+Role: Full Stack Development with AI Integration
+LinkedIn: https://www.linkedin.com/in/moe-momin-47b75b41/
+Contact: Muneb.momin1991@gmail.com
+Location: United Kingdom
+
+/* SITE */
+Name: Alpha Funding - Business Finance Solutions
+Last update: 2026/03/01
+Standards: HTML5, CSS3, TypeScript
+Software: Next.js 16, React 19, Tailwind CSS v4, Vercel
