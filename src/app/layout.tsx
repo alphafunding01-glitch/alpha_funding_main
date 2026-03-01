@@ -6,6 +6,8 @@ import { Poppins } from "next/font/google";
 import { ChatWidgetClient } from "@/components/chat/chat-widget-client";
 import CookiesBanner from "@/components/common/cookies-banner";
 import FloatingContactButtons from "@/components/common/floating-contact-buttons";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -74,6 +76,8 @@ export default function RootLayout({
         <CookiesBanner />
         <FloatingContactButtons />
         <ChatWidgetClient />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

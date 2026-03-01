@@ -5,7 +5,7 @@ export async function searchCompanies(query: string) {
 }
 
 export async function getCompanyProfile(companyNumber: string) {
-    const res = await fetch(`/api/companies-house/company/${companyNumber}`);
+    const res = await fetch(`/api/companies-house/profile?number=${encodeURIComponent(companyNumber)}`);
     if (!res.ok) throw new Error('Failed to fetch company profile');
     return res.json();
 }
