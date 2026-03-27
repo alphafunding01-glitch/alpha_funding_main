@@ -40,7 +40,7 @@ export default function AboutUs() {
                 ]}
             />
             <NavBar />
-            <main className="flex-grow pt-36">
+            <main className="grow pt-36">
                 <AboutUsContent />
             </main>
             <Footer />

@@ -8,6 +8,7 @@ import CookiesBanner from "@/components/common/cookies-banner";
 import FloatingContactButtons from "@/components/common/floating-contact-buttons";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import GoogleAnalyticsConsent from "@/components/common/google-analytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -108,6 +109,7 @@ export default function RootLayout({
         <ChatWidgetClient />
         <Analytics />
         <SpeedInsights />
+        <GoogleAnalyticsConsent />
       </body>
     </html>
   );

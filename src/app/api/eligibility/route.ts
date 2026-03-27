@@ -1,19 +1,6 @@
-import { streamText, convertToModelMessages, UIMessage, stepCountIs } from 'ai';
+import { UIMessage } from 'ai';
 import { tools } from '@/ai/tools';
 
-// Mock model for use if no API key is provided
-const mockModel = {
-    specificationVersion: 'v1' as const,
-    defaultObjectGenerationMode: 'json' as const,
-    modelId: 'mock-model',
-    provider: 'mock-provider',
-    doStream: async () => {
-        // This is a minimal mock to satisfy streamText if keys are missing
-        // But since we want "logic based magic", we can just handle the POST manually 
-        // or provide a simple echo model.
-        return {} as any;
-    }
-};
 
 export const maxDuration = 30;
 

@@ -1,10 +1,9 @@
 
 import { streamText, convertToModelMessages } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
-import { tools } from '@/ai/tools';
 
 export async function POST(request: Request) {
-    const { messages, company_context } = await request.json();
+    const { messages } = await request.json();
 
     // Use the provided key or fallback to simulated for demo
     const apiKey = process.env.ANTHROPIC_API_KEY;

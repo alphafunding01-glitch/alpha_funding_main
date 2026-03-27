@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,7 +8,6 @@ import {
     CardHeader,
     CardTitle,
     CardContent,
-    CardFooter,
 } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import {
@@ -328,7 +327,7 @@ export default function CalculatorPage() {
                         className="lg:col-span-4 relative group h-fit"
                     >
                         {/* Ambient Glow */}
-                        <div className="absolute -inset-1 bg-gradient-to-r from-[#1CB5E0] to-[#000428] rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" />
+                        <div className="absolute -inset-1 bg-linear-to-r from-brand-cyan to-[#000428] rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" />
 
                         <Card className="relative bg-white/80 backdrop-blur-xl border-white/20 shadow-xl rounded-2xl overflow-hidden">
                             <CardHeader>
@@ -346,7 +345,7 @@ export default function CalculatorPage() {
                                             type="number"
                                             value={amount ?? ""}
                                             onChange={(e) => setAmount(e.target.value === "" ? null : Number(e.target.value))}
-                                            className="pl-10 h-12 bg-white/50 border-slate-200 focus:border-[#1CB5E0] focus:ring-[#1CB5E0] text-lg font-bold text-slate-800 rounded-xl"
+                                            className="pl-10 h-12 bg-white/50 border-slate-200 focus:border-brand-cyan focus:ring-brand-cyan text-lg font-bold text-slate-800 rounded-xl"
                                         />
                                     </div>
                                     <Slider
@@ -363,7 +362,7 @@ export default function CalculatorPage() {
                                 <div className="space-y-3">
                                     <div className="flex justify-between">
                                         <label className="text-sm font-bold text-slate-700 uppercase tracking-widest">Loan Term</label>
-                                        <span className="text-sm font-bold text-[#1CB5E0]">{months} Months</span>
+                                        <span className="text-sm font-bold text-brand-cyan">{months} Months</span>
                                     </div>
                                     <Slider
                                         value={[months ?? 1]}
@@ -408,7 +407,7 @@ export default function CalculatorPage() {
                                             type="number"
                                             value={rateValue ?? ""}
                                             onChange={(e) => setRateValue(e.target.value === "" ? null : Number(e.target.value))}
-                                            className="h-12 bg-white/50 border-slate-200 focus:border-[#1CB5E0] focus:ring-[#1CB5E0] text-lg font-bold text-slate-800 rounded-xl"
+                                            className="h-12 bg-white/50 border-slate-200 focus:border-brand-cyan focus:ring-brand-cyan text-lg font-bold text-slate-800 rounded-xl"
                                             step={0.01}
                                         />
                                         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">
@@ -425,17 +424,17 @@ export default function CalculatorPage() {
                                     <div className="grid grid-cols-2 bg-white rounded-xl p-1 border border-slate-200 shadow-sm">
                                         <button
                                             onClick={() => { setFeeType("percentage"); setFeeValue(2.0); }}
-                                            className={`text-xs py-2 rounded-lg font-bold transition-all ${feeType === "percentage" ? "bg-[#1CB5E0] text-white shadow-md relative overflow-hidden" : "text-slate-400 hover:text-slate-600"}`}
+                                            className={`text-xs py-2 rounded-lg font-bold transition-all ${feeType === "percentage" ? "bg-brand-cyan text-white shadow-md relative overflow-hidden" : "text-slate-400 hover:text-slate-600"}`}
                                         >
                                             <span className="relative z-10">Percentage %</span>
-                                            {feeType === "percentage" && <div className="absolute inset-0 bg-gradient-to-r from-[#1CB5E0] to-[#22D3EE]" />}
+                                            {feeType === "percentage" && <div className="absolute inset-0 bg-linear-to-r from-brand-cyan to-[#22D3EE]" />}
                                         </button>
                                         <button
                                             onClick={() => { setFeeType("fixed"); setFeeValue(500); }}
-                                            className={`text-xs py-2 rounded-lg font-bold transition-all ${feeType === "fixed" ? "bg-[#1CB5E0] text-white shadow-md relative overflow-hidden" : "text-slate-400 hover:text-slate-600"}`}
+                                            className={`text-xs py-2 rounded-lg font-bold transition-all ${feeType === "fixed" ? "bg-brand-cyan text-white shadow-md relative overflow-hidden" : "text-slate-400 hover:text-slate-600"}`}
                                         >
                                             <span className="relative z-10">Fixed Amount £</span>
-                                            {feeType === "fixed" && <div className="absolute inset-0 bg-gradient-to-r from-[#1CB5E0] to-[#22D3EE]" />}
+                                            {feeType === "fixed" && <div className="absolute inset-0 bg-linear-to-r from-brand-cyan to-[#22D3EE]" />}
                                         </button>
                                     </div>
 
@@ -443,7 +442,7 @@ export default function CalculatorPage() {
                                         <div className="space-y-3">
                                             <div className="flex justify-between text-xs font-bold text-slate-600">
                                                 <span>0%</span>
-                                                <span className="text-[#1CB5E0] text-base">{feeValue}%</span>
+                                                <span className="text-brand-cyan text-base">{feeValue}%</span>
                                                 <span>50%</span>
                                             </div>
                                             <Slider
@@ -480,13 +479,13 @@ export default function CalculatorPage() {
                             transition={{ delay: 0.1 }}
                             className="relative group"
                         >
-                            <div className="absolute -inset-1 bg-gradient-to-r from-[#000428] to-[#1CB5E0] rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200" />
+                            <div className="absolute -inset-1 bg-linear-to-r from-[#000428] to-brand-cyan rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200" />
                             <Card className="relative border-none overflow-hidden bg-white/90 backdrop-blur-xl shadow-2xl rounded-2xl">
-                                <div className="h-2 bg-gradient-to-r from-[#000428] via-[#1CB5E0] to-[#22D3EE]" />
+                                <div className="h-2 bg-linear-to-r from-[#000428] via-brand-cyan to-[#22D3EE]" />
                                 <CardContent className="p-8 space-y-6">
                                     <div className="text-center">
                                         <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Estimated Monthly Payment</p>
-                                        <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#000428] to-[#1CB5E0]">
+                                        <p className="text-5xl font-black text-transparent bg-clip-text bg-linear-to-r from-[#000428] to-brand-cyan">
                                             £{calculations ? formatNumber(calculations.monthlyPayment) : "0.00"}
                                         </p>
                                     </div>
@@ -494,7 +493,7 @@ export default function CalculatorPage() {
                                     <div className="grid grid-cols-2 gap-4 pt-6 border-t border-slate-100">
                                         <div className="text-center p-4 bg-slate-50/80 rounded-2xl border border-slate-100">
                                             <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Total Interest</p>
-                                            <p className="text-xl font-black text-[#1CB5E0]">
+                                            <p className="text-xl font-black text-brand-cyan">
                                                 {calculations ? `£${formatNumber(calculations.totalInterest)}` : "£0.00"}
                                             </p>
                                         </div>
@@ -529,11 +528,11 @@ export default function CalculatorPage() {
                             transition={{ delay: 0.2 }}
                         >
                             <Card className="bg-white/90 backdrop-blur-xl border-none shadow-xl rounded-2xl overflow-hidden relative">
-                                <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-[#1CB5E0] to-[#D946EF]" />
+                                <div className="absolute top-0 w-full h-1 bg-linear-to-r from-brand-cyan to-[#D946EF]" />
                                 <CardContent className="p-6">
                                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 text-center">Cost Breakdown</p>
                                     <div className="h-64 w-full">
-                                        <ResponsiveContainer width="100%" height="100%">
+                                        <ResponsiveContainer width="100%" height={256}>
                                             <PieChart>
                                                 <Pie
                                                     data={chartData}
@@ -574,7 +573,7 @@ export default function CalculatorPage() {
                             animate={{ opacity: 1, x: 0 }}
                         >
                             <Card className="neuromorphic-card border-none overflow-hidden relative group">
-                                <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-[#D946EF] to-[#1CB5E0]" />
+                                <div className="absolute top-0 w-full h-1 bg-linear-to-r from-[#D946EF] to-brand-cyan" />
                                 <CardHeader>
                                     <CardTitle className="text-xl font-heading font-bold text-brand-midnight">
                                         Your Loan Quote Summary
@@ -608,7 +607,7 @@ export default function CalculatorPage() {
                                         </div>
                                         <div className="flex justify-between items-center py-2 border-b border-slate-100">
                                             <span className="font-bold text-slate-600">Loan Term</span>
-                                            <span className="font-black text-[#1CB5E0]">{months} Months</span>
+                                            <span className="font-black text-brand-cyan">{months} Months</span>
                                         </div>
                                         <div className="flex justify-between items-center py-2 border-b border-slate-100">
                                             <span className="font-bold text-slate-600">Monthly Payment</span>
@@ -618,7 +617,7 @@ export default function CalculatorPage() {
                                         </div>
                                         <div className="flex justify-between items-center py-2 border-b border-slate-100">
                                             <span className="font-bold text-slate-600">Total Interest</span>
-                                            <span className="font-black text-[#1CB5E0]">
+                                            <span className="font-black text-brand-cyan">
                                                 £{calculations ? formatNumber(calculations.totalInterest) : "0.00"}
                                             </span>
                                         </div>
@@ -633,7 +632,7 @@ export default function CalculatorPage() {
                                     {/* Email Quote Dialog */}
                                     <Dialog open={isEmailOpen} onOpenChange={setIsEmailOpen}>
                                         <DialogTrigger asChild>
-                                            <Button variant="outline" className="w-full mt-4 border-2 border-[#1CB5E0] text-[#1CB5E0] hover:bg-[#1CB5E0] hover:text-white font-bold transition-all">
+                                            <Button variant="outline" className="w-full mt-4 border-2 border-brand-cyan text-brand-cyan hover:bg-brand-cyan hover:text-white font-bold transition-all">
                                                 Get Quote by Email
                                             </Button>
                                         </DialogTrigger>
@@ -671,7 +670,7 @@ export default function CalculatorPage() {
                                                             className="bg-slate-50 border-slate-200"
                                                         />
                                                     </div>
-                                                    <Button id="send-quote-btn" type="submit" className="w-full bg-[#1CB5E0] hover:bg-cyan-400 text-[#000428] font-bold">
+                                                    <Button id="send-quote-btn" type="submit" className="w-full bg-brand-cyan hover:bg-cyan-400 text-[#000428] font-bold">
                                                         Send Quote
                                                     </Button>
                                                 </form>
@@ -712,14 +711,14 @@ export default function CalculatorPage() {
 
                         <div className="relative p-6 rounded-2xl text-center space-y-4 overflow-hidden group">
                             {/* Background Gradient */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#000428] via-[#0F172A] to-[#000428]" />
+                            <div className="absolute inset-0 bg-linear-to-br from-[#000428] via-[#0F172A] to-[#000428]" />
                             <div className="absolute inset-0 bg-[url('/bg-pattern.svg')] opacity-10" />
 
                             <div className="relative z-10 space-y-4">
                                 <h3 className="text-white font-bold text-xl">Ready to proceed?</h3>
                                 <p className="text-slate-300 text-sm">Get your funding approved in as little as 24 hours.</p>
                                 <Link href="/apply-now">
-                                    <Button className="w-full bg-[#1CB5E0] hover:bg-cyan-400 text-[#000428] font-bold py-6 rounded-xl text-lg transition-transform hover:-translate-y-1 shadow-[0_0_20px_rgba(28,181,224,0.3)] hover:shadow-[0_0_30px_rgba(28,181,224,0.5)]">
+                                    <Button className="w-full bg-brand-cyan hover:bg-cyan-400 text-[#000428] font-bold py-6 rounded-xl text-lg transition-transform hover:-translate-y-1 shadow-[0_0_20px_rgba(28,181,224,0.3)] hover:shadow-[0_0_30px_rgba(28,181,224,0.5)]">
                                         Start Application
                                     </Button>
                                 </Link>
