@@ -23,7 +23,7 @@ export default function FloatingContactButtons() {
                 aria-label="Chat on WhatsApp"
             >
                 <FaWhatsapp className="w-8 h-8 text-white" />
-                <span className="absolute left-full ml-3 px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-lg text-white text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                <span className="hidden sm:block absolute left-full ml-3 px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-lg text-white text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                     WhatsApp Us
                 </span>
             </a>
@@ -35,7 +35,7 @@ export default function FloatingContactButtons() {
                 aria-label="Call Us"
             >
                 <Phone className="w-6 h-6 text-white" />
-                <span className="absolute left-full ml-3 px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-lg text-white text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                <span className="hidden sm:block absolute left-full ml-3 px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-lg text-white text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                     Call Us
                 </span>
             </a>

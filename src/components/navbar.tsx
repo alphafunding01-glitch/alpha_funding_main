@@ -425,7 +425,7 @@ export default function NavBar({ hideOnScroll = false }: NavBarProps) {
     );
 
     // Common styles for navigation menu triggers - cyan hover with contrast
-    const navTriggerStyles = "uppercase bg-transparent text-[#201130] hover:text-[#0891B2] focus:text-[#0891B2] data-[state=open]:text-[#0891B2] data-[state=open]:bg-white/50 transition-all duration-200 hover:translate-y-[-1px]";
+    const navTriggerStyles = "uppercase bg-transparent text-[#201130] hover:text-[#0891B2] focus:text-[#0891B2] data-[state=open]:text-[#0891B2] data-[state=open]:bg-white/50 transition-all duration-200 hover:translate-y-[-1px] lg:px-1.5 xl:px-2 2xl:px-4";
 
     return (
         <motion.div
@@ -436,19 +436,19 @@ export default function NavBar({ hideOnScroll = false }: NavBarProps) {
             animate={hidden ? "hidden" : "visible"}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className={"flex bg-[#F0F4F8] rounded-2xl justify-between fixed gap-2 lg:gap-4 left-[2%] right-[2%] md:left-[4%] md:right-[4%] top-4 py-3 px-[2%] z-50 border-t-2 border-l-2 border-white/80 border-b-2 border-r-2 border-b-slate-200/50 border-r-slate-200/50 shadow-sm"}>
-            <div className={"flex items-center gap-2 lg:gap-4 xl:gap-6"}>
-                <Link href={"/"} className={"w-36"}>
+            <div className={"flex items-center gap-2 lg:gap-1 xl:gap-2 2xl:gap-6"}>
+                <Link href={"/"} className={"w-28 2xl:w-36"}>
                     <img
                         src={"/logo.png"}
-                        className={"h-12 w-36"}
+                        className={"h-10 w-28 2xl:h-12 2xl:w-36"}
                         alt={"logo"}
                     />
                 </Link>
 
-                {/* Desktop Navigation - Hidden on mobile */}
+                {/* Desktop Navigation - Hidden below lg */}
                 <div className="hidden lg:block">
                     <NavigationMenu viewport={false}>
-                        <NavigationMenuList>
+                        <NavigationMenuList className="gap-0 2xl:gap-1">
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger className={navTriggerStyles}>
                                     Alpha Funding
@@ -604,13 +604,15 @@ export default function NavBar({ hideOnScroll = false }: NavBarProps) {
                             <NavigationMenuItem>
                                 <NavigationMenuLink
                                     href={"/partner"}
-                                    className={"uppercase text-[#201130] hover:text-[#0891B2] transition-all duration-200 px-4 py-2 hover:translate-y-[-1px] font-medium"}
+                                    className={"uppercase text-[#201130] hover:text-[#0891B2] transition-all duration-200 lg:px-1.5 xl:px-2 2xl:px-4 py-2 hover:-translate-y-px font-medium"}
                                 >
                                     Partner With Us
                                 </NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <ContactFormDialog />
+                                <span className="[&_button]:lg:px-1.5! [&_button]:xl:px-2! [&_button]:2xl:px-4!">
+                                    <ContactFormDialog />
+                                </span>
                             </NavigationMenuItem>
                         </NavigationMenuList >
                     </NavigationMenu >
@@ -622,7 +624,7 @@ export default function NavBar({ hideOnScroll = false }: NavBarProps) {
                 {/* Desktop buttons - Hidden on small screens */}
                 < div className="hidden md:flex items-center gap-2 lg:gap-3" >
                     {/* Search input and dropdown */}
-                    < div className="relative" >
+                    < div className="relative hidden 2xl:block" >
                         <div className="flex items-center bg-white border border-[#CBD5E1] rounded-lg px-3 py-1">
                             <Search className="w-4 h-4 text-[#64748B] mr-2" />
                             <input
@@ -660,13 +662,13 @@ export default function NavBar({ hideOnScroll = false }: NavBarProps) {
 
 
                     <Link href={"/check-eligibility"}
-                        className={buttonVariants({ size: "lg", className: "hidden lg:flex bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white hover:opacity-90 transition-opacity shrink-0" })}>
-                        Check Eligibility <ArrowUpRight />
+                        className={buttonVariants({ size: "sm", className: "hidden lg:flex bg-linear-to-r from-[#000046] to-brand-cyan text-white hover:opacity-90 transition-opacity shrink-0 whitespace-nowrap xl:px-5 2xl:px-8 2xl:h-11 2xl:text-base" })}>
+                        <span className="hidden xl:inline">Check </span>Eligibility <ArrowUpRight />
                     </Link>
                 </div >
 
-                {/* Mobile CTA button - Visible on mobile */}
-                < Button size={"sm"} className={"bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white hover:opacity-90 lg:hidden"} >
+                {/* Mobile CTA button - Visible below lg */}
+                < Button size={"sm"} className={"bg-gradient-to-r from-[#000046] to-brand-cyan text-white hover:opacity-90 lg:hidden"} >
                     <Search className="w-4 h-4" />
                 </Button >
 
@@ -729,7 +731,7 @@ export default function NavBar({ hideOnScroll = false }: NavBarProps) {
                                     className={
                                         buttonVariants({
                                             size: "lg",
-                                            className: "w-full bg-gradient-to-r from-[#000046] to-[#1CB5E0] text-white hover:opacity-90"
+                                            className: "w-full bg-gradient-to-r from-[#000046] to-brand-cyan text-white hover:opacity-90"
                                         })
                                     }
                                     onClick={() => setIsSheetOpen(false)}
