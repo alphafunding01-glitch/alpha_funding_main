@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed 's/:import.*//')",
+      "Bash(node -e \"const JO = require\\(''javascript-obfuscator''\\); const r = JO.obfuscate\\(''var x=1;'', {stringArray: true, stringArrayEncoding: ''base64''}\\); console.log\\(''ok''\\);\")",
+      "Bash(npm run:*)"
+    ]
+  }
+}
