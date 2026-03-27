@@ -73,7 +73,7 @@ const products: ProductProps[] = [
 
 export default function HomeProductsGrid() {
     return (
-        <section className="py-28 bg-slate-50 relative">
+        <section className="py-16 md:py-28 bg-slate-50 relative">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <motion.div
@@ -88,10 +88,10 @@ export default function HomeProductsGrid() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-5xl font-heading font-bold text-brand-midnight mb-6"
+                        className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-brand-midnight mb-6"
                     >
                         Tailored Finance for <br />
-                        <span className="text-[#1CB5E0]">Every Stage of Growth</span>
+                        <span className="text-brand-cyan">Every Stage of Growth</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -118,18 +118,18 @@ export default function HomeProductsGrid() {
                             className={`group ${product.isWide ? 'md:col-span-2' : ''}`}
                         >
                             <Link href={product.href} className="block h-full">
-                                <div className="neuromorphic-card p-8 rounded-[32px] bg-white h-full border border-slate-100 hover-glow transition-all duration-500">
+                                <div className="neuromorphic-card p-8 rounded-4xl bg-white h-full border border-slate-100 hover-glow transition-all duration-500">
                                     <div className="flex flex-col h-full">
-                                        <div className="feature-icon-wrapper mb-6 group-hover:bg-[#1CB5E0]/10 transition-colors">
-                                            <product.icon className="w-6 h-6 text-[#1CB5E0]" />
+                                        <div className="feature-icon-wrapper mb-6 group-hover:bg-brand-cyan/10 transition-colors">
+                                            <product.icon className="w-6 h-6 text-brand-cyan" />
                                         </div>
                                         <h3 className="text-xl font-heading font-bold text-brand-midnight mb-3">
                                             {product.title}
                                         </h3>
-                                        <p className="text-slate-500 text-sm leading-relaxed mb-8 flex-grow">
+                                        <p className="text-slate-500 text-sm leading-relaxed mb-8 grow">
                                             {product.description}
                                         </p>
-                                        <div className="flex items-center gap-2 text-[#1CB5E0] font-bold text-xs uppercase tracking-widest mt-auto group-hover:gap-4 transition-all">
+                                        <div className="flex items-center gap-2 text-brand-cyan font-bold text-xs uppercase tracking-widest mt-auto group-hover:gap-4 transition-all">
                                             Learn More
                                             <ArrowRight className="w-4 h-4" />
                                         </div>

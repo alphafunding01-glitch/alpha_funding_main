@@ -45,9 +45,9 @@ const features = [
 
 export default function HomeWhyAlpha() {
     return (
-        <section className="py-28 bg-[#f8fafc] relative">
+        <section className="py-16 md:py-28 bg-[#f8fafc] relative">
             <div className="container mx-auto px-4 md:px-6">
-                <div className="grid lg:grid-cols-[0.8fr_1.3fr] gap-16 items-center">
+                <div className="grid lg:grid-cols-[0.8fr_1.3fr] gap-8 lg:gap-16 items-center">
                     {/* Left Side */}
                     <motion.div
                         initial="hidden"
@@ -57,9 +57,9 @@ export default function HomeWhyAlpha() {
                         className="space-y-10"
                     >
                         <motion.div variants={itemVariants}>
-                            <h2 className="text-4xl md:text-5xl font-heading font-bold text-brand-midnight leading-tight">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-brand-midnight leading-tight">
                                 Why 5000+ UK <br />
-                                <span className="text-[#1CB5E0]">Businesses Trust</span> <br />
+                                <span className="text-brand-cyan">Businesses Trust</span> <br />
                                 Alpha Funding
                             </h2>
                         </motion.div>
@@ -103,10 +103,10 @@ export default function HomeWhyAlpha() {
                                     key={idx}
                                     variants={itemVariants}
                                     whileHover={{ y: -8, scale: 1.01 }}
-                                    className="neuromorphic-card p-6 rounded-3xl bg-white border border-slate-50 group hover:border-[#1CB5E0]/20 transition-all duration-300"
+                                    className="neuromorphic-card p-6 rounded-3xl bg-white border border-slate-50 group hover:border-brand-cyan/20 transition-all duration-300"
                                 >
                                     <div className="feature-icon-wrapper mb-4 group-hover:scale-110 transition-transform">
-                                        <feature.icon className="w-5 h-5 text-[#1CB5E0]" />
+                                        <feature.icon className="w-5 h-5 text-brand-cyan" />
                                     </div>
                                     <h3 className="text-lg font-heading font-bold text-brand-midnight mb-2">{feature.title}</h3>
                                     {idx === 0 ? ( // Apply this specific change only to the first feature (Lender Panel)

@@ -32,7 +32,7 @@ const Section = ({ children, className, id }: { children: React.ReactNode, class
 
 const Hero = () => (
     // Updated background gradient as requested (matching Home Page / Brand Theme)
-    <section className="relative bg-gradient-to-br from-[#000428] via-[#004e92] to-[#1CB5E0] text-white py-32 md:py-40 px-4 overflow-hidden">
+    <section className="relative bg-linear-to-br from-[#000428] via-[#004e92] to-brand-cyan text-white py-32 md:py-40 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         <div className="max-w-7xl mx-auto relative z-10 text-center">
             <FadeIn>
@@ -56,7 +56,7 @@ const Hero = () => (
                 <LeadMagnetDialog>
                     <Button
                         size="lg"
-                        className={cn("bg-[#1CB5E0] text-[#000428] hover:bg-[#1CB5E0]/90 text-lg px-8 py-6 h-auto font-bold rounded-full shadow-lg shadow-[#1CB5E0]/20 transition-transform hover:scale-105")}
+                        className={cn("bg-brand-cyan text-[#000428] hover:bg-brand-cyan/90 text-lg px-8 py-6 h-auto font-bold rounded-full shadow-lg shadow-brand-cyan/20 transition-transform hover:scale-105")}
                     >
                         Download Free Guide
                     </Button>
@@ -122,16 +122,16 @@ const OurStory = () => (
         <FadeIn delay={0.2}>
             <div className="bg-[#000428] text-white p-10 rounded-3xl relative overflow-hidden">
                 <div className="relative z-10">
-                    <QuoteIcon className="w-12 h-12 text-[#1CB5E0] mb-6 opacity-50" />
+                    <QuoteIcon className="w-12 h-12 text-brand-cyan mb-6 opacity-50" />
                     <blockquote className="text-2xl font-heading leading-relaxed mb-6">
                         "32% of UK SMEs successfully funded through commercial finance brokers had previously been declined funding elsewhere. We specialise in turning those 'no's into 'yes's."
                     </blockquote>
-                    <cite className="not-italic text-[#1CB5E0] font-semibold block">
+                    <cite className="not-italic text-brand-cyan font-semibold block">
                         — NACFB Industry Report, 2024
                     </cite>
                 </div>
                 {/* Abstract Background Shape */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-[#1CB5E0]/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                <div className="absolute top-0 right-0 w-64 h-64 bg-brand-cyan/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#D946EF]/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
             </div>
         </FadeIn>
@@ -169,7 +169,7 @@ const WhatWeDo = () => {
                 <div className="grid md:grid-cols-3 gap-8">
                     {cards.map((card, i) => (
                         <FadeIn key={i} delay={i * 0.1} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
-                            <div className="w-14 h-14 bg-[#1CB5E0]/10 rounded-xl flex items-center justify-center text-[#1CB5E0] mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <div className="w-14 h-14 bg-brand-cyan/10 rounded-xl flex items-center justify-center text-brand-cyan mb-6 group-hover:scale-110 transition-transform duration-300">
                                 <card.icon className="w-7 h-7" />
                             </div>
                             <h3 className="text-2xl font-bold text-[#000428] mb-4 font-heading">{card.title}</h3>
@@ -206,7 +206,7 @@ const Values = () => {
             </div>
             <div className="space-y-8">
                 {values.map((val, i) => (
-                    <FadeIn key={i} delay={i * 0.1} className="flex gap-6 p-6 rounded-2xl bg-white border border-slate-100 shadow-sm hover:border-[#1CB5E0]/30 transition-colors">
+                    <FadeIn key={i} delay={i * 0.1} className="flex gap-6 p-6 rounded-2xl bg-white border border-slate-100 shadow-sm hover:border-brand-cyan/30 transition-colors">
                         <div className="shrink-0 p-4 bg-[#000428]/5 rounded-full h-fit text-[#000428]">
                             <val.icon className="w-6 h-6" />
                         </div>
@@ -231,9 +231,9 @@ const Services = () => {
 
     return (
         // Updated background to gradient to "keep it for next sections as well"
-        <div className="bg-gradient-to-br from-[#000428] to-[#0F172A] text-white py-24 relative overflow-hidden">
+        <div className="bg-linear-to-br from-[#000428] to-[#0F172A] text-white py-24 relative overflow-hidden">
             {/* Subtle background element to match theme */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#1CB5E0]/5 rounded-full blur-3xl -mr-64 -mt-64"></div>
+            <div className="absolute top-0 right-0 w-125 h-125 bg-brand-cyan/5 rounded-full blur-3xl -mr-64 -mt-64"></div>
 
             <Section className="relative z-10">
                 <div className="text-center mb-16">
@@ -245,12 +245,12 @@ const Services = () => {
                 <div className="grid md:grid-cols-3 gap-8">
                     {services.map((svc, i) => (
                         <FadeIn key={i} delay={i * 0.1} className="bg-white/5 border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors backdrop-blur-sm group">
-                            <div className="w-14 h-14 bg-[#1CB5E0] rounded-xl flex items-center justify-center text-[#000428] mb-8 group-hover:scale-110 transition-transform">
+                            <div className="w-14 h-14 bg-brand-cyan rounded-xl flex items-center justify-center text-[#000428] mb-8 group-hover:scale-110 transition-transform">
                                 <svc.icon className="w-7 h-7" />
                             </div>
                             <h3 className="text-2xl font-bold mb-4 font-heading">{svc.title}</h3>
                             <p className="text-slate-300 mb-8 h-24">{svc.desc}</p>
-                            <Link href={svc.href} className="text-[#1CB5E0] font-bold flex items-center gap-2 hover:gap-3 transition-all group-hover:text-white">
+                            <Link href={svc.href} className="text-brand-cyan font-bold flex items-center gap-2 hover:gap-3 transition-all group-hover:text-white">
                                 Explore Solution <ArrowRight className="w-4 h-4" />
                             </Link>
                         </FadeIn>
@@ -258,7 +258,7 @@ const Services = () => {
                 </div>
                 <div className="mt-16 text-center">
                     {/* Updated Link to Solutions Index Page */}
-                    <Link href="/solutions" className={cn(buttonVariants({ size: "lg", variant: "outline" }), "bg-transparent border-[#1CB5E0] text-[#1CB5E0] hover:bg-[#1CB5E0] hover:text-[#000428] text-lg px-8 py-6 h-auto font-bold rounded-full")}>
+                    <Link href="/solutions" className={cn(buttonVariants({ size: "lg", variant: "outline" }), "bg-transparent border-brand-cyan text-brand-cyan hover:bg-brand-cyan hover:text-[#000428] text-lg px-8 py-6 h-auto font-bold rounded-full")}>
                         Explore All Solutions
                     </Link>
                 </div>
@@ -280,7 +280,7 @@ const CTA = () => (
                     <LeadMagnetDialog>
                         <Button
                             size="lg"
-                            className={cn("bg-[#1CB5E0] text-[#000428] hover:bg-[#1CB5E0]/90 text-lg px-8 py-6 h-auto font-bold rounded-full shadow-lg shadow-[#1CB5E0]/20 transition-transform hover:scale-105")}
+                            className={cn("bg-brand-cyan text-[#000428] hover:bg-brand-cyan/90 text-lg px-8 py-6 h-auto font-bold rounded-full shadow-lg shadow-brand-cyan/20 transition-transform hover:scale-105")}
                         >
                             Download Free Guide
                         </Button>
@@ -292,10 +292,10 @@ const CTA = () => (
                 </div>
                 <div className="flex flex-wrap justify-center gap-8 md:gap-16 text-slate-500 font-medium opacity-80">
                     <div className="flex items-center gap-2">
-                        <CheckCircle className="w-5 h-5 text-[#1CB5E0]" /> Authorised under applicable regulations
+                        <CheckCircle className="w-5 h-5 text-brand-cyan" /> Authorised under applicable regulations
                     </div>
                     <div className="flex items-center gap-2">
-                        <CheckCircle className="w-5 h-5 text-[#1CB5E0]" /> No Upfront Fees
+                        <CheckCircle className="w-5 h-5 text-brand-cyan" /> No Upfront Fees
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="flex -space-x-2">

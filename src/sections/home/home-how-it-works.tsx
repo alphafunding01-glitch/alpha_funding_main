@@ -51,14 +51,14 @@ export default function HomeHowItWorks() {
     });
 
     return (
-        <section ref={containerRef} className="py-28 bg-white relative overflow-hidden">
+        <section ref={containerRef} className="py-16 md:py-28 bg-white relative overflow-hidden">
             <div className="container mx-auto px-4 md:px-6">
-                <div className="text-center max-w-2xl mx-auto mb-20">
+                <div className="text-center max-w-2xl mx-auto mb-10 md:mb-20">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-5xl font-heading font-bold text-brand-midnight mb-6"
+                        className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-brand-midnight mb-6"
                     >
                         Get Funded in <span className="text-[#1CB5E0]">4 Simple Steps</span>
                     </motion.h2>
@@ -85,7 +85,7 @@ export default function HomeHowItWorks() {
                         style={{ scaleY, height: "100%" }}
                     />
 
-                    <div className="space-y-12 md:space-y-24">
+                    <div className="space-y-16 md:space-y-24">
                         {steps.map((step, idx) => (
                             <motion.div
                                 key={step.id}
@@ -117,7 +117,7 @@ export default function HomeHowItWorks() {
                     </div>
                 </div>
 
-                <div className="mt-24 text-center">
+                <div className="mt-12 md:mt-24 text-center">
                     <Link href="/apply-now" className="cta-button-primary px-12 h-16 inline-flex items-center justify-center gap-3 text-lg font-bold">
                         Start Your Application
                         <ArrowRight className="w-5 h-5" />

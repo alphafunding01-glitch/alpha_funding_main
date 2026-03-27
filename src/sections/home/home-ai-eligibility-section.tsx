@@ -7,7 +7,7 @@ import { fadeUp, containerVariants, itemVariants } from '@/lib/animation-variant
 
 export default function HomeAIEligibilitySection() {
     return (
-        <section className="py-24 bg-brand-midnight relative overflow-hidden">
+        <section className="py-16 md:py-24 bg-brand-midnight relative overflow-hidden">
             {/* Background decoration */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#1CB5E0]/10 rounded-full blur-[100px] animate-pulse" />
@@ -15,7 +15,7 @@ export default function HomeAIEligibilitySection() {
             </div>
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-16 items-center">
+                <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                     {/* Left: Content */}
                     <motion.div
                         initial="hidden"
@@ -31,7 +31,7 @@ export default function HomeAIEligibilitySection() {
                             <span className="text-[10px] font-bold text-[#1CB5E0] uppercase tracking-widest">Instant Qualification</span>
                         </motion.div>
 
-                        <motion.h2 variants={itemVariants} className="font-heading text-4xl md:text-5xl text-white mb-6 leading-tight">
+                        <motion.h2 variants={itemVariants} className="font-heading text-3xl sm:text-4xl md:text-5xl text-white mb-6 leading-tight">
                             See If You Qualify in{' '}
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1CB5E0] to-cyan-400">60 Seconds</span>
                         </motion.h2>

@@ -11,7 +11,7 @@ export default function HomeCalculatorCTA() {
     const opacity = useTransform(scrollY, [2000, 2500], [0.8, 1]);
 
     return (
-        <section className="py-32 relative overflow-hidden bg-white">
+        <section className="py-16 md:py-32 relative overflow-hidden bg-white">
             {/* Background Parallax Layer */}
             <motion.div
                 style={{ y }}
@@ -39,7 +39,7 @@ export default function HomeCalculatorCTA() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="neuromorphic-card-dark p-10 md:p-16 rounded-[48px] bg-brand-midnight border border-white/5 shadow-[0_30px_100px_rgba(0,0,0,0.5)] relative overflow-hidden text-center"
+                        className="neuromorphic-card-dark p-6 sm:p-10 md:p-16 rounded-3xl md:rounded-[48px] bg-brand-midnight border border-white/5 shadow-[0_30px_100px_rgba(0,0,0,0.5)] relative overflow-hidden text-center"
                     >
                         {/* Background mesh-like circles */}
                         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
@@ -53,11 +53,11 @@ export default function HomeCalculatorCTA() {
                             </div>
 
                             <div className="space-y-4">
-                                <h2 className="text-4xl md:text-5xl font-heading font-bold text-white">
+                                <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white">
                                     Calculate Your Business <br />
                                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-blue-400">Loan Repayments</span>
                                 </h2>
-                                <p className="text-slate-400 font-body text-xl max-w-2xl mx-auto leading-relaxed">
+                                <p className="text-slate-400 font-body text-base md:text-xl max-w-2xl mx-auto leading-relaxed">
                                     Instant estimates. No commitment. No credit check required.
                                     Compare 50+ lenders. Decisions in 24-48 hours. No upfront fees.
                                     Get a clear picture of your funding costs in seconds.
@@ -75,7 +75,7 @@ export default function HomeCalculatorCTA() {
                                 </Link>
                             </div>
 
-                            <div className="flex items-center justify-center gap-10 pt-8 mt-8 border-t border-white/5 opacity-50">
+                            <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 pt-8 mt-8 border-t border-white/5 opacity-50">
                                 <div className="flex items-center gap-2">
                                     <Landmark className="w-4 h-4 text-brand-cyan" />
                                     <span className="text-[10px] uppercase font-extrabold tracking-widest text-slate-400">200+ Lenders Scanned</span>

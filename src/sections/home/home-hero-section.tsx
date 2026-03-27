@@ -13,7 +13,7 @@ export default function HomeHeroSection() {
     const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
     return (
-        <section className="relative min-h-[90vh] flex items-center pt-44 pb-28 overflow-hidden bg-[#030f42]">
+        <section className="relative min-h-[90vh] flex items-center pt-28 sm:pt-36 md:pt-44 pb-16 md:pb-28 overflow-hidden bg-[#030f42]">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#1CB5E0]/10 rounded-full blur-[120px] -mr-48 -mt-48 animate-pulse" />
@@ -22,7 +22,7 @@ export default function HomeHeroSection() {
             </div>
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
-                <div className="grid lg:grid-cols-[0.8fr_1.3fr] gap-16 items-center">
+                <div className="grid lg:grid-cols-[0.8fr_1.3fr] gap-8 lg:gap-16 items-center">
                     {/* Left Content */}
                     <motion.div
                         initial="hidden"
@@ -39,7 +39,7 @@ export default function HomeHeroSection() {
 
                         <motion.h1
                             variants={itemVariants}
-                            className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[1.2] md:leading-[1.1]"
+                            className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[1.2] md:leading-[1.1]"
                         >
                             You Built The Business.<br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1CB5E0] via-cyan-400 to-blue-400">
@@ -101,7 +101,7 @@ export default function HomeHeroSection() {
                         transition={{ duration: 1, ease: 'easeOut', delay: 0.5 }}
                         className="relative w-full flex justify-center lg:justify-end z-10"
                     >
-                        <div className="relative w-full max-w-[700px] group -ml-8 lg:-ml-0">
+                        <div className="relative w-full max-w-[700px] group lg:ml-0">
                             {/* Soft Gradient Glow Backend */}
                             <div className="absolute -inset-1 bg-gradient-to-r from-[#1CB5E0] via-cyan-400 to-blue-500 rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
 
