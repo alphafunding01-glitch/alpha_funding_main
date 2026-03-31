@@ -44,7 +44,7 @@ export function ChatPanel({
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [input, setInput] = useState('');
 
-    const { messages, sendMessage, status } = useChat({
+    const { messages, sendMessage, status, error } = useChat({
         transport: new DefaultChatTransport({
             api: '/api/chatbot',
         }),
@@ -145,6 +145,12 @@ export function ChatPanel({
                     </>
                 ) : (
                     <ChatMessages messages={messages} isLoading={isLoading} />
+                )}
+
+                {error && (
+                    <div className="mx-2 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-xs text-red-400">
+                        Something went wrong. Please try again.
+                    </div>
                 )}
 
                 <div ref={messagesEndRef} />
