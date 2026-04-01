@@ -35,6 +35,26 @@ function getMessageText(message: UIMessage): string {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Render inline markdown (bold, line breaks)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function renderMarkdown(text: string) {
+    return text.split('\n').map((line, lineIdx) => {
+        const parts = line.split(/(\*\*[^*]+\*\*)/g);
+        return (
+            <span key={lineIdx}>
+                {parts.map((part, i) =>
+                    part.startsWith('**') && part.endsWith('**')
+                        ? <strong key={i}>{part.slice(2, -2)}</strong>
+                        : <span key={i}>{part}</span>
+                )}
+                {lineIdx < text.split('\n').length - 1 && <br />}
+            </span>
+        );
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Message Bubble Component
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -73,8 +93,8 @@ export function MessageBubble({ message }: MessageBubbleProps) {
                     ? 'bg-brand-cyan text-white rounded-tr-sm'
                     : 'bg-white/10 dark:bg-white/5 border border-white/10 rounded-tl-sm'
             )}>
-                <div className="text-sm whitespace-pre-wrap break-words">
-                    {content}
+                <div className="text-sm wrap-break-word leading-relaxed">
+                    {renderMarkdown(content)}
                 </div>
             </div>
         </motion.div>

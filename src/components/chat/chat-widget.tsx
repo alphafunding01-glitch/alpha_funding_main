@@ -7,7 +7,6 @@ import { ChatPanel } from "./chat-panel";
 
 export function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
-    const [userName, setUserName] = useState<string | null>(null);
 
     const handleClose = useCallback(() => setIsOpen(false), []);
     const handleMessageSent = useCallback(() => {}, []);
@@ -26,8 +25,6 @@ export function ChatWidget() {
                         <ChatPanel
                             onClose={handleClose}
                             onMessageSent={handleMessageSent}
-                            userName={userName}
-                            onUserNameSet={setUserName}
                         />
                     </motion.div>
                 )}

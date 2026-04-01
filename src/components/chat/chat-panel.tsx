@@ -16,8 +16,6 @@ import { ChatDisclaimer } from './chat-disclaimer';
 interface ChatPanelProps {
     onClose: () => void;
     onMessageSent: () => void;
-    userName: string | null;
-    onUserNameSet: (name: string) => void;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -38,8 +36,6 @@ const SUGGESTED_QUESTIONS = [
 export function ChatPanel({
     onClose,
     onMessageSent,
-    userName,
-    onUserNameSet
 }: ChatPanelProps) {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [input, setInput] = useState('');
@@ -84,18 +80,11 @@ export function ChatPanel({
             <div className="
         flex items-center justify-between
         px-4 py-3
-        bg-gradient-to-r from-[#030f42] to-[#1CB5E0]
+        bg-linear-to-r from-[#030f42] to-brand-cyan
         text-white
       ">
                 <div className="flex items-center gap-2">
-                    {/* Traffic Light Dots */}
-                    <div className="flex gap-1.5 mr-2">
-                        <span className="w-3 h-3 rounded-full bg-red-500/80" />
-                        <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                        <span className="w-3 h-3 rounded-full bg-green-500/80" />
-                    </div>
-
-                    <Sparkles className="w-5 h-5" />
+<Sparkles className="w-5 h-5" />
                     <div>
                         <h2 className="font-semibold text-sm">Alpha Assistant</h2>
                         <p className="text-xs text-white/70">Business Finance Help</p>
@@ -125,7 +114,7 @@ export function ChatPanel({
                             <div className="
                 inline-flex items-center justify-center
                 w-16 h-16 rounded-full mb-4
-                bg-gradient-to-r from-[#030f42] to-[#1CB5E0]
+                bg-linear-to-r from-[#030f42] to-brand-cyan
               ">
                                 <Sparkles className="w-8 h-8 text-white" />
                             </div>

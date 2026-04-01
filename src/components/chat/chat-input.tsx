@@ -62,18 +62,19 @@ export function ChatInput({ input = '', onChange, onSubmit, isLoading }: ChatInp
             <button
                 type="submit"
                 disabled={!input?.trim() || isLoading}
-                className="
-          flex-shrink-0
+                className={`
+          shrink-0
           w-12 h-12
           rounded-xl
-          bg-brand-cyan
           text-white
           flex items-center justify-center
-          hover:bg-brand-cyan/90
-          disabled:opacity-50 disabled:cursor-not-allowed
           transition-all duration-200
           focus:outline-none focus:ring-2 focus:ring-brand-cyan focus:ring-offset-2
-        "
+          ${input?.trim() && !isLoading
+                        ? 'bg-blue-600 shadow-[0_0_18px_4px_rgba(37,99,235,0.7)] scale-105 hover:bg-blue-500'
+                        : 'bg-blue-600/25 cursor-not-allowed'
+                    }
+        `}
                 aria-label="Send message"
             >
                 <Send className="w-5 h-5" />
